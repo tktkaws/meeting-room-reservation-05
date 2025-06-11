@@ -619,6 +619,16 @@ function showGroupEditModal(group, reservations) {
     document.getElementById('group-title').value = group.title;
     document.getElementById('group-description').value = group.description || '';
     
+    // 時間フォームの初期化（最初の予約の時間を設定）
+    if (reservations.length > 0) {
+        const firstReservation = reservations[0];
+        const startTime = firstReservation.start_datetime.split(' ')[1].substring(0, 5);
+        const endTime = firstReservation.end_datetime.split(' ')[1].substring(0, 5);
+        
+        document.getElementById('group-start-time').value = startTime;
+        document.getElementById('group-end-time').value = endTime;
+    }
+    
     // グループIDを保存
     form.setAttribute('data-group-id', group.id);
     
@@ -655,12 +665,25 @@ async function handleGroupEditSubmit(e) {
     const groupId = form.getAttribute('data-group-id');
     const formData = new FormData(form);
     
-    // 基本情報のみ更新（時間変更は行わない）
+    const newStartTime = formData.get('start_time');
+    const newEndTime = formData.get('end_time');
+    
+    // 入力検証
+    if (newStartTime && newEndTime) {
+        if (newStartTime >= newEndTime) {
+            showMessage('終了時間は開始時間より後にしてください', 'error');
+            return;
+        }
+    }
+    
     const data = {
         group_id: parseInt(groupId),
         title: formData.get('title'),
         description: formData.get('description'),
-        time_changes: [] // 空の配列
+        bulk_time_update: {
+            start_time: newStartTime,
+            end_time: newEndTime
+        }
     };
     
     try {

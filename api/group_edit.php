@@ -82,7 +82,7 @@ function handleUpdateGroupReservations() {
     $groupId = $input['group_id'] ?? 0;
     $title = sanitizeInput($input['title'] ?? '');
     $description = sanitizeInput($input['description'] ?? '');
-    $timeChanges = $input['time_changes'] ?? []; // 時間変更の配列
+    $bulkTimeUpdate = $input['bulk_time_update'] ?? null; // 時間一括更新
     
     if (!$groupId) {
         sendJsonResponse(['error' => 'グループIDが必要です'], 400);
@@ -126,57 +126,52 @@ function handleUpdateGroupReservations() {
         ");
         $stmt->execute([$title, $description, $groupId]);
         
-        // 個別の予約を更新
-        foreach ($timeChanges as $change) {
-            $reservationId = $change['id'] ?? 0;
-            $newStartTime = $change['start_time'] ?? '';
-            $newEndTime = $change['end_time'] ?? '';
-            
-            if (!$reservationId || !$newStartTime || !$newEndTime) continue;
-            
-            // 現在の予約情報を取得（日付は変更しない）
-            $stmt = $db->prepare("SELECT date FROM reservations WHERE id = ? AND group_id = ?");
-            $stmt->execute([$reservationId, $groupId]);
-            $currentReservation = $stmt->fetch();
-            
-            if (!$currentReservation) continue;
-            
-            // 日付は変更せず、時間のみ更新
-            $finalDate = $currentReservation['date'];
+        // 時間一括更新の処理
+        if ($bulkTimeUpdate && !empty($bulkTimeUpdate['start_time']) && !empty($bulkTimeUpdate['end_time'])) {
+            $newStartTime = $bulkTimeUpdate['start_time'];
+            $newEndTime = $bulkTimeUpdate['end_time'];
             
             // 入力検証
             if (!validateInput($newStartTime, 'time')) {
-                throw new Exception("予約ID {$reservationId}: 無効な開始時間です");
+                throw new Exception('無効な開始時間です');
             }
             
             if (!validateInput($newEndTime, 'time')) {
-                throw new Exception("予約ID {$reservationId}: 無効な終了時間です");
+                throw new Exception('無効な終了時間です');
             }
-            
-            $finalStartDatetime = $finalDate . ' ' . $newStartTime;
-            $finalEndDatetime = $finalDate . ' ' . $newEndTime;
             
             // 論理チェック
-            if (strtotime($finalStartDatetime) >= strtotime($finalEndDatetime)) {
-                throw new Exception("予約ID {$reservationId}: 終了時間は開始時間より後にしてください");
+            if (strtotime($newStartTime) >= strtotime($newEndTime)) {
+                throw new Exception('終了時間は開始時間より後にしてください');
             }
             
-            // 時間重複チェック（同じグループの他の予約は除外）
-            if (!checkTimeConflictForGroup($finalDate, $finalStartDatetime, $finalEndDatetime, $reservationId, $groupId)) {
-                throw new Exception("予約ID {$reservationId}: この時間帯は既に予約されています");
-            }
+            // グループ内の全ての予約を取得
+            $stmt = $db->prepare("SELECT id, date FROM reservations WHERE group_id = ?");
+            $stmt->execute([$groupId]);
+            $groupReservations = $stmt->fetchAll();
             
-            // 予約更新（日付は変更せず、時間のみ更新）
-            $stmt = $db->prepare("
-                UPDATE reservations 
-                SET title = ?, description = ?, start_datetime = ?, end_datetime = ?, updated_at = CURRENT_TIMESTAMP 
-                WHERE id = ? AND group_id = ?
-            ");
-            $stmt->execute([$title, $description, $finalStartDatetime, $finalEndDatetime, $reservationId, $groupId]);
-        }
-        
-        // 時間変更が指定されていない場合は、タイトルと説明のみ更新
-        if (empty($timeChanges)) {
+            // 各予約の時間重複チェックと更新
+            foreach ($groupReservations as $reservation) {
+                $reservationId = $reservation['id'];
+                $date = $reservation['date'];
+                $finalStartDatetime = $date . ' ' . $newStartTime;
+                $finalEndDatetime = $date . ' ' . $newEndTime;
+                
+                // 時間重複チェック（同じグループの他の予約は除外）
+                if (!checkTimeConflictForGroup($date, $finalStartDatetime, $finalEndDatetime, $reservationId, $groupId)) {
+                    throw new Exception("日付 {$date}: この時間帯は既に予約されています");
+                }
+                
+                // 予約更新
+                $stmt = $db->prepare("
+                    UPDATE reservations 
+                    SET title = ?, description = ?, start_datetime = ?, end_datetime = ?, updated_at = CURRENT_TIMESTAMP 
+                    WHERE id = ?
+                ");
+                $stmt->execute([$title, $description, $finalStartDatetime, $finalEndDatetime, $reservationId]);
+            }
+        } else {
+            // 時間変更がない場合は、タイトルと説明のみ更新
             $stmt = $db->prepare("
                 UPDATE reservations 
                 SET title = ?, description = ?, updated_at = CURRENT_TIMESTAMP 

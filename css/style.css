@@ -443,6 +443,28 @@ body {
     border-bottom: 1px solid #e2e8f0;
 }
 
+.group-time-info {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.group-time-info h3 {
+    color: #333;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #667eea;
+    padding-bottom: 0.5rem;
+}
+
+.time-form-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.time-form-row .form-group {
+    flex: 1;
+}
+
 .group-reservations {
     margin-bottom: 1rem;
 }

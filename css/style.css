@@ -302,6 +302,15 @@ body {
     background: #5a67d8;
 }
 
+.reservation-item.recurring {
+    background: #38a169;
+    border-left: 4px solid #2f855a;
+}
+
+.reservation-item.recurring:hover {
+    background: #2f855a;
+}
+
 .reservation-title {
     font-weight: 600;
     overflow: hidden;
@@ -329,6 +338,157 @@ body {
 .btn-danger:hover {
     background: #c53030;
 }
+
+/* 予約詳細モーダル */
+.detail-content {
+    padding: 1.5rem;
+}
+
+.detail-section {
+    margin-bottom: 2rem;
+}
+
+.detail-section h3 {
+    color: #333;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #667eea;
+    padding-bottom: 0.5rem;
+}
+
+.detail-item {
+    display: flex;
+    margin-bottom: 0.75rem;
+    align-items: flex-start;
+}
+
+.detail-item label {
+    font-weight: 600;
+    min-width: 100px;
+    color: #555;
+    margin-right: 1rem;
+}
+
+.detail-item span {
+    flex: 1;
+    color: #333;
+}
+
+.detail-actions {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+.group-list {
+    background: #f8f9fa;
+    border-radius: 5px;
+    padding: 1rem;
+    margin-top: 0.5rem;
+}
+
+.group-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.group-item:last-child {
+    border-bottom: none;
+}
+
+.group-item-date {
+    font-weight: 600;
+    color: #495057;
+}
+
+.group-item-time {
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+.btn-edit-single,
+.btn-edit-group {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-edit-single:hover,
+.btn-edit-group:hover {
+    background: #218838;
+}
+
+/* グループ編集モーダル */
+.large-modal {
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+}
+
+.group-edit-content {
+    padding: 1.5rem;
+}
+
+.group-basic-info {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.group-reservations {
+    margin-bottom: 1rem;
+}
+
+.group-reservations h3 {
+    color: #333;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #667eea;
+    padding-bottom: 0.5rem;
+}
+
+.info-text {
+    background: #f8f9fa;
+    padding: 0.75rem;
+    border-radius: 5px;
+    color: #6c757d;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+.reservation-display-item {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 5px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.reservation-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.reservation-date {
+    font-weight: 600;
+    color: #495057;
+    font-size: 1rem;
+}
+
+.reservation-time {
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+/* 時間編集関連のCSSは削除されました */
 
 /* モーダル */
 .modal {

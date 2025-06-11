@@ -183,9 +183,15 @@ function setupEventListeners() {
     // モーダル関連
     document.getElementById('close-modal')?.addEventListener('click', closeModal);
     document.getElementById('cancel-btn')?.addEventListener('click', closeModal);
+    document.getElementById('close-detail-modal')?.addEventListener('click', closeDetailModal);
+    document.getElementById('close-group-edit-modal')?.addEventListener('click', closeGroupEditModal);
+    document.getElementById('group-cancel-btn')?.addEventListener('click', closeGroupEditModal);
     
     // 予約フォーム送信
     document.getElementById('reservation-form')?.addEventListener('submit', handleReservationSubmit);
+    
+    // グループ編集フォーム送信
+    document.getElementById('group-edit-form')?.addEventListener('submit', handleGroupEditSubmit);
     
     // 繰り返し予約チェックボックス
     document.getElementById('is-recurring')?.addEventListener('change', toggleRecurringOptions);
@@ -277,8 +283,8 @@ function renderMonthView(container) {
                 <div class="day-number">${currentDay.getDate()}</div>
                 <div class="reservations">
                     ${dayReservations.map(res => `
-                        <div class="reservation-item" onclick="event.stopPropagation(); editReservation(${res.id})" title="${res.title} (${res.start_datetime.split(' ')[1].substring(0,5)}-${res.end_datetime.split(' ')[1].substring(0,5)})">
-                            <div class="reservation-title">${res.title}</div>
+                        <div class="reservation-item ${res.group_id ? 'recurring' : ''}" onclick="event.stopPropagation(); showReservationDetail(${res.id})" title="${res.title} (${res.start_datetime.split(' ')[1].substring(0,5)}-${res.end_datetime.split(' ')[1].substring(0,5)})${res.group_id ? ' - 繰り返し予約' : ''}">
+                            <div class="reservation-title">${res.title}${res.group_id ? ' ♻' : ''}</div>
                             <div class="reservation-time">${res.start_datetime.split(' ')[1].substring(0,5)}-${res.end_datetime.split(' ')[1].substring(0,5)}</div>
                         </div>
                     `).join('')}
@@ -370,7 +376,91 @@ function selectDate(dateStr) {
     openNewReservationModal(dateStr);
 }
 
-// 予約編集
+// 予約詳細表示
+async function showReservationDetail(reservationId) {
+    try {
+        showLoading(true);
+        const response = await fetch(`api/reservation_detail.php?id=${reservationId}`);
+        const result = await response.json();
+        
+        if (result.error) {
+            showMessage(result.error, 'error');
+            return;
+        }
+        
+        const reservation = result.reservation;
+        const canEdit = result.can_edit;
+        const groupReservations = result.group_reservations;
+        
+        // 詳細情報を表示
+        document.getElementById('detail-user').textContent = `${reservation.user_name} (${reservation.department || '部署未設定'})`;
+        document.getElementById('detail-title').textContent = reservation.title;
+        document.getElementById('detail-date').textContent = reservation.date;
+        document.getElementById('detail-time').textContent = `${reservation.start_datetime.split(' ')[1].substring(0,5)} - ${reservation.end_datetime.split(' ')[1].substring(0,5)}`;
+        document.getElementById('detail-description').textContent = reservation.description || '説明なし';
+        
+        // 繰り返し予約情報表示
+        const recurringSection = document.getElementById('recurring-section');
+        if (reservation.group_id) {
+            recurringSection.style.display = 'block';
+            
+            const repeatTypes = {
+                'daily': '毎日',
+                'weekly': '毎週',
+                'monthly': '毎月'
+            };
+            document.getElementById('detail-repeat-type').textContent = repeatTypes[reservation.repeat_type] || reservation.repeat_type;
+            
+            // グループ内の他の予約を表示
+            const groupList = document.getElementById('group-list');
+            if (groupReservations.length > 0) {
+                groupList.innerHTML = '<div class="group-list">' + 
+                    groupReservations.map(gr => `
+                        <div class="group-item">
+                            <div>
+                                <div class="group-item-date">${gr.date}</div>
+                                <div class="group-item-time">${gr.start_datetime.split(' ')[1].substring(0,5)} - ${gr.end_datetime.split(' ')[1].substring(0,5)}</div>
+                            </div>
+                        </div>
+                    `).join('') + '</div>';
+            } else {
+                groupList.innerHTML = '<p>他の関連予約はありません</p>';
+            }
+        } else {
+            recurringSection.style.display = 'none';
+        }
+        
+        // 編集ボタンの表示
+        const detailActions = document.getElementById('detail-actions');
+        detailActions.innerHTML = '';
+        
+        if (canEdit) {
+            if (reservation.group_id) {
+                // 繰り返し予約の場合は2つのボタン
+                detailActions.innerHTML = `
+                    <button class="btn-edit-single" onclick="editSingleReservation(${reservationId})">この予約のみ編集</button>
+                    <button class="btn-edit-group" onclick="editGroupReservations(${reservation.group_id})">全ての繰り返し予約を編集</button>
+                `;
+            } else {
+                // 単発予約の場合は1つのボタン
+                detailActions.innerHTML = `
+                    <button class="btn-edit-single" onclick="editSingleReservation(${reservationId})">編集</button>
+                `;
+            }
+        }
+        
+        // 詳細モーダルを表示
+        document.getElementById('reservation-detail-modal').style.display = 'flex';
+        
+    } catch (error) {
+        console.error('予約詳細取得エラー:', error);
+        showMessage('予約詳細の取得に失敗しました', 'error');
+    } finally {
+        showLoading(false);
+    }
+}
+
+// 予約編集（単発または個別編集）
 async function editReservation(reservationId) {
     const reservation = reservations.find(r => r.id == reservationId);
     if (!reservation) {
@@ -383,6 +473,9 @@ async function editReservation(reservationId) {
         showMessage('この予約を編集する権限がありません', 'error');
         return;
     }
+    
+    // 詳細モーダルを閉じる
+    document.getElementById('reservation-detail-modal').style.display = 'none';
     
     // 編集モーダルを開く
     const modal = document.getElementById('reservation-modal');
@@ -397,21 +490,219 @@ async function editReservation(reservationId) {
     
     // フォームに編集用のIDを設定
     form.setAttribute('data-edit-id', reservationId);
+    form.setAttribute('data-edit-type', 'single');
     
-    // 削除ボタンを追加
-    let deleteBtn = document.getElementById('delete-btn');
-    if (!deleteBtn) {
-        deleteBtn = document.createElement('button');
-        deleteBtn.id = 'delete-btn';
-        deleteBtn.type = 'button';
-        deleteBtn.className = 'btn-danger';
-        deleteBtn.textContent = '削除';
-        deleteBtn.onclick = () => deleteReservation(reservationId);
-        document.querySelector('.modal-actions').insertBefore(deleteBtn, document.getElementById('cancel-btn'));
+    // 既存の削除ボタンを削除
+    const existingDeleteBtn = document.getElementById('delete-btn');
+    if (existingDeleteBtn) {
+        existingDeleteBtn.remove();
     }
-    deleteBtn.style.display = 'inline-block';
+    
+    // 削除ボタンを新しく作成
+    const deleteBtn = document.createElement('button');
+    deleteBtn.id = 'delete-btn';
+    deleteBtn.type = 'button';
+    deleteBtn.className = 'btn-danger';
+    deleteBtn.textContent = '削除';
+    deleteBtn.onclick = () => deleteReservation(reservationId);
+    
+    // modal-actions要素を取得して削除ボタンを追加
+    const modalActions = document.querySelector('#reservation-modal .modal-actions');
+    const cancelBtn = document.getElementById('cancel-btn');
+    
+    if (modalActions && cancelBtn) {
+        modalActions.insertBefore(deleteBtn, cancelBtn);
+    } else if (modalActions) {
+        modalActions.appendChild(deleteBtn);
+    }
     
     modal.style.display = 'flex';
+}
+
+// 単一予約編集（繰り返しグループから除外）
+async function editSingleReservation(reservationId) {
+    const reservation = reservations.find(r => r.id == reservationId);
+    if (!reservation) {
+        showMessage('予約が見つかりません', 'error');
+        return;
+    }
+    
+    // 権限チェック
+    if (reservation.user_id != currentUser.id && currentUser.role !== 'admin') {
+        showMessage('この予約を編集する権限がありません', 'error');
+        return;
+    }
+    
+    // 詳細モーダルを閉じる
+    document.getElementById('reservation-detail-modal').style.display = 'none';
+    
+    // 編集モーダルを開く
+    const modal = document.getElementById('reservation-modal');
+    const form = document.getElementById('reservation-form');
+    
+    document.getElementById('modal-title').textContent = reservation.group_id ? '個別予約編集（グループから除外）' : '予約編集';
+    document.getElementById('reservation-title').value = reservation.title;
+    document.getElementById('reservation-description').value = reservation.description || '';
+    document.getElementById('reservation-date').value = reservation.date;
+    document.getElementById('start-time').value = reservation.start_datetime.split(' ')[1].substring(0,5);
+    document.getElementById('end-time').value = reservation.end_datetime.split(' ')[1].substring(0,5);
+    
+    // 繰り返し予約オプションを非表示
+    document.getElementById('is-recurring').checked = false;
+    document.getElementById('recurring-options').style.display = 'none';
+    
+    // フォームに編集用のIDを設定
+    form.setAttribute('data-edit-id', reservationId);
+    form.setAttribute('data-edit-type', 'single');
+    
+    // 既存の削除ボタンを削除
+    const existingDeleteBtn = document.getElementById('delete-btn');
+    if (existingDeleteBtn) {
+        existingDeleteBtn.remove();
+    }
+    
+    // 削除ボタンを新しく作成
+    const deleteBtn = document.createElement('button');
+    deleteBtn.id = 'delete-btn';
+    deleteBtn.type = 'button';
+    deleteBtn.className = 'btn-danger';
+    deleteBtn.textContent = '削除';
+    deleteBtn.onclick = () => deleteReservation(reservationId);
+    
+    // modal-actions要素を取得して削除ボタンを追加
+    const modalActions = document.querySelector('#reservation-modal .modal-actions');
+    const cancelBtn = document.getElementById('cancel-btn');
+    
+    if (modalActions && cancelBtn) {
+        modalActions.insertBefore(deleteBtn, cancelBtn);
+    } else if (modalActions) {
+        modalActions.appendChild(deleteBtn);
+    }
+    
+    modal.style.display = 'flex';
+}
+
+// グループ全体編集
+async function editGroupReservations(groupId) {
+    try {
+        showLoading(true);
+        
+        // グループ情報と予約一覧を取得
+        const response = await fetch(`api/group_edit.php?group_id=${groupId}`);
+        const result = await response.json();
+        
+        if (result.error) {
+            showMessage(result.error, 'error');
+            return;
+        }
+        
+        // 詳細モーダルを閉じる
+        document.getElementById('reservation-detail-modal').style.display = 'none';
+        
+        // グループ編集モーダルを表示
+        showGroupEditModal(result.group, result.reservations);
+        
+    } catch (error) {
+        console.error('グループ編集データ取得エラー:', error);
+        showMessage('グループ編集データの取得に失敗しました', 'error');
+    } finally {
+        showLoading(false);
+    }
+}
+
+// グループ編集モーダル表示
+function showGroupEditModal(group, reservations) {
+    const modal = document.getElementById('group-edit-modal');
+    const form = document.getElementById('group-edit-form');
+    
+    // 基本情報設定
+    document.getElementById('group-title').value = group.title;
+    document.getElementById('group-description').value = group.description || '';
+    
+    // グループIDを保存
+    form.setAttribute('data-group-id', group.id);
+    
+    // 予約リスト生成
+    const reservationsList = document.getElementById('group-reservations-list');
+    reservationsList.innerHTML = '';
+    
+    reservations.forEach(reservation => {
+        const startTime = reservation.start_datetime.split(' ')[1].substring(0, 5);
+        const endTime = reservation.end_datetime.split(' ')[1].substring(0, 5);
+        
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'reservation-display-item';
+        itemDiv.innerHTML = `
+            <div class="reservation-info">
+                <div class="reservation-date">${reservation.date}</div>
+                <div class="reservation-time">${startTime} - ${endTime}</div>
+            </div>
+        `;
+        
+        reservationsList.appendChild(itemDiv);
+    });
+    
+    modal.style.display = 'flex';
+}
+
+// resetReservationTime関数は削除されました（個別時間調整機能を削除）
+
+// グループ編集フォーム送信
+async function handleGroupEditSubmit(e) {
+    e.preventDefault();
+    
+    const form = e.target;
+    const groupId = form.getAttribute('data-group-id');
+    const formData = new FormData(form);
+    
+    // 基本情報のみ更新（時間変更は行わない）
+    const data = {
+        group_id: parseInt(groupId),
+        title: formData.get('title'),
+        description: formData.get('description'),
+        time_changes: [] // 空の配列
+    };
+    
+    try {
+        showLoading(true);
+        
+        const response = await fetch('api/group_edit.php', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showMessage(result.message, 'success');
+            closeGroupEditModal();
+            await loadReservations();
+            renderCalendar();
+        } else {
+            showMessage(result.error || 'グループ編集に失敗しました', 'error');
+        }
+        
+    } catch (error) {
+        console.error('グループ編集エラー:', error);
+        showMessage('グループ編集に失敗しました', 'error');
+    } finally {
+        showLoading(false);
+    }
+}
+
+// グループ編集モーダルを閉じる
+function closeGroupEditModal() {
+    const modal = document.getElementById('group-edit-modal');
+    const form = document.getElementById('group-edit-form');
+    
+    form.reset();
+    form.removeAttribute('data-group-id');
+    document.getElementById('group-reservations-list').innerHTML = '';
+    
+    modal.style.display = 'none';
 }
 
 // 予約削除
@@ -450,18 +741,35 @@ function closeModal() {
     const deleteBtn = document.getElementById('delete-btn');
     
     // 編集フラグをクリア
-    form.removeAttribute('data-edit-id');
+    if (form) {
+        form.removeAttribute('data-edit-id');
+        form.removeAttribute('data-edit-type');
+    }
     
-    // 削除ボタンを非表示
+    // 削除ボタンを削除
     if (deleteBtn) {
-        deleteBtn.style.display = 'none';
+        deleteBtn.remove();
     }
     
     // フォームリセット
-    form.reset();
-    document.getElementById('modal-title').textContent = '新規予約';
+    if (form) {
+        form.reset();
+    }
     
-    document.getElementById('reservation-modal').style.display = 'none';
+    const modalTitle = document.getElementById('modal-title');
+    if (modalTitle) {
+        modalTitle.textContent = '新規予約';
+    }
+    
+    const modal = document.getElementById('reservation-modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// 詳細モーダルを閉じる
+function closeDetailModal() {
+    document.getElementById('reservation-detail-modal').style.display = 'none';
 }
 
 // 繰り返し予約オプション切り替え
@@ -495,9 +803,10 @@ async function handleReservationSubmit(e) {
         repeat_end_date: formData.get('repeat_end_date')
     };
     
-    // 編集の場合はIDを追加
+    // 編集の場合はIDと編集タイプを追加
     if (editId) {
         data.id = editId;
+        data.edit_type = form.getAttribute('data-edit-type') || 'single';
     }
     
     try {

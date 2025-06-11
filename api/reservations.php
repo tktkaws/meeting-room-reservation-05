@@ -49,10 +49,17 @@ function handleGetReservations() {
 function handleCreateReservation() {
     requireAuth();
     
+    // レート制限チェック
+    checkRateLimit('create_reservation', 30, 3600); // 1時間に30回まで
+    
     $input = json_decode(file_get_contents('php://input'), true);
     
-    $title = $input['title'] ?? '';
-    $description = $input['description'] ?? '';
+    if (!$input) {
+        sendJsonResponse(['error' => '無効なJSONデータです'], 400);
+    }
+    
+    $title = sanitizeInput($input['title'] ?? '');
+    $description = sanitizeInput($input['description'] ?? '');
     $date = $input['date'] ?? '';
     $startTime = $input['start_time'] ?? '';
     $endTime = $input['end_time'] ?? '';
@@ -62,46 +69,83 @@ function handleCreateReservation() {
         sendJsonResponse(['error' => '必須項目を入力してください'], 400);
     }
     
+    // 入力検証
+    if (!validateInput($title, 'string', 100)) {
+        sendJsonResponse(['error' => 'タイトルは100文字以内で入力してください'], 400);
+    }
+    
+    if (!validateInput($description, 'string', 500)) {
+        sendJsonResponse(['error' => '説明は500文字以内で入力してください'], 400);
+    }
+    
+    if (!validateInput($date, 'date')) {
+        sendJsonResponse(['error' => '有効な日付を入力してください'], 400);
+    }
+    
+    if (!validateInput($startTime, 'time')) {
+        sendJsonResponse(['error' => '有効な開始時間を入力してください'], 400);
+    }
+    
+    if (!validateInput($endTime, 'time')) {
+        sendJsonResponse(['error' => '有効な終了時間を入力してください'], 400);
+    }
+    
+    // 論理チェック
+    if (strtotime($date . ' ' . $startTime) >= strtotime($date . ' ' . $endTime)) {
+        sendJsonResponse(['error' => '終了時間は開始時間より後にしてください'], 400);
+    }
+    
+    // 予約期間チェック（未来の日付のみ許可、ただし当日は除外しない）
+    if (strtotime($date) < strtotime('today')) {
+        sendJsonResponse(['error' => '過去の日付には予約できません'], 400);
+    }
+    
     $startDatetime = $date . ' ' . $startTime;
     $endDatetime = $date . ' ' . $endTime;
-    
-    // 時間重複チェック
-    if (!checkTimeConflict($date, $startDatetime, $endDatetime)) {
-        sendJsonResponse(['error' => 'この時間帯は既に予約されています'], 400);
-    }
     
     $db = getDatabase();
     $db->beginTransaction();
     
     try {
-        $groupId = null;
-        
-        // 繰り返し予約の場合
         if ($isRecurring) {
+            // 繰り返し予約の場合
             $groupId = createRecurringReservations($db, $input);
+            
+            $db->commit();
+            sendJsonResponse([
+                'success' => true,
+                'message' => '繰り返し予約を作成しました',
+                'group_id' => $groupId
+            ]);
+        } else {
+            // 単発予約の場合
+            // 時間重複チェック
+            if (!checkTimeConflict($date, $startDatetime, $endDatetime)) {
+                sendJsonResponse(['error' => 'この時間帯は既に予約されています'], 400);
+            }
+            
+            $stmt = $db->prepare("
+                INSERT INTO reservations (user_id, title, description, date, start_datetime, end_datetime) 
+                VALUES (?, ?, ?, ?, ?, ?)
+            ");
+            $stmt->execute([
+                $_SESSION['user_id'],
+                $title,
+                $description,
+                $date,
+                $startDatetime,
+                $endDatetime
+            ]);
+            
+            $reservationId = $db->lastInsertId();
+            
+            $db->commit();
+            sendJsonResponse([
+                'success' => true,
+                'message' => '予約を作成しました',
+                'reservation_id' => $reservationId
+            ]);
         }
-        
-        // 単発予約作成
-        $stmt = $db->prepare("
-            INSERT INTO reservations (user_id, title, description, date, start_datetime, end_datetime, group_id) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        ");
-        $stmt->execute([
-            $_SESSION['user_id'],
-            $title,
-            $description,
-            $date,
-            $startDatetime,
-            $endDatetime,
-            $groupId
-        ]);
-        
-        $db->commit();
-        sendJsonResponse([
-            'success' => true,
-            'message' => '予約を作成しました',
-            'reservation_id' => $db->lastInsertId()
-        ]);
         
     } catch (Exception $e) {
         $db->rollback();
@@ -115,59 +159,102 @@ function handleUpdateReservation() {
     
     $input = json_decode(file_get_contents('php://input'), true);
     $reservationId = $input['id'] ?? 0;
+    $editType = $input['edit_type'] ?? 'single'; // 'single' or 'group'
     
     if (!$reservationId) {
         sendJsonResponse(['error' => '予約IDが必要です'], 400);
     }
     
     $db = getDatabase();
-    
-    // 権限チェック（自分の予約または管理者のみ）
-    $stmt = $db->prepare('SELECT user_id FROM reservations WHERE id = ?');
-    $stmt->execute([$reservationId]);
-    $reservation = $stmt->fetch();
-    
-    if (!$reservation) {
-        sendJsonResponse(['error' => '予約が見つかりません'], 404);
-    }
-    
-    if ($reservation['user_id'] != $_SESSION['user_id'] && $_SESSION['role'] !== 'admin') {
-        sendJsonResponse(['error' => 'この予約を編集する権限がありません'], 403);
-    }
-    
-    $title = $input['title'] ?? '';
-    $description = $input['description'] ?? '';
-    $date = $input['date'] ?? '';
-    $startTime = $input['start_time'] ?? '';
-    $endTime = $input['end_time'] ?? '';
-    
-    if (empty($title) || empty($date) || empty($startTime) || empty($endTime)) {
-        sendJsonResponse(['error' => '必須項目を入力してください'], 400);
-    }
-    
-    $startDatetime = $date . ' ' . $startTime;
-    $endDatetime = $date . ' ' . $endTime;
-    
-    // 時間重複チェック（自分の予約は除外）
-    if (!checkTimeConflict($date, $startDatetime, $endDatetime, $reservationId)) {
-        sendJsonResponse(['error' => 'この時間帯は既に予約されています'], 400);
-    }
+    $db->beginTransaction();
     
     try {
-        $stmt = $db->prepare("
-            UPDATE reservations 
-            SET title = ?, description = ?, date = ?, start_datetime = ?, end_datetime = ?, updated_at = CURRENT_TIMESTAMP 
-            WHERE id = ?
-        ");
-        $stmt->execute([$title, $description, $date, $startDatetime, $endDatetime, $reservationId]);
+        // 権限チェック
+        $stmt = $db->prepare('SELECT user_id, group_id FROM reservations WHERE id = ?');
+        $stmt->execute([$reservationId]);
+        $reservation = $stmt->fetch();
         
+        if (!$reservation) {
+            sendJsonResponse(['error' => '予約が見つかりません'], 404);
+        }
+        
+        if ($reservation['user_id'] != $_SESSION['user_id'] && $_SESSION['role'] !== 'admin') {
+            sendJsonResponse(['error' => 'この予約を編集する権限がありません'], 403);
+        }
+        
+        $title = sanitizeInput($input['title'] ?? '');
+        $description = sanitizeInput($input['description'] ?? '');
+        $date = $input['date'] ?? '';
+        $startTime = $input['start_time'] ?? '';
+        $endTime = $input['end_time'] ?? '';
+        
+        if (empty($title) || empty($date) || empty($startTime) || empty($endTime)) {
+            sendJsonResponse(['error' => '必須項目を入力してください'], 400);
+        }
+        
+        // 入力検証
+        if (!validateInput($title, 'string', 100)) {
+            sendJsonResponse(['error' => 'タイトルは100文字以内で入力してください'], 400);
+        }
+        
+        if (!validateInput($date, 'date')) {
+            sendJsonResponse(['error' => '有効な日付を入力してください'], 400);
+        }
+        
+        if (!validateInput($startTime, 'time')) {
+            sendJsonResponse(['error' => '有効な開始時間を入力してください'], 400);
+        }
+        
+        if (!validateInput($endTime, 'time')) {
+            sendJsonResponse(['error' => '有効な終了時間を入力してください'], 400);
+        }
+        
+        $startDatetime = $date . ' ' . $startTime;
+        $endDatetime = $date . ' ' . $endTime;
+        
+        // 時間重複チェック（自分の予約は除外）
+        if (!checkTimeConflict($date, $startDatetime, $endDatetime, $reservationId)) {
+            sendJsonResponse(['error' => 'この時間帯は既に予約されています'], 400);
+        }
+        
+        if ($editType === 'single' && $reservation['group_id']) {
+            // 単一編集の場合：グループから除外
+            $stmt = $db->prepare("
+                UPDATE reservations 
+                SET title = ?, description = ?, date = ?, start_datetime = ?, end_datetime = ?, group_id = NULL, updated_at = CURRENT_TIMESTAMP 
+                WHERE id = ?
+            ");
+            $stmt->execute([$title, $description, $date, $startDatetime, $endDatetime, $reservationId]);
+            
+            // グループリレーションを削除
+            $stmt = $db->prepare("DELETE FROM reservation_group_relations WHERE reserve_id = ?");
+            $stmt->execute([$reservationId]);
+            
+            // グループに残った予約が1件以下の場合はグループを削除
+            cleanupEmptyGroups($db, $reservation['group_id']);
+            
+            $message = '予約を更新しました（繰り返しグループから除外されました）';
+        } else {
+            // 通常の編集
+            $stmt = $db->prepare("
+                UPDATE reservations 
+                SET title = ?, description = ?, date = ?, start_datetime = ?, end_datetime = ?, updated_at = CURRENT_TIMESTAMP 
+                WHERE id = ?
+            ");
+            $stmt->execute([$title, $description, $date, $startDatetime, $endDatetime, $reservationId]);
+            
+            $message = '予約を更新しました';
+        }
+        
+        $db->commit();
         sendJsonResponse([
             'success' => true,
-            'message' => '予約を更新しました'
+            'message' => $message
         ]);
         
     } catch (Exception $e) {
-        sendJsonResponse(['error' => '予約の更新に失敗しました'], 500);
+        $db->rollback();
+        sendJsonResponse(['error' => '予約の更新に失敗しました: ' . $e->getMessage()], 500);
     }
 }
 
@@ -182,31 +269,46 @@ function handleDeleteReservation() {
     }
     
     $db = getDatabase();
-    
-    // 権限チェック
-    $stmt = $db->prepare('SELECT user_id FROM reservations WHERE id = ?');
-    $stmt->execute([$reservationId]);
-    $reservation = $stmt->fetch();
-    
-    if (!$reservation) {
-        sendJsonResponse(['error' => '予約が見つかりません'], 404);
-    }
-    
-    if ($reservation['user_id'] != $_SESSION['user_id'] && $_SESSION['role'] !== 'admin') {
-        sendJsonResponse(['error' => 'この予約を削除する権限がありません'], 403);
-    }
+    $db->beginTransaction();
     
     try {
+        // 権限チェック
+        $stmt = $db->prepare('SELECT user_id, group_id FROM reservations WHERE id = ?');
+        $stmt->execute([$reservationId]);
+        $reservation = $stmt->fetch();
+        
+        if (!$reservation) {
+            sendJsonResponse(['error' => '予約が見つかりません'], 404);
+        }
+        
+        if ($reservation['user_id'] != $_SESSION['user_id'] && $_SESSION['role'] !== 'admin') {
+            sendJsonResponse(['error' => 'この予約を削除する権限がありません'], 403);
+        }
+        
+        // グループリレーションを削除
+        if ($reservation['group_id']) {
+            $stmt = $db->prepare('DELETE FROM reservation_group_relations WHERE reserve_id = ?');
+            $stmt->execute([$reservationId]);
+        }
+        
+        // 予約を削除
         $stmt = $db->prepare('DELETE FROM reservations WHERE id = ?');
         $stmt->execute([$reservationId]);
         
+        // グループのクリーンアップ
+        if ($reservation['group_id']) {
+            cleanupEmptyGroups($db, $reservation['group_id']);
+        }
+        
+        $db->commit();
         sendJsonResponse([
             'success' => true,
             'message' => '予約を削除しました'
         ]);
         
     } catch (Exception $e) {
-        sendJsonResponse(['error' => '予約の削除に失敗しました'], 500);
+        $db->rollback();
+        sendJsonResponse(['error' => '予約の削除に失敗しました: ' . $e->getMessage()], 500);
     }
 }
 
@@ -236,11 +338,19 @@ function checkTimeConflict($date, $startDatetime, $endDatetime, $excludeId = nul
     return !$stmt->fetch();
 }
 
-// 繰り返し予約作成（基本機能のみ）
+// 繰り返し予約作成
 function createRecurringReservations($db, $input) {
     $repeatType = $input['repeat_type'] ?? 'weekly';
     $repeatInterval = $input['repeat_interval'] ?? 1;
     $endDate = $input['repeat_end_date'] ?? null;
+    $startDate = new DateTime($input['date']);
+    
+    // 終了日が指定されていない場合は3ヶ月後に設定
+    if (!$endDate) {
+        $endDateTime = clone $startDate;
+        $endDateTime->add(new DateInterval('P3M')); // 3ヶ月後
+        $endDate = $endDateTime->format('Y-m-d');
+    }
     
     // 繰り返しグループ作成
     $stmt = $db->prepare("
@@ -257,6 +367,90 @@ function createRecurringReservations($db, $input) {
         $endDate
     ]);
     
-    return $db->lastInsertId();
+    $groupId = $db->lastInsertId();
+    
+    // 繰り返し予約を生成
+    $reservationIds = [];
+    $currentDate = clone $startDate;
+    $endDateTime = new DateTime($endDate);
+    $startTime = $input['start_time'];
+    $endTime = $input['end_time'];
+    
+    $count = 0;
+    $maxReservations = 50; // 安全のため最大50件に制限
+    
+    while ($currentDate <= $endDateTime && $count < $maxReservations) {
+        $dateStr = $currentDate->format('Y-m-d');
+        $startDatetime = $dateStr . ' ' . $startTime;
+        $endDatetime = $dateStr . ' ' . $endTime;
+        
+        // 時間重複チェック
+        if (checkTimeConflict($dateStr, $startDatetime, $endDatetime)) {
+            // 予約作成
+            $stmt = $db->prepare("
+                INSERT INTO reservations (user_id, title, description, date, start_datetime, end_datetime, group_id) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            ");
+            $stmt->execute([
+                $_SESSION['user_id'],
+                $input['title'],
+                $input['description'] ?? '',
+                $dateStr,
+                $startDatetime,
+                $endDatetime,
+                $groupId
+            ]);
+            
+            $reservationId = $db->lastInsertId();
+            $reservationIds[] = $reservationId;
+            
+            // リレーション作成
+            $stmt = $db->prepare("
+                INSERT INTO reservation_group_relations (reserve_id, group_id) 
+                VALUES (?, ?)
+            ");
+            $stmt->execute([$reservationId, $groupId]);
+        }
+        
+        // 次の日付を計算
+        switch ($repeatType) {
+            case 'daily':
+                $currentDate->add(new DateInterval('P' . $repeatInterval . 'D'));
+                break;
+            case 'weekly':
+                $currentDate->add(new DateInterval('P' . ($repeatInterval * 7) . 'D'));
+                break;
+            case 'monthly':
+                $currentDate->add(new DateInterval('P' . $repeatInterval . 'M'));
+                break;
+        }
+        
+        $count++;
+    }
+    
+    return $groupId;
+}
+
+// 空のグループをクリーンアップ
+function cleanupEmptyGroups($db, $groupId) {
+    if (!$groupId) return;
+    
+    // グループに属する予約数をチェック
+    $stmt = $db->prepare("SELECT COUNT(*) as count FROM reservation_group_relations WHERE group_id = ?");
+    $stmt->execute([$groupId]);
+    $result = $stmt->fetch();
+    
+    if ($result['count'] <= 1) {
+        // 残りの予約が1件以下の場合、グループを削除
+        $stmt = $db->prepare("DELETE FROM reservation_group_relations WHERE group_id = ?");
+        $stmt->execute([$groupId]);
+        
+        $stmt = $db->prepare("DELETE FROM reservation_groups WHERE id = ?");
+        $stmt->execute([$groupId]);
+        
+        // 残った予約のgroup_idをNULLに設定
+        $stmt = $db->prepare("UPDATE reservations SET group_id = NULL WHERE group_id = ?");
+        $stmt->execute([$groupId]);
+    }
 }
 ?>

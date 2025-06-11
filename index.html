@@ -43,6 +43,95 @@
             </div>
         </main>
         
+        <!-- 予約詳細モーダル -->
+        <div id="reservation-detail-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>予約詳細</h2>
+                    <button class="close-btn" id="close-detail-modal">&times;</button>
+                </div>
+                <div class="detail-content">
+                    <div class="detail-section">
+                        <h3>基本情報</h3>
+                        <div class="detail-item">
+                            <label>予約者:</label>
+                            <span id="detail-user"></span>
+                        </div>
+                        <div class="detail-item">
+                            <label>タイトル:</label>
+                            <span id="detail-title"></span>
+                        </div>
+                        <div class="detail-item">
+                            <label>日付:</label>
+                            <span id="detail-date"></span>
+                        </div>
+                        <div class="detail-item">
+                            <label>時間:</label>
+                            <span id="detail-time"></span>
+                        </div>
+                        <div class="detail-item">
+                            <label>説明:</label>
+                            <span id="detail-description"></span>
+                        </div>
+                    </div>
+                    
+                    <div id="recurring-section" class="detail-section" style="display: none;">
+                        <h3>繰り返し予約情報</h3>
+                        <div class="detail-item">
+                            <label>繰り返しパターン:</label>
+                            <span id="detail-repeat-type"></span>
+                        </div>
+                        <div id="group-reservations">
+                            <label>関連する予約:</label>
+                            <div id="group-list"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-actions" id="detail-actions">
+                        <!-- 編集ボタンは権限に応じて動的に追加 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- グループ編集モーダル -->
+        <div id="group-edit-modal" class="modal" style="display: none;">
+            <div class="modal-content large-modal">
+                <div class="modal-header">
+                    <h2>全ての繰り返し予約を編集</h2>
+                    <button class="close-btn" id="close-group-edit-modal">&times;</button>
+                </div>
+                <form id="group-edit-form">
+                    <div class="group-edit-content">
+                        <div class="group-basic-info">
+                            <h3>基本情報</h3>
+                            <div class="form-group">
+                                <label for="group-title">タイトル</label>
+                                <input type="text" id="group-title" name="title" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="group-description">説明</label>
+                                <textarea id="group-description" name="description" rows="3"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="group-reservations">
+                            <h3>グループ内の予約一覧</h3>
+                            <p class="info-text">このグループに含まれる予約の一覧です。基本情報（タイトル・説明）の変更が全ての予約に適用されます。</p>
+                            <div id="group-reservations-list">
+                                <!-- 動的に生成される予約リスト -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button type="button" id="group-cancel-btn" class="btn-secondary">キャンセル</button>
+                        <button type="submit" class="btn-primary">すべて更新</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <!-- 予約作成モーダル -->
         <div id="reservation-modal" class="modal" style="display: none;">
             <div class="modal-content">

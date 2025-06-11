@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会議室予約システム</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- ヘッダー -->
+        <header class="header">
+            <div class="header-content">
+                <h1>会議室予約システム</h1>
+                <div class="header-actions">
+                    <span id="user-info"></span>
+                    <button id="logout-btn" class="btn-secondary">ログアウト</button>
+                </div>
+            </div>
+        </header>
+        
+        <!-- メインコンテンツ -->
+        <main class="main-content">
+            <!-- ツールバー -->
+            <div class="toolbar">
+                <div class="view-controls">
+                    <button id="prev-btn" class="btn-icon">‹</button>
+                    <span id="current-period"></span>
+                    <button id="next-btn" class="btn-icon">›</button>
+                    <button id="today-btn" class="btn-secondary">今日</button>
+                </div>
+                <div class="view-options">
+                    <button id="month-view" class="btn-view active">月</button>
+                    <button id="week-view" class="btn-view">週</button>
+                    <button id="day-view" class="btn-view">日</button>
+                </div>
+                <button id="new-reservation-btn" class="btn-primary">新規予約</button>
+            </div>
+            
+            <!-- カレンダー表示エリア -->
+            <div class="calendar-container">
+                <div id="calendar-view"></div>
+            </div>
+        </main>
+        
+        <!-- 予約作成モーダル -->
+        <div id="reservation-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modal-title">新規予約</h2>
+                    <button class="close-btn" id="close-modal">&times;</button>
+                </div>
+                <form id="reservation-form">
+                    <div class="form-group">
+                        <label for="reservation-title">タイトル</label>
+                        <input type="text" id="reservation-title" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reservation-description">説明</label>
+                        <textarea id="reservation-description" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="reservation-date">日付</label>
+                            <input type="date" id="reservation-date" name="date" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="start-time">開始時間</label>
+                            <input type="time" id="start-time" name="start_time" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="end-time">終了時間</label>
+                            <input type="time" id="end-time" name="end_time" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="is-recurring" name="is_recurring">
+                            繰り返し予約
+                        </label>
+                    </div>
+                    <div id="recurring-options" style="display: none;">
+                        <div class="form-group">
+                            <label for="repeat-type">繰り返しパターン</label>
+                            <select id="repeat-type" name="repeat_type">
+                                <option value="daily">毎日</option>
+                                <option value="weekly" selected>毎週</option>
+                                <option value="monthly">毎月</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="repeat-end-date">終了日</label>
+                            <input type="date" id="repeat-end-date" name="repeat_end_date">
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" id="cancel-btn" class="btn-secondary">キャンセル</button>
+                        <button type="submit" class="btn-primary">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- ローディング表示 -->
+        <div id="loading" class="loading" style="display: none;">
+            <div class="spinner"></div>
+        </div>
+        
+        <!-- メッセージ表示 -->
+        <div id="message" class="message"></div>
+    </div>
+    
+    <script src="js/main.js"></script>
+</body>
+</html>

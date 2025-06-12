@@ -43,7 +43,7 @@ async function handleReservationSubmit(e) {
         date: formData.get('date'),
         start_time: formData.get('start_time'),
         end_time: formData.get('end_time'),
-        is_recurring: formData.get('is_recurring') === 'on',
+        is_recurring: formData.get('is_recurring') === 'yes',
         repeat_type: formData.get('repeat_type'),
         repeat_end_date: formData.get('repeat_end_date')
     };

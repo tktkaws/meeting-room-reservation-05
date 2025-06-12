@@ -52,8 +52,9 @@ function setupEventListeners() {
     // グループ編集フォーム送信
     document.getElementById('group-edit-form')?.addEventListener('submit', handleGroupEditSubmit);
     
-    // 繰り返し予約チェックボックス
-    document.getElementById('is-recurring')?.addEventListener('change', toggleRecurringOptions);
+    // 繰り返し予約ラジオボタン
+    document.getElementById('recurring-yes')?.addEventListener('change', toggleRecurringOptions);
+    document.getElementById('recurring-no')?.addEventListener('change', toggleRecurringOptions);
     
     // モーダル外クリックで閉じる
     document.getElementById('reservation-modal')?.addEventListener('click', function(e) {

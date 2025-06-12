@@ -188,10 +188,17 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="is-recurring" name="is_recurring">
-                            繰り返し予約
-                        </label>
+                        <label>繰り返し設定</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" id="recurring-no" name="is_recurring" value="no" checked>
+                                繰り返さない
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" id="recurring-yes" name="is_recurring" value="yes">
+                                繰り返す
+                            </label>
+                        </div>
                     </div>
                     <div id="recurring-options" style="display: none;">
                         <div class="form-group">

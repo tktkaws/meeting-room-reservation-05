@@ -152,7 +152,7 @@ async function editSingleReservation(reservationId) {
     populateTimeSelect(document.getElementById('end-time'), endTime);
     
     // 繰り返し予約オプションを非表示
-    document.getElementById('is-recurring').checked = false;
+    document.getElementById('recurring-no').checked = true;
     document.getElementById('recurring-options').style.display = 'none';
     
     // フォームに編集用のIDを設定
@@ -225,10 +225,10 @@ function closeDetailModal() {
 
 // 繰り返し予約オプション切り替え
 function toggleRecurringOptions() {
-    const checkbox = document.getElementById('is-recurring');
+    const recurringYes = document.getElementById('recurring-yes');
     const options = document.getElementById('recurring-options');
     
-    if (checkbox.checked) {
+    if (recurringYes && recurringYes.checked) {
         options.style.display = 'block';
     } else {
         options.style.display = 'none';

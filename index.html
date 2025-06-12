@@ -23,18 +23,18 @@
         <main class="main-content">
             <!-- ツールバー -->
             <div class="toolbar">
-                <div class="view-controls">
-                    <button id="prev-btn" class="btn-icon">‹</button>
-                    <span id="current-period"></span>
-                    <button id="next-btn" class="btn-icon">›</button>
-                    <button id="today-btn" class="btn-secondary">今日</button>
-                </div>
                 <div class="view-options">
                     <button id="month-view" class="btn-view active">月</button>
                     <button id="week-view" class="btn-view">週</button>
-                    <button id="day-view" class="btn-view">日</button>
+                    <button id="list-view" class="btn-view">リスト</button>
                 </div>
-                <button id="new-reservation-btn" class="btn-primary">新規予約</button>
+                <div class="view-controls">
+                    <button id="today-btn" class="btn-today">今日</button>
+                    <button id="prev-btn" class="btn-icon">‹</button>
+                    <button id="next-btn" class="btn-icon">›</button>
+                    <span id="current-period"></span>
+                </div>
+                <button id="new-reservation-btn" class="btn-primary btn-new-reservation">新規予約</button>
             </div>
             
             <!-- カレンダー表示エリア -->
@@ -121,11 +121,15 @@
                             <div class="time-form-row">
                                 <div class="form-group">
                                     <label for="group-start-time">開始時間</label>
-                                    <input type="time" id="group-start-time" name="start_time">
+                                    <select id="group-start-time" name="start_time">
+                                        <!-- 15分単位の時間選択肢を動的に生成 -->
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="group-end-time">終了時間</label>
-                                    <input type="time" id="group-end-time" name="end_time">
+                                    <select id="group-end-time" name="end_time">
+                                        <!-- 15分単位の時間選択肢を動的に生成 -->
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -172,11 +176,15 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="start-time">開始時間</label>
-                            <input type="time" id="start-time" name="start_time" required>
+                            <select id="start-time" name="start_time" required>
+                                <!-- 15分単位の時間選択肢を動的に生成 -->
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="end-time">終了時間</label>
-                            <input type="time" id="end-time" name="end_time" required>
+                            <select id="end-time" name="end_time" required>
+                                <!-- 15分単位の時間選択肢を動的に生成 -->
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
@@ -216,6 +224,14 @@
         <div id="message" class="message"></div>
     </div>
     
-    <script src="js/main.js"></script>
+    <script src="js/shared/ui-utils.js"></script>
+    <script src="js/shared/time-utils.js"></script>
+    <script src="js/calendar/date-utils.js"></script>
+    <script src="js/auth/auth.js"></script>
+    <script src="js/calendar/calendar.js"></script>
+    <script src="js/reservations/reservation-api.js"></script>
+    <script src="js/reservations/reservation-modal.js"></script>
+    <script src="js/reservations/group-edit.js"></script>
+    <script src="js/main/main-page.js"></script>
 </body>
 </html>

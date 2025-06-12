@@ -212,11 +212,13 @@ function updateUserInfo() {
     }
 }
 
-// 予約データ読み込み
+// 予約データ読み込み（平日表示期間の全予約を取得）
 async function loadReservations() {
     try {
-        const startDate = formatDate(getMonthStart(currentDate));
-        const endDate = formatDate(getMonthEnd(currentDate));
+        const monthStart = getMonthStart(currentDate);
+        const monthEnd = getMonthEnd(currentDate);
+        const startDate = formatDate(getWeekdayStart(new Date(monthStart)));
+        const endDate = formatDate(getWeekdayEnd(new Date(monthEnd)));
         
         console.log('予約データを読み込み中:', startDate, 'から', endDate);
         
@@ -255,43 +257,45 @@ function renderCalendar() {
     }
 }
 
-// 月表示
+// 月表示（平日のみ）
 function renderMonthView(container) {
     const monthStart = getMonthStart(currentDate);
     const monthEnd = getMonthEnd(currentDate);
-    const calendarStart = getWeekStart(new Date(monthStart));
-    const calendarEnd = getWeekEnd(new Date(monthEnd));
+    const calendarStart = getWeekdayStart(new Date(monthStart));
+    const calendarEnd = getWeekdayEnd(new Date(monthEnd));
     
-    let html = '<div class="calendar-grid">';
+    let html = '<div class="calendar-grid weekdays-only">';
     
-    // ヘッダー（曜日）
-    const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+    // ヘッダー（平日のみ）
+    const weekdays = ['月', '火', '水', '木', '金'];
     weekdays.forEach(day => {
         html += `<div class="calendar-header">${day}</div>`;
     });
     
-    // 日付セル
+    // 日付セル（平日のみ）
     let currentDay = new Date(calendarStart);
     while (currentDay <= calendarEnd) {
-        const dayReservations = getDayReservations(currentDay);
-        const isToday = isSameDay(currentDay, new Date());
-        const isCurrentMonth = currentDay.getMonth() === currentDate.getMonth();
-        
-        html += `
-            <div class="calendar-day ${isToday ? 'today' : ''} ${!isCurrentMonth ? 'other-month' : ''}" 
-                 data-date="${formatDate(currentDay)}" onclick="selectDate('${formatDate(currentDay)}')">
-                <div class="day-number">${currentDay.getDate()}</div>
-                <div class="reservations">
-                    ${dayReservations.map(res => `
-                        <div class="reservation-item ${res.group_id ? 'recurring' : ''}" onclick="event.stopPropagation(); showReservationDetail(${res.id})" title="${res.title} (${res.start_datetime.split(' ')[1].substring(0,5)}-${res.end_datetime.split(' ')[1].substring(0,5)})${res.group_id ? ' - 繰り返し予約' : ''}">
-                            <div class="reservation-title">${res.title}${res.group_id ? ' ♻' : ''}</div>
-                            <div class="reservation-time">${res.start_datetime.split(' ')[1].substring(0,5)}-${res.end_datetime.split(' ')[1].substring(0,5)}</div>
-                        </div>
-                    `).join('')}
+        // 平日のみ処理（月曜=1, 火曜=2, ..., 金曜=5）
+        if (currentDay.getDay() >= 1 && currentDay.getDay() <= 5) {
+            const dayReservations = getDayReservations(currentDay);
+            const isToday = isSameDay(currentDay, new Date());
+            const isCurrentMonth = currentDay.getMonth() === currentDate.getMonth();
+            
+            html += `
+                <div class="calendar-day ${isToday ? 'today' : ''} ${!isCurrentMonth ? 'other-month' : ''}" 
+                     data-date="${formatDate(currentDay)}" onclick="selectDate('${formatDate(currentDay)}')">
+                    <div class="day-number">${currentDay.getDate()}</div>
+                    <div class="reservations">
+                        ${dayReservations.map(res => `
+                            <div class="reservation-item ${res.group_id ? 'recurring' : ''}" onclick="event.stopPropagation(); showReservationDetail(${res.id})" title="${res.title} (${res.start_datetime.split(' ')[1].substring(0,5)}-${res.end_datetime.split(' ')[1].substring(0,5)})${res.group_id ? ' - 繰り返し予約' : ''}">
+                                <div class="reservation-title">${res.title}${res.group_id ? ' ♻' : ''}</div>
+                                <div class="reservation-time">${res.start_datetime.split(' ')[1].substring(0,5)}-${res.end_datetime.split(' ')[1].substring(0,5)}</div>
+                            </div>
+                        `).join('')}
+                    </div>
                 </div>
-            </div>
-        `;
-        
+            `;
+        }
         currentDay.setDate(currentDay.getDate() + 1);
     }
     
@@ -894,6 +898,45 @@ function getWeekEnd(date) {
     const day = date.getDay();
     const diff = date.getDate() + (6 - day);
     return new Date(date.setDate(diff));
+}
+
+// 平日表示用の開始日取得（その月の最初の平日またはその前の週の月曜日）
+function getWeekdayStart(date) {
+    const monthStart = new Date(date.getFullYear(), date.getMonth(), 1);
+    const dayOfWeek = monthStart.getDay(); // 0=日曜日, 1=月曜日, ..., 6=土曜日
+    
+    if (dayOfWeek === 0) {
+        // 月初が日曜日の場合、翌日（月曜日）から開始
+        return new Date(monthStart.getFullYear(), monthStart.getMonth(), 2);
+    } else if (dayOfWeek === 1) {
+        // 月初が月曜日の場合、そのまま月初から開始
+        return monthStart;
+    } else {
+        // 月初が火曜日以降の場合、前の週の月曜日から開始
+        const daysBack = dayOfWeek - 1;
+        return new Date(monthStart.getFullYear(), monthStart.getMonth(), monthStart.getDate() - daysBack);
+    }
+}
+
+// 平日表示用の終了日取得（その月の最後の平日またはその次の週の金曜日）
+function getWeekdayEnd(date) {
+    const monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    const dayOfWeek = monthEnd.getDay(); // 0=日曜日, 1=月曜日, ..., 6=土曜日
+    
+    if (dayOfWeek === 5) {
+        // 月末が金曜日の場合、そのまま月末で終了
+        return monthEnd;
+    } else if (dayOfWeek === 6) {
+        // 月末が土曜日の場合、前日（金曜日）で終了
+        return new Date(monthEnd.getFullYear(), monthEnd.getMonth(), monthEnd.getDate() - 1);
+    } else if (dayOfWeek === 0) {
+        // 月末が日曜日の場合、前々日（金曜日）で終了
+        return new Date(monthEnd.getFullYear(), monthEnd.getMonth(), monthEnd.getDate() - 2);
+    } else {
+        // 月末が平日の場合、次の金曜日まで延長
+        const daysForward = 5 - dayOfWeek;
+        return new Date(monthEnd.getFullYear(), monthEnd.getMonth(), monthEnd.getDate() + daysForward);
+    }
 }
 
 function getDayReservations(date) {

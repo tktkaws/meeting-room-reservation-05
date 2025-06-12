@@ -251,6 +251,11 @@ body {
     background: #e2e8f0;
 }
 
+/* 平日のみカレンダーグリッド */
+.calendar-grid.weekdays-only {
+    grid-template-columns: repeat(5, 1fr);
+}
+
 .calendar-header {
     background: #f7fafc;
     padding: 1rem;

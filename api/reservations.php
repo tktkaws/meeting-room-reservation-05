@@ -24,7 +24,7 @@ switch ($method) {
 
 // 予約一覧取得
 function handleGetReservations() {
-    requireAuth();
+    // 予約一覧の閲覧は認証不要
     
     $db = getDatabase();
     $futureOnly = $_GET['future_only'] ?? false;

@@ -25,7 +25,7 @@
             <!-- ツールバー -->
             <div class="toolbar">
                 <div class="view-options">
-                    <button id="month-view" class="btn-view active">月</button>
+                    <button id="month-view" class="btn-view">月</button>
                     <button id="week-view" class="btn-view">週</button>
                     <button id="list-view" class="btn-view">リスト</button>
                 </div>
@@ -48,16 +48,10 @@
         <div id="reservation-detail-modal" class="modal" style="display: none;">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2>予約詳細</h2>
                     <button class="close-btn" id="close-detail-modal">&times;</button>
                 </div>
                 <div class="detail-content">
                     <div class="detail-section">
-                        <h3>基本情報</h3>
-                        <div class="detail-item">
-                            <label>予約者:</label>
-                            <span id="detail-user"></span>
-                        </div>
                         <div class="detail-item">
                             <label>タイトル:</label>
                             <span id="detail-title"></span>
@@ -69,6 +63,11 @@
                         <div class="detail-item">
                             <label>時間:</label>
                             <span id="detail-time"></span>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <label>予約者:</label>
+                            <span id="detail-user"></span>
                         </div>
                         <div class="detail-item">
                             <label>説明:</label>

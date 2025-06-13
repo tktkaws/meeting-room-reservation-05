@@ -326,15 +326,16 @@ body {
     background: #f9f9f9;
 }
 
-.calendar-day.today {
-    background: #e6fffa;
-    border-color: #38b2ac;
+.calendar-day.today  {
 }
 
 .day-number {
     text-align: center;
     font-weight: 600;
     margin-bottom: 0.5rem;
+}
+.calendar-day.today .day-number {
+    color: #f15252;
 }
 
 .reservation-item {
@@ -392,13 +393,6 @@ body {
 
 .detail-section {
     margin-bottom: 2rem;
-}
-
-.detail-section h3 {
-    color: #333;
-    margin-bottom: 1rem;
-    border-bottom: 2px solid #667eea;
-    padding-bottom: 0.5rem;
 }
 
 .detail-item {
@@ -680,9 +674,10 @@ body {
 
 .modal-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     padding: 1.5rem;
+    padding-bottom: 0;
     border-bottom: 1px solid #e2e8f0;
 }
 

@@ -219,6 +219,11 @@ function createCurrentTimeLine() {
 
 // 週間表示のセルクリック処理
 function selectWeekTimeSlot(dateStr, timeSlot) {
+    // 非ログインユーザーの場合は何もしない
+    if (!currentUser) {
+        return;
+    }
+    
     // 終了時間を1時間後に設定
     const [hours, minutes] = timeSlot.split(':').map(Number);
     let endHours = hours + 1;
@@ -353,5 +358,9 @@ async function switchView(view) {
 
 // 日付選択
 function selectDate(dateStr) {
+    // 非ログインユーザーの場合は何もしない
+    if (!currentUser) {
+        return;
+    }
     openNewReservationModal(dateStr);
 }

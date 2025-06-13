@@ -17,7 +17,7 @@ if (!$reservationId) {
 
 // 予約詳細取得
 function getReservationDetail($reservationId) {
-    requireAuth();
+    // 予約詳細の閲覧は認証不要（編集権限チェックは後で行う）
     
     $db = getDatabase();
     
@@ -59,6 +59,11 @@ function getReservationDetail($reservationId) {
 
 // 編集権限チェック
 function canEditReservation($reservation) {
+    // ログインしていない場合は編集不可
+    if (!isset($_SESSION['user_id'])) {
+        return false;
+    }
+    
     return $_SESSION['role'] === 'admin' || $_SESSION['user_id'] == $reservation['user_id'];
 }
 

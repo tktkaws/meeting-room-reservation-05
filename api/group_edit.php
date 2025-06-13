@@ -13,7 +13,7 @@ switch ($method) {
         handleUpdateGroupReservations();
         break;
     default:
-        sendJsonResponse(['error' => 'サポートされていないメソッドです'], 405);
+        sendJsonResponse(false, 'サポートされていないメソッドです', null, 405);
 }
 
 // グループの予約一覧取得
@@ -23,7 +23,7 @@ function handleGetGroupReservations() {
     $groupId = $_GET['group_id'] ?? 0;
     
     if (!$groupId) {
-        sendJsonResponse(['error' => 'グループIDが必要です'], 400);
+        sendJsonResponse(false, 'グループIDが必要です', null, 400);
     }
     
     $db = getDatabase();
@@ -40,12 +40,12 @@ function handleGetGroupReservations() {
         $group = $stmt->fetch();
         
         if (!$group) {
-            sendJsonResponse(['error' => '繰り返し予約グループが見つかりません'], 404);
+            sendJsonResponse(false, '繰り返し予約グループが見つかりません', null, 404);
         }
         
         // 権限チェック
         if ($group['user_id'] != $_SESSION['user_id'] && $_SESSION['role'] !== 'admin') {
-            sendJsonResponse(['error' => 'この繰り返し予約を編集する権限がありません'], 403);
+            sendJsonResponse(false, 'この繰り返し予約を編集する権限がありません', null, 403);
         }
         
         // グループに属する予約一覧取得
@@ -58,14 +58,14 @@ function handleGetGroupReservations() {
         $stmt->execute([$groupId]);
         $reservations = $stmt->fetchAll();
         
-        sendJsonResponse([
+        sendJsonResponse(true, 'グループ情報を取得しました', [
             'group' => $group,
             'reservations' => $reservations,
             'can_edit' => true
         ]);
         
     } catch (Exception $e) {
-        sendJsonResponse(['error' => 'グループ情報の取得に失敗しました: ' . $e->getMessage()], 500);
+        sendJsonResponse(false, 'グループ情報の取得に失敗しました: ' . $e->getMessage(), null, 500);
     }
 }
 
@@ -76,7 +76,7 @@ function handleUpdateGroupReservations() {
     $input = json_decode(file_get_contents('php://input'), true);
     
     if (!$input) {
-        sendJsonResponse(['error' => '無効なJSONデータです'], 400);
+        sendJsonResponse(false, '無効なJSONデータです', null, 400);
     }
     
     $groupId = $input['group_id'] ?? 0;
@@ -85,20 +85,20 @@ function handleUpdateGroupReservations() {
     $bulkTimeUpdate = $input['bulk_time_update'] ?? null; // 時間一括更新
     
     if (!$groupId) {
-        sendJsonResponse(['error' => 'グループIDが必要です'], 400);
+        sendJsonResponse(false, 'グループIDが必要です', null, 400);
     }
     
     if (empty($title)) {
-        sendJsonResponse(['error' => 'タイトルは必須です'], 400);
+        sendJsonResponse(false, 'タイトルは必須です', null, 400);
     }
     
     // 入力検証
     if (!validateInput($title, 'string', 100)) {
-        sendJsonResponse(['error' => 'タイトルは100文字以内で入力してください'], 400);
+        sendJsonResponse(false, 'タイトルは100文字以内で入力してください', null, 400);
     }
     
     if (!validateInput($description, 'string', 500)) {
-        sendJsonResponse(['error' => '説明は500文字以内で入力してください'], 400);
+        sendJsonResponse(false, '説明は500文字以内で入力してください', null, 400);
     }
     
     $db = getDatabase();
@@ -111,11 +111,11 @@ function handleUpdateGroupReservations() {
         $group = $stmt->fetch();
         
         if (!$group) {
-            sendJsonResponse(['error' => '繰り返し予約グループが見つかりません'], 404);
+            sendJsonResponse(false, '繰り返し予約グループが見つかりません', null, 404);
         }
         
         if ($group['user_id'] != $_SESSION['user_id'] && $_SESSION['role'] !== 'admin') {
-            sendJsonResponse(['error' => 'この繰り返し予約を編集する権限がありません'], 403);
+            sendJsonResponse(false, 'この繰り返し予約を編集する権限がありません', null, 403);
         }
         
         // グループ情報更新
@@ -181,14 +181,11 @@ function handleUpdateGroupReservations() {
         }
         
         $db->commit();
-        sendJsonResponse([
-            'success' => true,
-            'message' => 'すべての繰り返し予約を更新しました'
-        ]);
+        sendJsonResponse(true, 'すべての繰り返し予約を更新しました');
         
     } catch (Exception $e) {
         $db->rollback();
-        sendJsonResponse(['error' => '繰り返し予約の更新に失敗しました: ' . $e->getMessage()], 500);
+        sendJsonResponse(false, '繰り返し予約の更新に失敗しました: ' . $e->getMessage(), null, 500);
     }
 }
 

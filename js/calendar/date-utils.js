@@ -77,3 +77,35 @@ function getWeekdayEnd(date) {
         return endDate;
     }
 }
+
+// 週間表示用の開始日取得（その週の月曜日）
+function getWeekStart(date) {
+    const d = new Date(date);
+    const day = d.getDay();
+    const diff = d.getDate() - day + (day === 0 ? -6 : 1); // 日曜日の場合は前週の月曜日
+    return new Date(d.setDate(diff));
+}
+
+// 週間表示用の終了日取得（その週の金曜日）
+function getWeekEnd(date) {
+    const weekStart = getWeekStart(date);
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekEnd.getDate() + 4); // 月曜日から4日後が金曜日
+    return weekEnd;
+}
+
+// 15分単位の時間スロットを生成
+function generateTimeSlots() {
+    const slots = [];
+    const startHour = 9;
+    const endHour = 18;
+    
+    for (let hour = startHour; hour < endHour; hour++) {
+        for (let minute = 0; minute < 60; minute += 15) {
+            const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+            slots.push(timeString);
+        }
+    }
+    
+    return slots;
+}

@@ -15,15 +15,41 @@ async function initMainPage() {
     // イベントリスナー設定
     setupEventListeners();
     
+    // 保存されたビュー状態を復元
+    await restoreSavedView();
+    
     // カレンダー初期表示
     await loadReservations();
     renderCalendar();
+}
+
+// 保存されたビュー状態を復元
+async function restoreSavedView() {
+    const savedView = loadSavedView();
+    currentView = savedView;
+    
+    // ボタンのアクティブ状態を更新
+    document.querySelectorAll('.btn-view').forEach(btn => btn.classList.remove('active'));
+    const targetBtn = document.getElementById(`${savedView}-view`);
+    if (targetBtn) {
+        targetBtn.classList.add('active');
+    }
+    
+    // リスト表示の場合は今日以降の全予約データを読み込み
+    if (savedView === 'list') {
+        await loadAllFutureReservations();
+    }
 }
 
 // イベントリスナー設定
 function setupEventListeners() {
     // ログアウトボタン
     document.getElementById('logout-btn')?.addEventListener('click', handleLogout);
+    
+    // 設定ボタン
+    document.getElementById('config-btn')?.addEventListener('click', () => {
+        window.location.href = 'config.html';
+    });
     
     // ナビゲーションボタン
     document.getElementById('prev-btn')?.addEventListener('click', () => navigateDate(-1));

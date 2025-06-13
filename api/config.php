@@ -25,17 +25,27 @@ function getDatabase() {
 }
 
 // JSON レスポンス送信関数
-function sendJsonResponse($data, $statusCode = 200) {
+function sendJsonResponse($success, $message, $data = null, $statusCode = 200) {
     http_response_code($statusCode);
     header('Content-Type: application/json; charset=utf-8');
-    echo json_encode($data, JSON_UNESCAPED_UNICODE);
+    
+    $response = [
+        'success' => $success,
+        'message' => $message
+    ];
+    
+    if ($data !== null) {
+        $response['data'] = $data;
+    }
+    
+    echo json_encode($response, JSON_UNESCAPED_UNICODE);
     exit;
 }
 
 // 認証チェック関数
 function requireAuth() {
     if (!isset($_SESSION['user_id'])) {
-        sendJsonResponse(['error' => 'ログインが必要です'], 401);
+        sendJsonResponse(false, 'ログインが必要です', null, 401);
     }
 }
 
@@ -43,7 +53,7 @@ function requireAuth() {
 function requireAdmin() {
     requireAuth();
     if ($_SESSION['role'] !== 'admin') {
-        sendJsonResponse(['error' => '管理者権限が必要です'], 403);
+        sendJsonResponse(false, '管理者権限が必要です', null, 403);
     }
 }
 
@@ -110,7 +120,7 @@ function checkRateLimit($action = 'default', $limit = 60, $window = 3600) {
     $_SESSION[$key]['count']++;
     
     if ($_SESSION[$key]['count'] > $limit) {
-        sendJsonResponse(['error' => 'リクエストが多すぎます。しばらく待ってから再試行してください。'], 429);
+        sendJsonResponse(false, 'リクエストが多すぎます。しばらく待ってから再試行してください。', null, 429);
     }
 }
 ?>

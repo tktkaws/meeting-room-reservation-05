@@ -12,8 +12,8 @@ async function loadAllFutureReservations() {
         
         console.log('読み込み結果:', result);
         
-        if (result.reservations) {
-            allFutureReservations = result.reservations;
+        if (result.success && result.data && result.data.reservations) {
+            allFutureReservations = result.data.reservations;
             console.log('今日以降の予約データ:', allFutureReservations.length, '件');
         } else {
             allFutureReservations = [];
@@ -26,13 +26,24 @@ async function loadAllFutureReservations() {
     }
 }
 
-// 予約データ読み込み（平日表示期間の全予約を取得）
+// 予約データ読み込み（表示期間の全予約を取得）
 async function loadReservations() {
     try {
-        const monthStart = getMonthStart(currentDate);
-        const monthEnd = getMonthEnd(currentDate);
-        const startDate = formatDate(getWeekdayStart(new Date(monthStart)));
-        const endDate = formatDate(getWeekdayEnd(new Date(monthEnd)));
+        let startDate, endDate;
+        
+        if (currentView === 'week') {
+            // 週間表示の場合は表示される週の範囲
+            const weekStart = getWeekStart(currentDate);
+            const weekEnd = getWeekEnd(currentDate);
+            startDate = formatDate(weekStart);
+            endDate = formatDate(weekEnd);
+        } else {
+            // 月表示の場合は従来通り
+            const monthStart = getMonthStart(currentDate);
+            const monthEnd = getMonthEnd(currentDate);
+            startDate = formatDate(getWeekdayStart(new Date(monthStart)));
+            endDate = formatDate(getWeekdayEnd(new Date(monthEnd)));
+        }
         
         console.log('予約データを読み込み中:', startDate, 'から', endDate);
         
@@ -41,8 +52,8 @@ async function loadReservations() {
         
         console.log('読み込み結果:', result);
         
-        if (result.reservations) {
-            reservations = result.reservations;
+        if (result.success && result.data && result.data.reservations) {
+            reservations = result.data.reservations;
             console.log('予約データ:', reservations.length, '件');
         } else {
             reservations = [];
@@ -108,7 +119,7 @@ async function handleReservationSubmit(e) {
             renderCalendar();
         } else {
             const message = editId ? '予約の更新に失敗しました' : '予約の作成に失敗しました';
-            showMessage(result.error || message, 'error');
+            showMessage(result.message || message, 'error');
         }
     } catch (error) {
         console.error('予約処理エラー:', error);
@@ -143,7 +154,7 @@ async function deleteReservation(reservationId) {
             }
             renderCalendar();
         } else {
-            showMessage(result.error || '予約の削除に失敗しました', 'error');
+            showMessage(result.message || '予約の削除に失敗しました', 'error');
         }
     } catch (error) {
         console.error('予約削除エラー:', error);

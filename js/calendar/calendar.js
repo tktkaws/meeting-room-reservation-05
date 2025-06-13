@@ -76,9 +76,163 @@ function renderMonthView(container) {
     container.innerHTML = html;
 }
 
-// 週表示（簡易版）
+// 週表示
 function renderWeekView(container) {
-    container.innerHTML = '<div class="week-view"><p>週表示は今後実装予定です</p></div>';
+    const weekStart = getWeekStart(currentDate);
+    const weekEnd = getWeekEnd(currentDate);
+    const timeSlots = generateTimeSlots();
+    
+    let html = '<div class="week-view">';
+    html += '<div class="week-grid">';
+    
+    // ヘッダー行
+    html += '<div class="week-header-row">';
+    html += '<div class="week-time-header"></div>';
+    
+    for (let dayIndex = 0; dayIndex < 5; dayIndex++) {
+        const date = new Date(weekStart);
+        date.setDate(date.getDate() + dayIndex);
+        const dayNames = ['月', '火', '水', '木', '金'];
+        const isToday = isSameDay(date, getJapanTime());
+        
+        html += `<div class="week-day-header ${isToday ? 'today' : ''}">
+            ${dayNames[dayIndex]} ${date.getMonth() + 1}/${date.getDate()}
+        </div>`;
+    }
+    html += '</div>';
+    
+    // コンテンツグリッド
+    html += '<div class="week-content-grid">';
+    
+    // 時間軸カラム
+    html += '<div class="week-time-column">';
+    timeSlots.forEach(timeSlot => {
+        const isHourMark = timeSlot.endsWith(':00') || timeSlot.endsWith(':30');
+        html += `<div class="week-time-label ${isHourMark ? 'hour-mark' : ''}">${timeSlot}</div>`;
+    });
+    html += '</div>';
+    
+    // 各日のカラム
+    for (let dayIndex = 0; dayIndex < 5; dayIndex++) {
+        const date = new Date(weekStart);
+        date.setDate(date.getDate() + dayIndex);
+        const dateStr = formatDate(date);
+        
+        html += `<div class="week-day-column">`;
+        
+        // 時間セル
+        timeSlots.forEach((timeSlot, timeIndex) => {
+            html += `<div class="week-cell" 
+                         data-date="${dateStr}" 
+                         data-time="${timeSlot}"
+                         data-slot-index="${timeIndex}"
+                         onclick="selectWeekTimeSlot('${dateStr}', '${timeSlot}')">
+                    </div>`;
+        });
+        
+        // その日の予約を配置
+        const dayReservations = getDayReservations(date);
+        dayReservations.forEach(reservation => {
+            const reservationHtml = createReservationComponent(reservation, timeSlots);
+            html += reservationHtml;
+        });
+        
+        // 今日の場合は現在時刻ラインを追加
+        const isToday = isSameDay(date, getJapanTime());
+        if (isToday) {
+            const currentTimeLine = createCurrentTimeLine();
+            if (currentTimeLine) {
+                html += currentTimeLine;
+            }
+        }
+        
+        html += '</div>';
+    }
+    
+    html += '</div>';
+    html += '</div>';
+    html += '</div>';
+    container.innerHTML = html;
+}
+
+// 予約コンポーネントを作成
+function createReservationComponent(reservation, timeSlots) {
+    const startTime = reservation.start_datetime.split(' ')[1].substring(0, 5);
+    const endTime = reservation.end_datetime.split(' ')[1].substring(0, 5);
+    
+    // 開始時間のスロットインデックスを取得
+    const startSlotIndex = timeSlots.indexOf(startTime);
+    if (startSlotIndex === -1) return '';
+    
+    // 予約の継続時間（分）を計算
+    const startMinutes = timeToMinutes(startTime);
+    const endMinutes = timeToMinutes(endTime);
+    const durationMinutes = endMinutes - startMinutes;
+    
+    // 高さを計算（15分 = 20px）
+    const height = ((durationMinutes / 15) * 20) - 4;
+
+    
+    // 開始位置を計算
+    // 10:00 (スロットインデックス 4) の場合、4 * 20 = 80px の位置
+    const topPosition = startSlotIndex * 20 + 2; // セル位置 + マージン
+    
+    return `<div class="week-reservation" 
+                 style="top: ${topPosition}px; height: ${height}px;"
+                 onclick="showReservationDetail(${reservation.id})"
+                 title="${reservation.title} (${startTime}-${endTime})">
+                ${reservation.title}
+            </div>`;
+}
+
+// 時間を分に変換
+function timeToMinutes(timeString) {
+    const [hours, minutes] = timeString.split(':').map(Number);
+    return hours * 60 + minutes;
+}
+
+// 現在時刻ラインを作成
+function createCurrentTimeLine() {
+    const now = getJapanTime();
+    const currentHours = now.getHours();
+    const currentMinutes = now.getMinutes();
+    
+    // 営業時間外の場合は表示しない
+    if (currentHours < 9 || currentHours >= 18) {
+        return null;
+    }
+    
+    // 現在時刻を15分単位に調整
+    const totalMinutes = (currentHours - 9) * 60 + currentMinutes;
+    const slotIndex = Math.floor(totalMinutes / 15);
+    const slotOffset = (totalMinutes % 15) / 15;
+    
+    // 位置を計算（20px per slot + offset）
+    const position = slotIndex * 20 + (slotOffset * 20);
+    
+    return `<div class="current-time-line" style="top: ${position}px;">
+                <div class="current-time-marker"></div>
+            </div>`;
+}
+
+
+
+// 週間表示のセルクリック処理
+function selectWeekTimeSlot(dateStr, timeSlot) {
+    // 終了時間を1時間後に設定
+    const [hours, minutes] = timeSlot.split(':').map(Number);
+    let endHours = hours + 1;
+    let endMinutes = minutes;
+    
+    // 18:00を超える場合は18:00に制限
+    if (endHours > 18) {
+        endHours = 18;
+        endMinutes = 0;
+    }
+    
+    const endTime = `${endHours.toString().padStart(2, '0')}:${endMinutes.toString().padStart(2, '0')}`;
+    
+    openNewReservationModal(dateStr, timeSlot, endTime);
 }
 
 // リスト表示
@@ -143,6 +297,19 @@ function updateCurrentPeriod() {
     
     if (currentView === 'month') {
         periodElement.textContent = `${currentDate.getFullYear()}年 ${currentDate.getMonth() + 1}月`;
+    } else if (currentView === 'week') {
+        const weekStart = getWeekStart(currentDate);
+        const weekEnd = getWeekEnd(currentDate);
+        const startMonth = weekStart.getMonth() + 1;
+        const startDay = weekStart.getDate();
+        const endMonth = weekEnd.getMonth() + 1;
+        const endDay = weekEnd.getDate();
+        
+        if (startMonth === endMonth) {
+            periodElement.textContent = `${currentDate.getFullYear()}年 ${startMonth}月 ${startDay}日 - ${endDay}日`;
+        } else {
+            periodElement.textContent = `${currentDate.getFullYear()}年 ${startMonth}月${startDay}日 - ${endMonth}月${endDay}日`;
+        }
     }
 }
 
@@ -150,8 +317,13 @@ function updateCurrentPeriod() {
 function navigateDate(direction) {
     if (currentView === 'month') {
         currentDate.setMonth(currentDate.getMonth() + direction);
+    } else if (currentView === 'week') {
+        currentDate.setDate(currentDate.getDate() + (direction * 7));
     }
-    loadReservations().then(() => renderCalendar());
+    loadReservations().then(() => {
+        renderCalendar();
+        updateCurrentPeriod();
+    });
 }
 
 // 今日に移動
@@ -163,6 +335,9 @@ function goToToday() {
 // ビュー切り替え
 async function switchView(view) {
     currentView = view;
+    
+    // ビュー状態を保存
+    saveCurrentView(view);
     
     // ボタンのアクティブ状態更新
     document.querySelectorAll('.btn-view').forEach(btn => btn.classList.remove('active'));

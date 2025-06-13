@@ -6,13 +6,13 @@ header('Content-Type: application/json; charset=utf-8');
 $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method !== 'GET') {
-    sendJsonResponse(['error' => 'サポートされていないメソッドです'], 405);
+    sendJsonResponse(false, 'サポートされていないメソッドです', null, 405);
 }
 
 $reservationId = $_GET['id'] ?? 0;
 
 if (!$reservationId) {
-    sendJsonResponse(['error' => '予約IDが必要です'], 400);
+    sendJsonResponse(false, '予約IDが必要です', null, 400);
 }
 
 // 予約詳細取得
@@ -33,7 +33,7 @@ function getReservationDetail($reservationId) {
     $reservation = $stmt->fetch();
     
     if (!$reservation) {
-        sendJsonResponse(['error' => '予約が見つかりません'], 404);
+        sendJsonResponse(false, '予約が見つかりません', null, 404);
     }
     
     $result = [
@@ -64,8 +64,8 @@ function canEditReservation($reservation) {
 
 try {
     $result = getReservationDetail($reservationId);
-    sendJsonResponse($result);
+    sendJsonResponse(true, '予約詳細を取得しました', $result);
 } catch (Exception $e) {
-    sendJsonResponse(['error' => '予約詳細の取得に失敗しました: ' . $e->getMessage()], 500);
+    sendJsonResponse(false, '予約詳細の取得に失敗しました: ' . $e->getMessage(), null, 500);
 }
 ?>

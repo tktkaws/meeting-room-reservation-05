@@ -19,7 +19,7 @@ switch ($method) {
         handleDeleteReservation();
         break;
     default:
-        sendJsonResponse(['error' => 'サポートされていないメソッドです'], 405);
+        sendJsonResponse(false, 'サポートされていないメソッドです', null, 405);
 }
 
 // 予約一覧取得
@@ -58,7 +58,7 @@ function handleGetReservations() {
     }
     
     $reservations = $stmt->fetchAll();
-    sendJsonResponse(['reservations' => $reservations]);
+    sendJsonResponse(true, '予約データを取得しました', ['reservations' => $reservations]);
 }
 
 // 新規予約作成
@@ -71,7 +71,7 @@ function handleCreateReservation() {
     $input = json_decode(file_get_contents('php://input'), true);
     
     if (!$input) {
-        sendJsonResponse(['error' => '無効なJSONデータです'], 400);
+        sendJsonResponse(false, '無効なJSONデータです', null, 400);
     }
     
     $title = sanitizeInput($input['title'] ?? '');
@@ -82,38 +82,38 @@ function handleCreateReservation() {
     $isRecurring = $input['is_recurring'] ?? false;
     
     if (empty($title) || empty($date) || empty($startTime) || empty($endTime)) {
-        sendJsonResponse(['error' => '必須項目を入力してください'], 400);
+        sendJsonResponse(false, '必須項目を入力してください', null, 400);
     }
     
     // 入力検証
     if (!validateInput($title, 'string', 100)) {
-        sendJsonResponse(['error' => 'タイトルは100文字以内で入力してください'], 400);
+        sendJsonResponse(false, 'タイトルは100文字以内で入力してください', null, 400);
     }
     
     if (!validateInput($description, 'string', 500)) {
-        sendJsonResponse(['error' => '説明は500文字以内で入力してください'], 400);
+        sendJsonResponse(false, '説明は500文字以内で入力してください', null, 400);
     }
     
     if (!validateInput($date, 'date')) {
-        sendJsonResponse(['error' => '有効な日付を入力してください'], 400);
+        sendJsonResponse(false, '有効な日付を入力してください', null, 400);
     }
     
     if (!validateInput($startTime, 'time')) {
-        sendJsonResponse(['error' => '有効な開始時間を入力してください'], 400);
+        sendJsonResponse(false, '有効な開始時間を入力してください', null, 400);
     }
     
     if (!validateInput($endTime, 'time')) {
-        sendJsonResponse(['error' => '有効な終了時間を入力してください'], 400);
+        sendJsonResponse(false, '有効な終了時間を入力してください', null, 400);
     }
     
     // 論理チェック
     if (strtotime($date . ' ' . $startTime) >= strtotime($date . ' ' . $endTime)) {
-        sendJsonResponse(['error' => '終了時間は開始時間より後にしてください'], 400);
+        sendJsonResponse(false, '終了時間は開始時間より後にしてください', null, 400);
     }
     
     // 予約期間チェック（未来の日付のみ許可、ただし当日は除外しない）
     if (strtotime($date) < strtotime('today')) {
-        sendJsonResponse(['error' => '過去の日付には予約できません'], 400);
+        sendJsonResponse(false, '過去の日付には予約できません', null, 400);
     }
     
     $startDatetime = $date . ' ' . $startTime;
@@ -128,16 +128,12 @@ function handleCreateReservation() {
             $groupId = createRecurringReservations($db, $input);
             
             $db->commit();
-            sendJsonResponse([
-                'success' => true,
-                'message' => '繰り返し予約を作成しました',
-                'group_id' => $groupId
-            ]);
+            sendJsonResponse(true, '繰り返し予約を作成しました', ['group_id' => $groupId]);
         } else {
             // 単発予約の場合
             // 時間重複チェック
             if (!checkTimeConflict($date, $startDatetime, $endDatetime)) {
-                sendJsonResponse(['error' => 'この時間帯は既に予約されています'], 400);
+                sendJsonResponse(false, 'この時間帯は既に予約されています', null, 400);
             }
             
             $stmt = $db->prepare("
@@ -156,16 +152,12 @@ function handleCreateReservation() {
             $reservationId = $db->lastInsertId();
             
             $db->commit();
-            sendJsonResponse([
-                'success' => true,
-                'message' => '予約を作成しました',
-                'reservation_id' => $reservationId
-            ]);
+            sendJsonResponse(true, '予約を作成しました', ['reservation_id' => $reservationId]);
         }
         
     } catch (Exception $e) {
         $db->rollback();
-        sendJsonResponse(['error' => '予約の作成に失敗しました: ' . $e->getMessage()], 500);
+        sendJsonResponse(false, '予約の作成に失敗しました: ' . $e->getMessage(), null, 500);
     }
 }
 
@@ -178,7 +170,7 @@ function handleUpdateReservation() {
     $editType = $input['edit_type'] ?? 'single'; // 'single' or 'group'
     
     if (!$reservationId) {
-        sendJsonResponse(['error' => '予約IDが必要です'], 400);
+        sendJsonResponse(false, '予約IDが必要です', null, 400);
     }
     
     $db = getDatabase();
@@ -191,11 +183,11 @@ function handleUpdateReservation() {
         $reservation = $stmt->fetch();
         
         if (!$reservation) {
-            sendJsonResponse(['error' => '予約が見つかりません'], 404);
+            sendJsonResponse(false, '予約が見つかりません', null, 404);
         }
         
         if ($reservation['user_id'] != $_SESSION['user_id'] && $_SESSION['role'] !== 'admin') {
-            sendJsonResponse(['error' => 'この予約を編集する権限がありません'], 403);
+            sendJsonResponse(false, 'この予約を編集する権限がありません', null, 403);
         }
         
         $title = sanitizeInput($input['title'] ?? '');
@@ -205,24 +197,24 @@ function handleUpdateReservation() {
         $endTime = $input['end_time'] ?? '';
         
         if (empty($title) || empty($date) || empty($startTime) || empty($endTime)) {
-            sendJsonResponse(['error' => '必須項目を入力してください'], 400);
+            sendJsonResponse(false, '必須項目を入力してください', null, 400);
         }
         
         // 入力検証
         if (!validateInput($title, 'string', 100)) {
-            sendJsonResponse(['error' => 'タイトルは100文字以内で入力してください'], 400);
+            sendJsonResponse(false, 'タイトルは100文字以内で入力してください', null, 400);
         }
         
         if (!validateInput($date, 'date')) {
-            sendJsonResponse(['error' => '有効な日付を入力してください'], 400);
+            sendJsonResponse(false, '有効な日付を入力してください', null, 400);
         }
         
         if (!validateInput($startTime, 'time')) {
-            sendJsonResponse(['error' => '有効な開始時間を入力してください'], 400);
+            sendJsonResponse(false, '有効な開始時間を入力してください', null, 400);
         }
         
         if (!validateInput($endTime, 'time')) {
-            sendJsonResponse(['error' => '有効な終了時間を入力してください'], 400);
+            sendJsonResponse(false, '有効な終了時間を入力してください', null, 400);
         }
         
         $startDatetime = $date . ' ' . $startTime;
@@ -230,7 +222,7 @@ function handleUpdateReservation() {
         
         // 時間重複チェック（自分の予約は除外）
         if (!checkTimeConflict($date, $startDatetime, $endDatetime, $reservationId)) {
-            sendJsonResponse(['error' => 'この時間帯は既に予約されています'], 400);
+            sendJsonResponse(false, 'この時間帯は既に予約されています', null, 400);
         }
         
         if ($editType === 'single' && $reservation['group_id']) {
@@ -263,14 +255,11 @@ function handleUpdateReservation() {
         }
         
         $db->commit();
-        sendJsonResponse([
-            'success' => true,
-            'message' => $message
-        ]);
+        sendJsonResponse(true, $message);
         
     } catch (Exception $e) {
         $db->rollback();
-        sendJsonResponse(['error' => '予約の更新に失敗しました: ' . $e->getMessage()], 500);
+        sendJsonResponse(false, '予約の更新に失敗しました: ' . $e->getMessage(), null, 500);
     }
 }
 
@@ -281,7 +270,7 @@ function handleDeleteReservation() {
     $reservationId = $_GET['id'] ?? 0;
     
     if (!$reservationId) {
-        sendJsonResponse(['error' => '予約IDが必要です'], 400);
+        sendJsonResponse(false, '予約IDが必要です', null, 400);
     }
     
     $db = getDatabase();
@@ -294,11 +283,11 @@ function handleDeleteReservation() {
         $reservation = $stmt->fetch();
         
         if (!$reservation) {
-            sendJsonResponse(['error' => '予約が見つかりません'], 404);
+            sendJsonResponse(false, '予約が見つかりません', null, 404);
         }
         
         if ($reservation['user_id'] != $_SESSION['user_id'] && $_SESSION['role'] !== 'admin') {
-            sendJsonResponse(['error' => 'この予約を削除する権限がありません'], 403);
+            sendJsonResponse(false, 'この予約を削除する権限がありません', null, 403);
         }
         
         // グループリレーションを削除
@@ -317,14 +306,11 @@ function handleDeleteReservation() {
         }
         
         $db->commit();
-        sendJsonResponse([
-            'success' => true,
-            'message' => '予約を削除しました'
-        ]);
+        sendJsonResponse(true, '予約を削除しました');
         
     } catch (Exception $e) {
         $db->rollback();
-        sendJsonResponse(['error' => '予約の削除に失敗しました: ' . $e->getMessage()], 500);
+        sendJsonResponse(false, '予約の削除に失敗しました: ' . $e->getMessage(), null, 500);
     }
 }
 

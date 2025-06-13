@@ -9,8 +9,8 @@ async function editGroupReservations(groupId) {
         const response = await fetch(`api/group_edit.php?group_id=${groupId}`);
         const result = await response.json();
         
-        if (result.error) {
-            showMessage(result.error, 'error');
+        if (!result.success) {
+            showMessage(result.message || 'グループ情報の取得に失敗しました', 'error');
             return;
         }
         
@@ -18,7 +18,7 @@ async function editGroupReservations(groupId) {
         document.getElementById('reservation-detail-modal').style.display = 'none';
         
         // グループ編集モーダルを表示
-        showGroupEditModal(result.group, result.reservations);
+        showGroupEditModal(result.data.group, result.data.reservations);
         
     } catch (error) {
         console.error('グループ編集データ取得エラー:', error);
@@ -124,7 +124,7 @@ async function handleGroupEditSubmit(e) {
             await loadReservations();
             renderCalendar();
         } else {
-            showMessage(result.error || 'グループ編集に失敗しました', 'error');
+            showMessage(result.message || 'グループ編集に失敗しました', 'error');
         }
         
     } catch (error) {

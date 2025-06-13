@@ -5,7 +5,14 @@ let currentUser = null;
 async function checkAuth() {
     try {
         const response = await fetch('api/auth.php');
-        return await response.json();
+        const result = await response.json();
+        
+        // 新しいAPIレスポンス形式に対応
+        if (result.success && result.data) {
+            return result.data;
+        } else {
+            return { logged_in: false };
+        }
     } catch (error) {
         console.error('認証チェックエラー:', error);
         return { logged_in: false };
@@ -32,7 +39,7 @@ async function handleLogin() {
                 window.location.href = 'index.html';
             }, 1000);
         } else {
-            showMessage(result.error || 'ログインに失敗しました', 'error');
+            showMessage(result.message || 'ログインに失敗しました', 'error');
         }
     } catch (error) {
         console.error('ログインエラー:', error);
@@ -63,7 +70,7 @@ async function handleRegister() {
             document.getElementById('login-form').style.display = 'block';
             document.getElementById('registerForm').reset();
         } else {
-            showMessage(result.error || 'ユーザー登録に失敗しました', 'error');
+            showMessage(result.message || 'ユーザー登録に失敗しました', 'error');
         }
     } catch (error) {
         console.error('登録エラー:', error);

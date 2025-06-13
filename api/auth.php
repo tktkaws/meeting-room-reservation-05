@@ -20,7 +20,7 @@ switch ($method) {
                 handleLogout();
                 break;
             default:
-                sendJsonResponse(['error' => '無効なアクションです'], 400);
+                sendJsonResponse(false, '無効なアクションです', null, 400);
         }
         break;
         
@@ -30,7 +30,7 @@ switch ($method) {
         break;
         
     default:
-        sendJsonResponse(['error' => 'サポートされていないメソッドです'], 405);
+        sendJsonResponse(false, 'サポートされていないメソッドです', null, 405);
 }
 
 // ログイン処理
@@ -42,16 +42,16 @@ function handleLogin() {
     $password = $_POST['password'] ?? '';
     
     if (empty($email) || empty($password)) {
-        sendJsonResponse(['error' => 'メールアドレスとパスワードを入力してください'], 400);
+        sendJsonResponse(false, 'メールアドレスとパスワードを入力してください', null, 400);
     }
     
     // 入力検証
     if (!validateInput($email, 'email')) {
-        sendJsonResponse(['error' => '有効なメールアドレスを入力してください'], 400);
+        sendJsonResponse(false, '有効なメールアドレスを入力してください', null, 400);
     }
     
     if (!validateInput($password, 'string', 100)) {
-        sendJsonResponse(['error' => 'パスワードが無効です'], 400);
+        sendJsonResponse(false, 'パスワードが無効です', null, 400);
     }
     
     $db = getDatabase();
@@ -62,7 +62,7 @@ function handleLogin() {
     if (!$user || !password_verify($password, $user['password'])) {
         // ログイン失敗をログ記録（簡易版）
         error_log("ログイン失敗: {$email} from {$_SERVER['REMOTE_ADDR']}");
-        sendJsonResponse(['error' => 'メールアドレスまたはパスワードが間違っています'], 401);
+        sendJsonResponse(false, 'メールアドレスまたはパスワードが間違っています', null, 401);
     }
     
     // セッション再生成でセッションハイジャック対策
@@ -75,9 +75,7 @@ function handleLogin() {
     $_SESSION['role'] = sanitizeInput($user['role']);
     $_SESSION['department'] = sanitizeInput($user['department'] ?? '');
     
-    sendJsonResponse([
-        'success' => true,
-        'message' => 'ログインしました',
+    sendJsonResponse(true, 'ログインしました', [
         'user' => [
             'id' => $user['id'],
             'name' => sanitizeInput($user['name']),
@@ -99,34 +97,34 @@ function handleRegister() {
     $department = sanitizeInput($_POST['department'] ?? '');
     
     if (empty($name) || empty($email) || empty($password)) {
-        sendJsonResponse(['error' => '必須項目を入力してください'], 400);
+        sendJsonResponse(false, '必須項目を入力してください', null, 400);
     }
     
     // 入力検証
     if (!validateInput($name, 'string', 50)) {
-        sendJsonResponse(['error' => '名前は50文字以内で入力してください'], 400);
+        sendJsonResponse(false, '名前は50文字以内で入力してください', null, 400);
     }
     
     if (!validateInput($email, 'email')) {
-        sendJsonResponse(['error' => '有効なメールアドレスを入力してください'], 400);
+        sendJsonResponse(false, '有効なメールアドレスを入力してください', null, 400);
     }
     
     if (!validateInput($department, 'string', 50)) {
-        sendJsonResponse(['error' => '部署名は50文字以内で入力してください'], 400);
+        sendJsonResponse(false, '部署名は50文字以内で入力してください', null, 400);
     }
     
     // パスワード強度チェック
     if (strlen($password) < 6) {
-        sendJsonResponse(['error' => 'パスワードは6文字以上で入力してください'], 400);
+        sendJsonResponse(false, 'パスワードは6文字以上で入力してください', null, 400);
     }
     
     if (strlen($password) > 100) {
-        sendJsonResponse(['error' => 'パスワードは100文字以内で入力してください'], 400);
+        sendJsonResponse(false, 'パスワードは100文字以内で入力してください', null, 400);
     }
     
     // パスワード複雑性チェック（英数字含む）
     if (!preg_match('/^(?=.*[a-zA-Z])(?=.*\d)/', $password)) {
-        sendJsonResponse(['error' => 'パスワードは英字と数字を含む必要があります'], 400);
+        sendJsonResponse(false, 'パスワードは英字と数字を含む必要があります', null, 400);
     }
     
     $db = getDatabase();
@@ -135,7 +133,7 @@ function handleRegister() {
     $stmt = $db->prepare('SELECT id FROM users WHERE email = ?');
     $stmt->execute([$email]);
     if ($stmt->fetch()) {
-        sendJsonResponse(['error' => 'このメールアドレスは既に登録されています'], 400);
+        sendJsonResponse(false, 'このメールアドレスは既に登録されています', null, 400);
     }
     
     // ユーザー登録
@@ -144,29 +142,23 @@ function handleRegister() {
     
     try {
         $stmt->execute([$name, $email, $hashedPassword, $department]);
-        sendJsonResponse([
-            'success' => true,
-            'message' => 'ユーザー登録が完了しました'
-        ]);
+        sendJsonResponse(true, 'ユーザー登録が完了しました');
     } catch (PDOException $e) {
         error_log("ユーザー登録エラー: " . $e->getMessage());
-        sendJsonResponse(['error' => 'ユーザー登録に失敗しました'], 500);
+        sendJsonResponse(false, 'ユーザー登録に失敗しました', null, 500);
     }
 }
 
 // ログアウト処理
 function handleLogout() {
     session_destroy();
-    sendJsonResponse([
-        'success' => true,
-        'message' => 'ログアウトしました'
-    ]);
+    sendJsonResponse(true, 'ログアウトしました');
 }
 
 // 現在のユーザー情報取得
 function handleGetCurrentUser() {
     if (isset($_SESSION['user_id'])) {
-        sendJsonResponse([
+        sendJsonResponse(true, 'ログイン中です', [
             'logged_in' => true,
             'user' => [
                 'id' => $_SESSION['user_id'],
@@ -177,7 +169,7 @@ function handleGetCurrentUser() {
             ]
         ]);
     } else {
-        sendJsonResponse(['logged_in' => false]);
+        sendJsonResponse(true, 'ログインしていません', ['logged_in' => false]);
     }
 }
 ?>

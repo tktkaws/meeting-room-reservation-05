@@ -1,7 +1,7 @@
 // 予約モーダル機能
 
 // 新規予約モーダルを開く
-function openNewReservationModal(selectedDate = null) {
+function openNewReservationModal(selectedDate = null, startTime = null, endTime = null) {
     const modal = document.getElementById('reservation-modal');
     const form = document.getElementById('reservation-form');
     const deleteBtn = document.getElementById('delete-btn');
@@ -27,8 +27,21 @@ function openNewReservationModal(selectedDate = null) {
         document.getElementById('reservation-date').value = formatDate(getJapanTime());
     }
     
-    // デフォルト時間を設定
-    setDefaultTimes();
+    // 指定された時間を設定、なければデフォルト時間を設定
+    if (startTime && endTime) {
+        const startTimeSelect = document.getElementById('start-time');
+        const endTimeSelect = document.getElementById('end-time');
+        
+        if (startTimeSelect) {
+            populateTimeSelect(startTimeSelect, startTime);
+        }
+        
+        if (endTimeSelect) {
+            populateTimeSelect(endTimeSelect, endTime);
+        }
+    } else {
+        setDefaultTimes();
+    }
     
     modal.style.display = 'flex';
 }
@@ -40,14 +53,14 @@ async function showReservationDetail(reservationId) {
         const response = await fetch(`api/reservation_detail.php?id=${reservationId}`);
         const result = await response.json();
         
-        if (result.error) {
-            showMessage(result.error, 'error');
+        if (!result.success) {
+            showMessage(result.message || '予約詳細の取得に失敗しました', 'error');
             return;
         }
         
-        const reservation = result.reservation;
-        const canEdit = result.can_edit;
-        const groupReservations = result.group_reservations;
+        const reservation = result.data.reservation;
+        const canEdit = result.data.can_edit;
+        const groupReservations = result.data.group_reservations;
         
         // 詳細情報を表示
         document.getElementById('detail-user').textContent = `${reservation.user_name} (${reservation.department || '部署未設定'})`;

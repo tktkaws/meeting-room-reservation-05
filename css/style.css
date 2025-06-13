@@ -177,7 +177,7 @@ body {
 }
 
 .btn-new-reservation {
-    max-width: 200px;
+    max-width: 120px;
 }
 
 
@@ -186,7 +186,7 @@ body {
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
-    padding: 0.5rem;
+    padding: 0.5rem 1rem;
     border-radius: 3px;
     transition: background-color 0.3s;
 }
@@ -253,7 +253,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
+    padding: 1rem 0;
 }
 
 .view-controls {
@@ -296,7 +296,7 @@ body {
 
 /* 平日のみカレンダーグリッド */
 .calendar-grid.weekdays-only {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(5, 20%);
 }
 
 
@@ -346,32 +346,28 @@ body {
     margin-bottom: 0.25rem;
     cursor: pointer;
     transition: background-color 0.3s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .reservation-item:hover {
     background: #5a67d8;
 }
 
-/* .reservation-item.recurring {
-    background: #38a169;
-    border-left: 4px solid #2f855a;
-}
-
-.reservation-item.recurring:hover {
-    background: #2f855a;
-} */
-
 .reservation-title {
     font-weight: 600;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    width: 50%;
 }
 
 .reservation-time {
     font-size: 0.7rem;
     opacity: 0.9;
     margin-top: 0.1rem;
+    width: 50%;
 }
 
 .btn-danger {
@@ -562,12 +558,11 @@ body {
 
 /* リスト表示 */
 .list-view {
-    padding: 1rem;
 }
 
 .list-header {
     display: grid;
-    grid-template-columns: 1fr 1fr 2fr 1fr 1fr;
+    grid-template-columns: 10% 10% 1fr 10% 10%;
     gap: 1rem;
     padding: 1rem;
     background: #f7fafc;
@@ -582,12 +577,14 @@ body {
 
 .list-item {
     display: grid;
-    grid-template-columns: 1fr 1fr 2fr 1fr 1fr;
+    grid-template-columns: 10% 10% 1fr 10% 10%;
     gap: 1rem;
     padding: 1rem;
     border-bottom: 1px solid #e2e8f0;
     cursor: pointer;
     transition: background-color 0.3s;
+    font-weight: 600;
+    color: #2d3748;
 }
 
 .list-item:hover {
@@ -602,23 +599,17 @@ body {
 }
 
 .list-date {
-    font-weight: 600;
-    color: #2d3748;
 }
 
 .list-time {
-    color: #4a5568;
-    font-family: monospace;
 }
 
 .list-title {
     text-align: left;
     justify-content: flex-start;
-    font-weight: 500;
 }
 
 .list-user {
-    color: #718096;
 }
 
 .list-type {
@@ -633,15 +624,11 @@ body {
 }
 
 .type-single {
-    background: #e6fffa;
-    color: #234e52;
-    border: 1px solid #81e6d9;
+    border: 1px solid;
 }
 
 .type-recurring {
-    background: #fef5e7;
-    color: #744210;
-    border: 1px solid #f6ad55;
+    border: 1px solid;
 }
 
 .list-empty {
@@ -841,5 +828,332 @@ body {
         margin: 1rem;
         bottom: auto;
         left: auto;
+    }
+}
+
+/* 週間表示 */
+.week-view {
+    overflow-x: auto;
+}
+
+.week-header-row {
+    display: grid;
+    grid-template-columns: 80px repeat(5, 1fr);
+    border: 1px solid #e2e8f0;
+    border-bottom: 2px solid #e2e8f0;
+    min-width: 800px;
+}
+
+.week-content-grid {
+    display: grid;
+    grid-template-columns: 80px repeat(5, 1fr);
+    background: #e2e8f0;
+    border: 1px solid #e2e8f0;
+    border-top: none;
+    min-width: 800px;
+}
+
+.week-grid {
+    display: flex;
+    flex-direction: column;
+    min-width: 800px;
+}
+
+.week-day-column {
+    position: relative;
+    border-left: 1px solid #e2e8f0;
+}
+
+.week-day-column:first-child {
+    border-left: none;
+}
+
+.week-time-header {
+    padding: 0.5rem;
+    text-align: center;
+    font-weight: 600;
+    color: #4a5568;
+    /* border-right: 1px solid #e2e8f0; */
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.week-day-header {
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    font-weight: 600;
+    color: #4a5568;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.week-time-label {
+    background: #f7fafc;
+    padding: 0.25rem 0.5rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #718096;
+    border-right: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.week-time-column {
+    display: grid;
+    grid-template-rows: repeat(36, 20px);
+}
+
+.week-day-column {
+    display: grid;
+    grid-template-rows: repeat(36, 20px);
+    position: relative;
+}
+
+.week-cell {
+    background: white;
+    height: 20px;
+    border-bottom: 1px solid #e2e8f0;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    position: relative;
+}
+
+.week-cell:hover {
+    background: #edf2f7;
+}
+
+.week-cell.has-reservation {
+    background: #bee3f8;
+    cursor: default;
+}
+
+.week-cell.has-reservation:hover {
+    background: #90cdf4;
+}
+
+.week-reservation {
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    background: #4299e1;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border: 1px solid #3182ce;
+}
+
+.week-reservation:hover {
+    background: #3182ce;
+    border-color: #2c5aa0;
+}
+
+/* 現在時刻ライン */
+.current-time-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #e53e3e;
+    z-index: 4;
+    pointer-events: none;
+}
+
+.current-time-marker {
+    position: absolute;
+    left: -4px;
+    top: -4px;
+    width: 8px;
+    height: 8px;
+    background: #e53e3e;
+    border-radius: 50%;
+    z-index: 5;
+}
+
+/* 時間ラベルを30分ごとに強調 */
+.week-time-label.hour-mark {
+    font-weight: 600;
+    color: #2d3748;
+    background: #edf2f7;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .week-header-row,
+    .week-content-grid {
+        min-width: 600px;
+        grid-template-columns: 60px repeat(5, 1fr);
+    }
+    
+    .week-time-column {
+        grid-template-rows: repeat(36, 17px);
+    }
+    
+    .week-day-column {
+        grid-template-rows: repeat(36, 17px);
+    }
+    
+    .week-time-label {
+        font-size: 0.625rem;
+        padding: 0.125rem 0.25rem;
+    }
+    
+    .week-day-header {
+        padding: 0.5rem 0.25rem;
+        font-size: 0.875rem;
+    }
+    
+    .week-cell {
+        height: 17px;
+    }
+    
+    .week-reservation {
+        font-size: 0.6rem;
+        padding: 0.125rem 0.25rem;
+    }
+}
+
+/* コンフィグページ */
+.config-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.config-section {
+    background: white;
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+}
+
+.config-section h2 {
+    margin: 0 0 1.5rem 0;
+    color: #2d3748;
+    font-size: 1.5rem;
+    font-weight: 600;
+    border-bottom: 2px solid #4299e1;
+    padding-bottom: 0.5rem;
+}
+
+.config-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.required {
+    color: #e53e3e;
+}
+
+.form-group input,
+.form-group select {
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+.form-group input:disabled,
+.form-group select:disabled {
+    background-color: #f7fafc;
+    color: #a0aec0;
+    cursor: not-allowed;
+}
+
+.form-help {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #718096;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.btn-secondary {
+    background: #e2e8f0;
+    color: #4a5568;
+    border: 1px solid #cbd5e0;
+}
+
+.btn-secondary:hover {
+    background: #cbd5e0;
+    border-color: #a0aec0;
+}
+
+.btn-primary {
+    background: #4299e1;
+    color: white;
+    border: 1px solid #3182ce;
+}
+
+.btn-primary:hover {
+    background: #3182ce;
+    border-color: #2c5aa0;
+}
+
+.btn-danger {
+    background: #e53e3e;
+    color: white;
+    border: 1px solid #c53030;
+}
+
+.btn-danger:hover {
+    background: #c53030;
+    border-color: #9c1b1b;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .config-container {
+        padding: 1rem;
+    }
+    
+    .config-section {
+        padding: 1.5rem;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .form-actions button {
+        width: 100%;
     }
 }

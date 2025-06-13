@@ -1,6 +1,6 @@
 // カレンダー表示機能
 let currentView = 'month';
-let currentDate = new Date();
+let currentDate = getJapanTime();
 let reservations = [];
 
 // 指定日の予約を取得
@@ -47,26 +47,29 @@ function renderMonthView(container) {
     while (currentDay <= calendarEnd) {
         // 平日のみ処理（月曜=1, 火曜=2, ..., 金曜=5）
         if (currentDay.getDay() >= 1 && currentDay.getDay() <= 5) {
-            const dayReservations = getDayReservations(currentDay);
-            const isToday = isSameDay(currentDay, new Date());
-            const isCurrentMonth = currentDay.getMonth() === currentDate.getMonth();
+            // 現在の日付のコピーを作成（参照問題を回避）
+            const displayDate = new Date(currentDay);
+            const dayReservations = getDayReservations(displayDate);
+            const isToday = isSameDay(displayDate, getJapanTime());
+            const isCurrentMonth = displayDate.getMonth() === currentDate.getMonth();
             
             html += `
                 <div class="calendar-day ${isToday ? 'today' : ''} ${!isCurrentMonth ? 'other-month' : ''}" 
-                     data-date="${formatDate(currentDay)}" onclick="selectDate('${formatDate(currentDay)}')">
-                    <div class="day-number">${currentDay.getDate()}</div>
+                     data-date="${formatDate(displayDate)}" onclick="selectDate('${formatDate(displayDate)}')">
+                    <div class="day-number">${displayDate.getDate()}</div>
                     <div class="reservations">
                         ${dayReservations.map(res => `
                             <div class="reservation-item ${res.group_id ? 'recurring' : ''}" onclick="event.stopPropagation(); showReservationDetail(${res.id})" title="${res.title} (${res.start_datetime.split(' ')[1].substring(0,5)}-${res.end_datetime.split(' ')[1].substring(0,5)})${res.group_id ? ' - 繰り返し予約' : ''}">
-                                <div class="reservation-title">${res.title}${res.group_id ? ' ♻' : ''}</div>
                                 <div class="reservation-time">${res.start_datetime.split(' ')[1].substring(0,5)}-${res.end_datetime.split(' ')[1].substring(0,5)}</div>
+                                <div class="reservation-title">${res.title}${res.group_id ? ' ♻' : ''}</div>
                             </div>
                         `).join('')}
                     </div>
                 </div>
             `;
         }
-        currentDay.setDate(currentDay.getDate() + 1);
+        // 日付を1日進める（新しいDateオブジェクトを作成）
+        currentDay = new Date(currentDay.getTime() + 24 * 60 * 60 * 1000);
     }
     
     html += '</div>';
@@ -80,14 +83,8 @@ function renderWeekView(container) {
 
 // リスト表示
 function renderListView(container) {
-    // 現在の月の予約をソート
-    const monthStart = getMonthStart(currentDate);
-    const monthEnd = getMonthEnd(currentDate);
-    
-    const monthReservations = reservations.filter(res => {
-        const resDate = new Date(res.date);
-        return resDate >= monthStart && resDate <= monthEnd;
-    }).sort((a, b) => {
+    // 全ての今日以降の予約をソート
+    const futureReservations = allFutureReservations.sort((a, b) => {
         // 日付と開始時間でソート
         const dateA = new Date(a.start_datetime);
         const dateB = new Date(b.start_datetime);
@@ -96,8 +93,8 @@ function renderListView(container) {
     
     let html = '<div class="list-view">';
     
-    if (monthReservations.length === 0) {
-        html += '<div class="list-empty">この月に予約はありません</div>';
+    if (futureReservations.length === 0) {
+        html += '<div class="list-empty">今日以降の予約はありません</div>';
     } else {
         html += '<div class="list-header">';
         html += '<div class="list-header-item">日付</div>';
@@ -107,7 +104,7 @@ function renderListView(container) {
         html += '<div class="list-header-item">種別</div>';
         html += '</div>';
         
-        monthReservations.forEach(res => {
+        futureReservations.forEach(res => {
             const date = new Date(res.date);
             const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
             const formattedDate = `${date.getMonth() + 1}/${date.getDate()}(${dayOfWeek})`;
@@ -159,17 +156,22 @@ function navigateDate(direction) {
 
 // 今日に移動
 function goToToday() {
-    currentDate = new Date();
+    currentDate = getJapanTime();
     loadReservations().then(() => renderCalendar());
 }
 
 // ビュー切り替え
-function switchView(view) {
+async function switchView(view) {
     currentView = view;
     
     // ボタンのアクティブ状態更新
     document.querySelectorAll('.btn-view').forEach(btn => btn.classList.remove('active'));
     document.getElementById(`${view}-view`).classList.add('active');
+    
+    // リスト表示の場合は今日以降の全予約データを読み込み
+    if (view === 'list') {
+        await loadAllFutureReservations();
+    }
     
     renderCalendar();
 }

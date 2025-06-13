@@ -1,4 +1,7 @@
 <?php
+// タイムゾーン設定（日本時間）
+date_default_timezone_set('Asia/Tokyo');
+
 // Initialize SQLite database
 try {
     $db = new PDO('sqlite:meeting_room.db');

@@ -1,5 +1,28 @@
 // 時間関連のユーティリティ関数
 
+// 日本時間を取得する関数
+function getJapanTime() {
+    // 日本時間（JST）で現在時刻を取得
+    const now = new Date();
+    // 日本時間のオプション
+    const japanTimeOptions = {
+        timeZone: 'Asia/Tokyo',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+    };
+    
+    // 日本時間の文字列を取得
+    const japanTimeString = now.toLocaleString('ja-JP', japanTimeOptions);
+    
+    // 新しいDateオブジェクトを日本時間で作成
+    return new Date(japanTimeString.replace(/\//g, '-'));
+}
+
 // 15分単位の時間選択肢を生成（9:00-18:00）
 function generateTimeOptions() {
     const options = [];
@@ -120,7 +143,7 @@ function initializeTimeSelects() {
 
 // デフォルト時間を設定（新規予約時）
 function setDefaultTimes() {
-    const now = new Date();
+    const now = getJapanTime();
     const currentHour = now.getHours();
     const currentMinute = now.getMinutes();
     

@@ -33,7 +33,7 @@ function setupEventListeners() {
     // ビュー切り替え
     document.getElementById('month-view')?.addEventListener('click', () => switchView('month'));
     document.getElementById('week-view')?.addEventListener('click', () => switchView('week'));
-    document.getElementById('list-view')?.addEventListener('click', () => switchView('list'));
+    document.getElementById('list-view')?.addEventListener('click', async () => await switchView('list'));
     document.getElementById('day-view')?.addEventListener('click', () => switchView('day'));
     
     // 新規予約ボタン

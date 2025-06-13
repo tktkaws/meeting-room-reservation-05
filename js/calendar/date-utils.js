@@ -1,6 +1,10 @@
 // 日付ユーティリティ関数
 function formatDate(date) {
-    return date.toISOString().split('T')[0];
+    // タイムゾーンを考慮したローカル日付フォーマット
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
 }
 
 function isSameDay(date1, date2) {
@@ -37,11 +41,13 @@ function getWeekdayStart(date) {
         return new Date(monthStart.getFullYear(), monthStart.getMonth(), 2);
     } else if (dayOfWeek === 1) {
         // 月初が月曜日の場合、そのまま月初から開始
-        return monthStart;
+        return new Date(monthStart);
     } else {
         // 月初が火曜日以降の場合、前の週の月曜日から開始
         const daysBack = dayOfWeek - 1;
-        return new Date(monthStart.getFullYear(), monthStart.getMonth(), monthStart.getDate() - daysBack);
+        const startDate = new Date(monthStart);
+        startDate.setDate(startDate.getDate() - daysBack);
+        return startDate;
     }
 }
 
@@ -52,16 +58,22 @@ function getWeekdayEnd(date) {
     
     if (dayOfWeek === 5) {
         // 月末が金曜日の場合、そのまま月末で終了
-        return monthEnd;
+        return new Date(monthEnd);
     } else if (dayOfWeek === 6) {
         // 月末が土曜日の場合、前日（金曜日）で終了
-        return new Date(monthEnd.getFullYear(), monthEnd.getMonth(), monthEnd.getDate() - 1);
+        const endDate = new Date(monthEnd);
+        endDate.setDate(endDate.getDate() - 1);
+        return endDate;
     } else if (dayOfWeek === 0) {
         // 月末が日曜日の場合、前々日（金曜日）で終了
-        return new Date(monthEnd.getFullYear(), monthEnd.getMonth(), monthEnd.getDate() - 2);
+        const endDate = new Date(monthEnd);
+        endDate.setDate(endDate.getDate() - 2);
+        return endDate;
     } else {
         // 月末が平日の場合、次の金曜日まで延長
         const daysForward = 5 - dayOfWeek;
-        return new Date(monthEnd.getFullYear(), monthEnd.getMonth(), monthEnd.getDate() + daysForward);
+        const endDate = new Date(monthEnd);
+        endDate.setDate(endDate.getDate() + daysForward);
+        return endDate;
     }
 }

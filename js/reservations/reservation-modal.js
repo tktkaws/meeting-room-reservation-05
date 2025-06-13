@@ -24,7 +24,7 @@ function openNewReservationModal(selectedDate = null) {
         document.getElementById('reservation-date').value = selectedDate;
     } else {
         // 今日の日付を設定
-        document.getElementById('reservation-date').value = formatDate(new Date());
+        document.getElementById('reservation-date').value = formatDate(getJapanTime());
     }
     
     // デフォルト時間を設定

@@ -1,5 +1,31 @@
 // 予約API通信機能
 
+// 今日以降の全予約データを読み込み（リスト表示用）
+let allFutureReservations = [];
+
+async function loadAllFutureReservations() {
+    try {
+        console.log('今日以降の全予約データを読み込み中...');
+        
+        const response = await fetch('api/reservations.php?future_only=true');
+        const result = await response.json();
+        
+        console.log('読み込み結果:', result);
+        
+        if (result.reservations) {
+            allFutureReservations = result.reservations;
+            console.log('今日以降の予約データ:', allFutureReservations.length, '件');
+        } else {
+            allFutureReservations = [];
+            console.log('今日以降の予約データが空です');
+        }
+    } catch (error) {
+        console.error('今日以降の予約データ読み込みエラー:', error);
+        showMessage('予約データの読み込みに失敗しました', 'error');
+        allFutureReservations = [];
+    }
+}
+
 // 予約データ読み込み（平日表示期間の全予約を取得）
 async function loadReservations() {
     try {
@@ -75,6 +101,10 @@ async function handleReservationSubmit(e) {
             showMessage(message, 'success');
             closeModal();
             await loadReservations();
+            // リスト表示の場合は今日以降の予約データも更新
+            if (currentView === 'list') {
+                await loadAllFutureReservations();
+            }
             renderCalendar();
         } else {
             const message = editId ? '予約の更新に失敗しました' : '予約の作成に失敗しました';
@@ -107,6 +137,10 @@ async function deleteReservation(reservationId) {
             showMessage('予約を削除しました', 'success');
             closeModal();
             await loadReservations();
+            // リスト表示の場合は今日以降の予約データも更新
+            if (currentView === 'list') {
+                await loadAllFutureReservations();
+            }
             renderCalendar();
         } else {
             showMessage(result.error || '予約の削除に失敗しました', 'error');

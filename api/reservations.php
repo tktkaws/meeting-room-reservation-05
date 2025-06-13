@@ -27,21 +27,37 @@ function handleGetReservations() {
     requireAuth();
     
     $db = getDatabase();
-    $startDate = $_GET['start_date'] ?? date('Y-m-01');
-    $endDate = $_GET['end_date'] ?? date('Y-m-t');
+    $futureOnly = $_GET['future_only'] ?? false;
     
-    $sql = "
-        SELECT r.*, u.name as user_name, u.department 
-        FROM reservations r 
-        JOIN users u ON r.user_id = u.id 
-        WHERE r.date BETWEEN ? AND ? 
-        ORDER BY r.start_datetime ASC
-    ";
+    if ($futureOnly) {
+        // 今日以降の全ての予約を取得
+        $today = date('Y-m-d');
+        $sql = "
+            SELECT r.*, u.name as user_name, u.department 
+            FROM reservations r 
+            JOIN users u ON r.user_id = u.id 
+            WHERE r.date >= ? 
+            ORDER BY r.start_datetime ASC
+        ";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$today]);
+    } else {
+        // 従来通りの期間指定での取得
+        $startDate = $_GET['start_date'] ?? date('Y-m-01');
+        $endDate = $_GET['end_date'] ?? date('Y-m-t');
+        
+        $sql = "
+            SELECT r.*, u.name as user_name, u.department 
+            FROM reservations r 
+            JOIN users u ON r.user_id = u.id 
+            WHERE r.date BETWEEN ? AND ? 
+            ORDER BY r.start_datetime ASC
+        ";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$startDate, $endDate]);
+    }
     
-    $stmt = $db->prepare($sql);
-    $stmt->execute([$startDate, $endDate]);
     $reservations = $stmt->fetchAll();
-    
     sendJsonResponse(['reservations' => $reservations]);
 }
 

@@ -1,4 +1,7 @@
 <?php
+// タイムゾーン設定（日本時間）
+date_default_timezone_set('Asia/Tokyo');
+
 // データベース設定
 define('DB_PATH', '../database/meeting_room.db');
 

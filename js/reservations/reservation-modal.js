@@ -48,6 +48,8 @@ function openNewReservationModal(selectedDate = null, startTime = null, endTime 
     // 新規予約では繰り返し設定を表示
     showRecurringOptionsForNewReservation();
     
+    // モーダルを画面中央に配置
+    positionModalCenter(modal);
     modal.style.display = 'flex';
     
     // 文字数カウンターを更新
@@ -251,6 +253,8 @@ async function showReservationDetail(reservationId) {
             return;
         }
         
+        // モーダルを画面中央に配置
+        positionModalCenter(modal);
         modal.style.display = 'flex';
         console.log('Reservation detail modal displayed successfully'); // デバッグ用
         
@@ -320,6 +324,8 @@ async function editSingleReservation(reservationId) {
     form.setAttribute('data-edit-id', reservationId);
     form.setAttribute('data-edit-type', 'single');
     
+    // モーダルを画面中央に配置
+    positionModalCenter(modal);
     modal.style.display = 'flex';
     
     // 文字数カウンターを更新
@@ -582,6 +588,230 @@ async function deleteAllGroupReservations(groupId) {
         }
     }
 }
+
+// モーダル位置設定とドラッグ機能
+let isDragging = false;
+let dragStartX = 0;
+let dragStartY = 0;
+let modalStartX = 0;
+let modalStartY = 0;
+
+// モーダルを画面中央に配置する関数
+function positionModalCenter(modal) {
+    const modalContent = modal.querySelector('.modal-content') || modal.querySelector('.modal-dialog') || modal;
+    
+    // モーダルを一時的に表示して寸法を取得
+    const originalDisplay = modal.style.display;
+    modal.style.display = 'flex';
+    modal.style.visibility = 'hidden';
+    
+    const rect = modalContent.getBoundingClientRect();
+    const centerX = (window.innerWidth - rect.width) / 2;
+    const centerY = (window.innerHeight - rect.height) / 2;
+    
+    // 画面外に出ないよう制限
+    const x = Math.max(20, Math.min(centerX, window.innerWidth - rect.width - 20));
+    const y = Math.max(20, Math.min(centerY, window.innerHeight - rect.height - 20));
+    
+    modalContent.style.position = 'absolute';
+    modalContent.style.left = `${x}px`;
+    modalContent.style.top = `${y}px`;
+    
+    // 表示状態を復元
+    modal.style.display = originalDisplay;
+    modal.style.visibility = 'visible';
+}
+
+
+// ドラッグ機能を設定する関数
+function setupModalDrag(modal) {
+    const modalHeader = modal.querySelector('.modal-header') || modal.querySelector('h3') || modal.querySelector('h2');
+    if (!modalHeader) return;
+    
+    const modalContent = modal.querySelector('.modal-content') || modal.querySelector('.modal-dialog') || modal;
+    
+    // ヘッダーにドラッグカーソルを設定
+    modalHeader.style.cursor = 'move';
+    modalHeader.style.userSelect = 'none';
+    
+    // ドラッグ開始
+    modalHeader.addEventListener('mousedown', (e) => {
+        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return; // ボタンクリック時は無視
+        
+        isDragging = true;
+        dragStartX = e.clientX;
+        dragStartY = e.clientY;
+        
+        const rect = modalContent.getBoundingClientRect();
+        modalStartX = rect.left;
+        modalStartY = rect.top;
+        
+        modalContent.style.cursor = 'grabbing';
+        modalHeader.style.cursor = 'grabbing';
+        modalContent.style.transition = 'none';
+        modalContent.style.userSelect = 'none';
+        
+        e.preventDefault();
+    });
+    
+    // タッチデバイス対応
+    modalHeader.addEventListener('touchstart', (e) => {
+        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
+        
+        isDragging = true;
+        const touch = e.touches[0];
+        dragStartX = touch.clientX;
+        dragStartY = touch.clientY;
+        
+        const rect = modalContent.getBoundingClientRect();
+        modalStartX = rect.left;
+        modalStartY = rect.top;
+        
+        modalContent.style.transition = 'none';
+        e.preventDefault();
+    });
+}
+
+// ドラッグ中の処理
+document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    
+    const deltaX = e.clientX - dragStartX;
+    const deltaY = e.clientY - dragStartY;
+    
+    let newX = modalStartX + deltaX;
+    let newY = modalStartY + deltaY;
+    
+    // 現在ドラッグ中のモーダルを取得
+    const activeModal = document.querySelector('#reservation-modal[style*="flex"], #reservation-detail-modal[style*="flex"]');
+    if (!activeModal) return;
+    
+    const modalContent = activeModal.querySelector('.modal-content') || activeModal.querySelector('.modal-dialog') || activeModal;
+    const modalRect = modalContent.getBoundingClientRect();
+    
+    // 画面外に出ないよう制限
+    const maxX = window.innerWidth - modalRect.width;
+    const maxY = window.innerHeight - modalRect.height;
+    
+    newX = Math.max(0, Math.min(newX, maxX));
+    newY = Math.max(0, Math.min(newY, maxY));
+    
+    modalContent.style.left = `${newX}px`;
+    modalContent.style.top = `${newY}px`;
+});
+
+// タッチデバイスのドラッグ中処理
+document.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    
+    const touch = e.touches[0];
+    const deltaX = touch.clientX - dragStartX;
+    const deltaY = touch.clientY - dragStartY;
+    
+    let newX = modalStartX + deltaX;
+    let newY = modalStartY + deltaY;
+    
+    const activeModal = document.querySelector('#reservation-modal[style*="flex"], #reservation-detail-modal[style*="flex"]');
+    if (!activeModal) return;
+    
+    const modalContent = activeModal.querySelector('.modal-content') || activeModal.querySelector('.modal-dialog') || activeModal;
+    const modalRect = modalContent.getBoundingClientRect();
+    
+    const maxX = window.innerWidth - modalRect.width;
+    const maxY = window.innerHeight - modalRect.height;
+    
+    newX = Math.max(0, Math.min(newX, maxX));
+    newY = Math.max(0, Math.min(newY, maxY));
+    
+    modalContent.style.left = `${newX}px`;
+    modalContent.style.top = `${newY}px`;
+    
+    e.preventDefault();
+});
+
+// ドラッグ終了
+document.addEventListener('mouseup', () => {
+    if (isDragging) {
+        isDragging = false;
+        
+        const activeModal = document.querySelector('#reservation-modal[style*="flex"], #reservation-detail-modal[style*="flex"]');
+        if (activeModal) {
+            const modalContent = activeModal.querySelector('.modal-content') || activeModal.querySelector('.modal-dialog') || activeModal;
+            const modalHeader = activeModal.querySelector('.modal-header') || activeModal.querySelector('h3') || activeModal.querySelector('h2');
+            
+            modalContent.style.cursor = '';
+            if (modalHeader) modalHeader.style.cursor = 'move';
+            modalContent.style.transition = '';
+            modalContent.style.userSelect = '';
+        }
+    }
+});
+
+// タッチ終了
+document.addEventListener('touchend', () => {
+    if (isDragging) {
+        isDragging = false;
+        
+        const activeModal = document.querySelector('#reservation-modal[style*="flex"], #reservation-detail-modal[style*="flex"]');
+        if (activeModal) {
+            const modalContent = activeModal.querySelector('.modal-content') || activeModal.querySelector('.modal-dialog') || activeModal;
+            modalContent.style.transition = '';
+        }
+    }
+});
+
+// ESCキーでモーダルを閉じる
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        const reservationModal = document.getElementById('reservation-modal');
+        const detailModal = document.getElementById('reservation-detail-modal');
+        
+        if (reservationModal && reservationModal.style.display === 'flex') {
+            closeModal();
+        } else if (detailModal && detailModal.style.display === 'flex') {
+            closeDetailModal();
+        }
+    }
+});
+
+// ウィンドウリサイズ時の対応
+window.addEventListener('resize', () => {
+    const activeModal = document.querySelector('#reservation-modal[style*="flex"], #reservation-detail-modal[style*="flex"]');
+    if (activeModal) {
+        const modalContent = activeModal.querySelector('.modal-content') || activeModal.querySelector('.modal-dialog') || activeModal;
+        const rect = modalContent.getBoundingClientRect();
+        const maxX = window.innerWidth - rect.width;
+        const maxY = window.innerHeight - rect.height;
+        
+        let currentX = parseInt(modalContent.style.left) || 0;
+        let currentY = parseInt(modalContent.style.top) || 0;
+        
+        currentX = Math.max(0, Math.min(currentX, maxX));
+        currentY = Math.max(0, Math.min(currentY, maxY));
+        
+        modalContent.style.left = `${currentX}px`;
+        modalContent.style.top = `${currentY}px`;
+    }
+});
+
+// モーダル表示時にドラッグ機能を設定
+function initializeModalFeatures() {
+    const reservationModal = document.getElementById('reservation-modal');
+    const detailModal = document.getElementById('reservation-detail-modal');
+    
+    if (reservationModal) {
+        setupModalDrag(reservationModal);
+    }
+    
+    if (detailModal) {
+        setupModalDrag(detailModal);
+    }
+}
+
+// DOMContentLoaded時に初期化
+document.addEventListener('DOMContentLoaded', () => {
+    initializeModalFeatures();
+});
 
 // グローバルスコープで関数を利用可能にする
 window.showReservationDetail = showReservationDetail;

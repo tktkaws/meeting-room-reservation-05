@@ -1432,8 +1432,6 @@ body {
     }
 }
 
-/* 時間編集関連のCSSは削除されました */
-
 /* モーダル */
 .modal {
     position: fixed;
@@ -2926,4 +2924,15 @@ input[type="checkbox"]#remember-me {
     border-top-color: #333;
     margin-bottom: -5px;
     z-index: 1000;
+}
+
+/* 過去の日付のスタイル */
+.calendar-day.past,
+.week-cell.past {
+    cursor: default !important;
+}
+
+.calendar-day.past:hover,
+.week-cell.past:hover {
+    cursor: default !important;
 }

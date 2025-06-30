@@ -52,12 +52,15 @@ async function renderMonthView(container) {
             const dayReservations = getDayReservations(displayDate);
             const isToday = isSameDay(displayDate, getJapanTime());
             const isCurrentMonth = displayDate.getMonth() === currentDate.getMonth();
+            const today = getJapanTime();
+            today.setHours(0, 0, 0, 0);
+            const isPastDate = displayDate < today;
             
             // 平日のみ表示なので全日予約可能
             const isAvailable = true;
             
             html += `
-                <div class="calendar-day ${isToday ? 'today' : ''} ${!isCurrentMonth ? 'other-month' : ''}" 
+                <div class="calendar-day ${isToday ? 'today' : ''} ${!isCurrentMonth ? 'other-month' : ''} ${isPastDate ? 'past' : ''}" 
                      data-date="${formatDate(displayDate)}" 
                      onclick="selectDate('${formatDate(displayDate)}')">
                     <div class="day-number">
@@ -136,13 +139,16 @@ async function renderWeekView(container) {
         const date = new Date(weekStart);
         date.setDate(date.getDate() + dayIndex);
         const dateStr = formatDate(date);
+        const today = getJapanTime();
+        today.setHours(0, 0, 0, 0);
+        const isPastDate = date < today;
         
         // 平日のみ表示なので全日予約可能
         html += `<div class="week-day-column">`;
         
         // 時間セル
         timeSlots.forEach((timeSlot, timeIndex) => {
-            html += `<div class="week-cell" 
+            html += `<div class="week-cell ${isPastDate ? 'past' : ''}" 
                          data-date="${dateStr}" 
                          data-time="${timeSlot}"
                          data-slot-index="${timeIndex}"

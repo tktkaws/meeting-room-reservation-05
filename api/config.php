@@ -7,6 +7,15 @@ define('DB_PATH', '../database/meeting_room.db');
 
 // セッション設定
 if (!session_id()) {
+    // セッションを180日間保持
+    ini_set('session.cookie_lifetime', 180 * 24 * 60 * 60); // 180日
+    ini_set('session.gc_maxlifetime', 180 * 24 * 60 * 60); // 180日
+    
+    // セキュリティ設定
+    ini_set('session.cookie_secure', false); // HTTPSでない場合はfalse
+    ini_set('session.cookie_httponly', true); // XSS対策
+    ini_set('session.cookie_samesite', 'Lax'); // CSRF対策
+    
     session_start();
 }
 
@@ -26,6 +35,11 @@ function getDatabase() {
 
 // JSON レスポンス送信関数
 function sendJsonResponse($success, $message, $data = null, $statusCode = 200) {
+    // 出力バッファをクリアしてエラー出力を除去
+    if (ob_get_length()) {
+        ob_clean();
+    }
+    
     http_response_code($statusCode);
     header('Content-Type: application/json; charset=utf-8');
     
@@ -86,7 +100,10 @@ function validateInput($input, $type = 'string', $maxLength = 255) {
         case 'email':
             return filter_var($input, FILTER_VALIDATE_EMAIL) !== false;
         case 'date':
-            return preg_match('/^\d{4}-\d{2}-\d{2}$/', $input) && strtotime($input) !== false;
+            $pattern_match = preg_match('/^\d{4}-\d{2}-\d{2}$/', $input);
+            $strtotime_valid = strtotime($input) !== false;
+            error_log("validateInput date - input: '$input', pattern: " . ($pattern_match ? 'true' : 'false') . ", strtotime: " . ($strtotime_valid ? 'true' : 'false'));
+            return $pattern_match && $strtotime_valid;
         case 'time':
             return preg_match('/^\d{2}:\d{2}$/', $input);
         case 'datetime':
@@ -95,7 +112,7 @@ function validateInput($input, $type = 'string', $maxLength = 255) {
             return filter_var($input, FILTER_VALIDATE_INT) !== false;
         case 'string':
         default:
-            return strlen($input) <= $maxLength && mb_check_encoding($input, 'UTF-8');
+            return mb_strlen($input, 'UTF-8') <= $maxLength && mb_check_encoding($input, 'UTF-8');
     }
 }
 

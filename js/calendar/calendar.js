@@ -10,16 +10,16 @@ function getDayReservations(date) {
 }
 
 // カレンダー表示
-function renderCalendar() {
+async function renderCalendar() {
     const calendarView = document.getElementById('calendar-view');
     if (!calendarView) return;
     
     updateCurrentPeriod();
     
     if (currentView === 'month') {
-        renderMonthView(calendarView);
+        await renderMonthView(calendarView);
     } else if (currentView === 'week') {
-        renderWeekView(calendarView);
+        await renderWeekView(calendarView);
     } else if (currentView === 'list') {
         renderListView(calendarView);
     } else if (currentView === 'day') {
@@ -27,8 +27,8 @@ function renderCalendar() {
     }
 }
 
-// 月表示（平日のみ）
-function renderMonthView(container) {
+// 月表示（平日のみ、祝日除外）
+async function renderMonthView(container) {
     const monthStart = getMonthStart(currentDate);
     const monthEnd = getMonthEnd(currentDate);
     const calendarStart = getWeekdayStart(new Date(monthStart));
@@ -42,7 +42,7 @@ function renderMonthView(container) {
         html += `<div class="calendar-header">${day}</div>`;
     });
     
-    // 日付セル（平日のみ）
+    // 日付セル（平日のみ、祝日除外）
     let currentDay = new Date(calendarStart);
     while (currentDay <= calendarEnd) {
         // 平日のみ処理（月曜=1, 火曜=2, ..., 金曜=5）
@@ -53,17 +53,27 @@ function renderMonthView(container) {
             const isToday = isSameDay(displayDate, getJapanTime());
             const isCurrentMonth = displayDate.getMonth() === currentDate.getMonth();
             
+            // 平日のみ表示なので全日予約可能
+            const isAvailable = true;
+            
             html += `
                 <div class="calendar-day ${isToday ? 'today' : ''} ${!isCurrentMonth ? 'other-month' : ''}" 
-                     data-date="${formatDate(displayDate)}" onclick="selectDate('${formatDate(displayDate)}')">
-                    <div class="day-number">${displayDate.getDate()}</div>
+                     data-date="${formatDate(displayDate)}" 
+                     onclick="selectDate('${formatDate(displayDate)}')">
+                    <div class="day-number">
+                        <span>${displayDate.getDate()}</span>
+                    </div>
                     <div class="reservations">
-                        ${dayReservations.map(res => `
-                            <div class="reservation-item ${res.group_id ? 'recurring' : ''}" onclick="event.stopPropagation(); showReservationDetail(${res.id})" title="${res.title} (${res.start_datetime.split(' ')[1].substring(0,5)}-${res.end_datetime.split(' ')[1].substring(0,5)})${res.group_id ? ' - 繰り返し予約' : ''}">
+                        ${dayReservations.map(res => {
+                            const isPast = new Date(res.end_datetime) < getJapanTime();
+                            const canEdit = res.can_edit ? 'editable' : '';
+                            const departmentClass = res.department ? `dept--${String(res.department).padStart(2, '0')}` : 'dept--00';
+                            return `
+                            <div class="reservation-item ${res.group_id ? 'recurring' : ''} ${isPast ? 'past' : ''} ${canEdit} ${departmentClass}" onclick="event.stopPropagation(); showReservationDetail(${res.id})" title="${res.title} (${res.start_datetime.split(' ')[1].substring(0,5)}-${res.end_datetime.split(' ')[1].substring(0,5)})${res.group_id ? ' - 繰り返し予約' : ''}">
                                 <div class="reservation-time">${res.start_datetime.split(' ')[1].substring(0,5)}-${res.end_datetime.split(' ')[1].substring(0,5)}</div>
-                                <div class="reservation-title">${res.title}${res.group_id ? ' ♻' : ''}</div>
+                                <div class="reservation-title">${res.title}</div>
                             </div>
-                        `).join('')}
+                        `;}).join('')}
                     </div>
                 </div>
             `;
@@ -74,10 +84,17 @@ function renderMonthView(container) {
     
     html += '</div>';
     container.innerHTML = html;
+    
+    // カレンダー描画完了後にテーマカラーを適用
+    setTimeout(() => {
+        if (typeof applyDepartmentThemeColors === 'function') {
+            applyDepartmentThemeColors();
+        }
+    }, 50);
 }
 
 // 週表示
-function renderWeekView(container) {
+async function renderWeekView(container) {
     const weekStart = getWeekStart(currentDate);
     const weekEnd = getWeekEnd(currentDate);
     const timeSlots = generateTimeSlots();
@@ -95,8 +112,10 @@ function renderWeekView(container) {
         const dayNames = ['月', '火', '水', '木', '金'];
         const isToday = isSameDay(date, getJapanTime());
         
+        // 平日のみ表示なので祝日判定不要
         html += `<div class="week-day-header ${isToday ? 'today' : ''}">
-            ${dayNames[dayIndex]} ${date.getMonth() + 1}/${date.getDate()}
+            <div class="day-name">${dayNames[dayIndex]}</div>
+            <div class="day-date"><span>${date.getDate()}</span></div>
         </div>`;
     }
     html += '</div>';
@@ -118,6 +137,7 @@ function renderWeekView(container) {
         date.setDate(date.getDate() + dayIndex);
         const dateStr = formatDate(date);
         
+        // 平日のみ表示なので全日予約可能
         html += `<div class="week-day-column">`;
         
         // 時間セル
@@ -153,35 +173,142 @@ function renderWeekView(container) {
     html += '</div>';
     html += '</div>';
     container.innerHTML = html;
+    
+    // カレンダー描画完了後にテーマカラーを適用
+    setTimeout(() => {
+        if (typeof applyDepartmentThemeColors === 'function') {
+            applyDepartmentThemeColors();
+        }
+    }, 50);
+}
+
+// 動的な高さを取得する関数
+function getWeekTimeHeaderHeight() {
+    // 画面高さから動的に計算（CSSと同じロジック）
+    const viewportHeight = window.innerHeight;
+    const availableHeight = viewportHeight - 200; // ヘッダーやマージン分を除外
+    const calculatedHeight = availableHeight / 37; // 37スロット分
+    const minHeight = 20; // 最小高さ
+    
+    return Math.max(minHeight, calculatedHeight);
+}
+
+// 週間ビューの予約配置を更新する関数
+function updateWeekViewReservations() {
+    if (currentView !== 'week') return;
+    
+    const weekViewContainer = document.querySelector('.week-view');
+    if (!weekViewContainer) return;
+    
+    // 現在の予約要素をすべて削除
+    const existingReservations = weekViewContainer.querySelectorAll('.week-reservation');
+    existingReservations.forEach(el => el.remove());
+    
+    // 予約を再配置
+    const timeSlots = generateTimeSlots();
+    const weekStart = getWeekStart(currentDate);
+    
+    for (let i = 0; i < 5; i++) {
+        const date = new Date(weekStart);
+        date.setDate(date.getDate() + i);
+        
+        const dayReservations = getDayReservations(date);
+        const dayColumn = weekViewContainer.querySelector(`.week-day-column:nth-child(${i + 2})`); // ヘッダー列分+1
+        
+        if (dayColumn) {
+            dayReservations.forEach(reservation => {
+                const reservationHtml = createReservationComponent(reservation, timeSlots);
+                if (reservationHtml) {
+                    dayColumn.insertAdjacentHTML('beforeend', reservationHtml);
+                }
+            });
+        }
+    }
+    
+    // テーマカラーを再適用
+    setTimeout(() => {
+        if (typeof applyDepartmentThemeColors === 'function') {
+            applyDepartmentThemeColors();
+        }
+    }, 10);
+}
+
+// リサイズイベントのデバウンス処理
+let resizeTimeout;
+function handleResize() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+        updateWeekViewReservations();
+    }, 150); // 150ms後に実行
+}
+
+// 時間形式を正規化する関数（HH:MM形式に統一）
+function normalizeTimeFormat(timeString) {
+    // "HH:MM:SS" または "H:MM" → "HH:MM"
+    const timePart = timeString.split(':');
+    const hour = timePart[0].padStart(2, '0');
+    const minute = timePart[1].padStart(2, '0');
+    return `${hour}:${minute}`;
 }
 
 // 予約コンポーネントを作成
 function createReservationComponent(reservation, timeSlots) {
-    const startTime = reservation.start_datetime.split(' ')[1].substring(0, 5);
-    const endTime = reservation.end_datetime.split(' ')[1].substring(0, 5);
+    const rawStartTime = reservation.start_datetime.split(' ')[1].substring(0, 5);
+    const rawEndTime = reservation.end_datetime.split(' ')[1].substring(0, 5);
+    
+    // 時間形式を正規化
+    const startTime = normalizeTimeFormat(rawStartTime);
+    const endTime = normalizeTimeFormat(rawEndTime);
     
     // 開始時間のスロットインデックスを取得
     const startSlotIndex = timeSlots.indexOf(startTime);
-    if (startSlotIndex === -1) return '';
+    if (startSlotIndex === -1) {
+        console.warn(`時間スロットが見つかりません: ${startTime}`, {
+            rawStartTime,
+            normalizedStartTime: startTime,
+            availableSlots: timeSlots.slice(0, 5) // デバッグ用に最初の5スロットを表示
+        });
+        return '';
+    }
     
     // 予約の継続時間（分）を計算
     const startMinutes = timeToMinutes(startTime);
     const endMinutes = timeToMinutes(endTime);
     const durationMinutes = endMinutes - startMinutes;
     
-    // 高さを計算（15分 = 20px）
-    const height = ((durationMinutes / 15) * 20) - 4;
+    // 動的な高さを取得
+    const cellHeight = getWeekTimeHeaderHeight();
+    
+    // 高さを計算（15分 = 1セル分）
+    const height = ((durationMinutes / 15) * cellHeight) - 4;
 
     
     // 開始位置を計算
-    // 10:00 (スロットインデックス 4) の場合、4 * 20 = 80px の位置
-    const topPosition = startSlotIndex * 20 + 2; // セル位置 + マージン
+    // 動的なセル高さに基づいて位置を計算
+    const topPosition = startSlotIndex * cellHeight; // セル位置 + マージン
     
-    return `<div class="week-reservation" 
+    // 継続時間に応じて表示内容を変更
+    let displayContent = '';
+    if (durationMinutes <= 15) {
+        // 15分の場合：タイトルのみ
+        displayContent = `${reservation.title}`;
+    } else if (durationMinutes <= 30) {
+        // 30分の場合：時間とタイトル
+        displayContent = `<div class="reservation-time">${startTime}～${endTime}</div><div class="reservation-title">${reservation.title}</div>`;
+    } else {
+        // 45分以上の場合：時間、タイトル、予約者
+        displayContent = `<div class="reservation-time">${startTime}～${endTime}</div><div class="reservation-title">${reservation.title}</div><div class="reservation-user">${reservation.user_name || '予約者不明'}</div>`;
+    }
+
+    const isPast = new Date(reservation.end_datetime) < getJapanTime();
+    const canEdit = reservation.can_edit ? 'editable' : '';
+    const departmentClass = reservation.department ? `dept--${String(reservation.department).padStart(2, '0')}` : 'dept--00';
+    
+    return `<div class="week-reservation ${reservation.group_id ? 'recurring' : ''} ${isPast ? 'past' : ''} ${canEdit} ${departmentClass}" 
                  style="top: ${topPosition}px; height: ${height}px;"
                  onclick="showReservationDetail(${reservation.id})"
-                 title="${reservation.title} (${startTime}-${endTime})">
-                ${reservation.title}
+                 title="${reservation.title} (${startTime}-${endTime})${reservation.group_id ? ' - 繰り返し予約' : ''}">
+                ${displayContent}
             </div>`;
 }
 
@@ -224,13 +351,25 @@ function selectWeekTimeSlot(dateStr, timeSlot) {
         return;
     }
     
+    // 過去の日付の場合は何もしない
+    const selectedDate = new Date(dateStr);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // 時刻をリセット
+    
+    if (selectedDate < today) {
+        return;
+    }
+    
     // 終了時間を1時間後に設定
     const [hours, minutes] = timeSlot.split(':').map(Number);
     let endHours = hours + 1;
     let endMinutes = minutes;
     
-    // 18:00を超える場合は18:00に制限
-    if (endHours > 18) {
+    // 17:15以降の場合、または18:00を超える場合は18:00に制限
+    if (hours >= 17 && minutes >= 15) {
+        endHours = 18;
+        endMinutes = 0;
+    } else if (endHours > 18) {
         endHours = 18;
         endMinutes = 0;
     }
@@ -252,16 +391,21 @@ function renderListView(container) {
     
     let html = '<div class="list-view">';
     
+    
     if (futureReservations.length === 0) {
         html += '<div class="list-empty">今日以降の予約はありません</div>';
     } else {
-        html += '<div class="list-header">';
+        // 固定ヘッダー
+        html += '<div class="list-header-fixed">';
         html += '<div class="list-header-item">日付</div>';
         html += '<div class="list-header-item">時間</div>';
-        html += '<div class="list-header-item">タイトル</div>';
-        html += '<div class="list-header-item">予約者</div>';
-        html += '<div class="list-header-item">種別</div>';
+        html += '<div class="list-header-item list-title">タイトル</div>';
+        html += '<div class="list-header-item list-department">部署</div>';
+        html += '<div class="list-header-item list-user">予約者</div>';
         html += '</div>';
+        
+        // スクロール可能なリストコンテナ
+        html += '<div class="list-content-scrollable">';
         
         futureReservations.forEach(res => {
             const date = new Date(res.date);
@@ -270,24 +414,42 @@ function renderListView(container) {
             const startTime = res.start_datetime.split(' ')[1].substring(0,5);
             const endTime = res.end_datetime.split(' ')[1].substring(0,5);
             const timeRange = `${startTime}-${endTime}`;
-            const reservationType = res.group_id ? '繰り返し' : '単発';
+            const titleWithIcon = `${res.title}`;
+            
+            // 今日の日付かどうかをチェック
+            const today = getJapanTime();
+            const isToday = isSameDay(date, today);
+            
+            // 過去の予約かどうかをチェック
+            const isPast = new Date(res.end_datetime) < today;
+            
+            // 編集可能な予約の場合は予約者名に✏️アイコンを追加
+            const canEdit = res.can_edit ? 'editable' : '';
+            // const userNameWithIcon = res.can_edit ? `${res.user_name || '不明'} ✏️` : (res.user_name || '不明');
             
             html += `
-                <div class="list-item" onclick="showReservationDetail(${res.id})" data-reservation-id="${res.id}">
+                <div class="list-item ${isToday ? 'today' : ''} ${isPast ? 'past' : ''}" onclick="showReservationDetail(${res.id})" data-reservation-id="${res.id}">
                     <div class="list-item-cell list-date">${formattedDate}</div>
                     <div class="list-item-cell list-time">${timeRange}</div>
-                    <div class="list-item-cell list-title">${res.title}${res.group_id ? ' ♻' : ''}</div>
-                    <div class="list-item-cell list-user">${res.user_name || '不明'}</div>
-                    <div class="list-item-cell list-type">
-                        <span class="type-badge ${res.group_id ? 'type-recurring' : 'type-single'}">${reservationType}</span>
-                    </div>
+                    <div class="list-item-cell list-title">${titleWithIcon}</div>
+                    <div class="list-item-cell list-department">${res.department_name || '未設定'}</div>
+                    <div class="list-item-cell list-user ${canEdit}">${res.user_name}</div>
                 </div>
             `;
         });
+        
+        html += '</div>'; // list-content-scrollable end
     }
     
     html += '</div>';
     container.innerHTML = html;
+    
+    // カレンダー描画完了後にテーマカラーを適用
+    setTimeout(() => {
+        if (typeof applyDepartmentThemeColors === 'function') {
+            applyDepartmentThemeColors();
+        }
+    }, 50);
 }
 
 // 日表示（簡易版）
@@ -297,8 +459,12 @@ function renderDayView(container) {
 
 // 現在の期間表示更新
 function updateCurrentPeriod() {
+    // console.log('updateCurrentPeriod called, currentView:', currentView); // デバッグ用
     const periodElement = document.getElementById('current-period');
-    if (!periodElement) return;
+    if (!periodElement) {
+        console.error('current-period element not found'); // デバッグ用
+        return;
+    }
     
     if (currentView === 'month') {
         periodElement.textContent = `${currentDate.getFullYear()}年 ${currentDate.getMonth() + 1}月`;
@@ -315,7 +481,13 @@ function updateCurrentPeriod() {
         } else {
             periodElement.textContent = `${currentDate.getFullYear()}年 ${startMonth}月${startDay}日 - ${endMonth}月${endDay}日`;
         }
+    } else if (currentView === 'list') {
+        // リスト表示の場合は今日以降の予約を表示していることを示す
+        const today = new Date();
+        periodElement.textContent = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日以降の予約`;
     }
+    
+    // console.log('Current period set to:', periodElement.textContent); // デバッグ用
 }
 
 // 日付ナビゲーション
@@ -324,6 +496,9 @@ function navigateDate(direction) {
         currentDate.setMonth(currentDate.getMonth() + direction);
     } else if (currentView === 'week') {
         currentDate.setDate(currentDate.getDate() + (direction * 7));
+    } else if (currentView === 'list') {
+        // リスト表示では日付ナビゲーションは不要（常に今日以降を表示）
+        return;
     }
     loadReservations().then(() => {
         renderCalendar();
@@ -362,5 +537,15 @@ function selectDate(dateStr) {
     if (!currentUser) {
         return;
     }
+    
+    // 過去の日付の場合は何もしない
+    const selectedDate = new Date(dateStr);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // 時刻をリセット
+    
+    if (selectedDate < today) {
+        return;
+    }
+    
     openNewReservationModal(dateStr);
 }

@@ -1,5 +1,13 @@
 <?php
+// エラー報告を有効にして問題を調査
+error_reporting(E_ALL);
+ini_set('display_errors', 0); // JSONレスポンスを壊さないためブラウザ表示は無効
+ini_set('log_errors', 1);
+
 require_once 'config.php';
+
+// バッファリングを開始してエラー出力を制御
+ob_start();
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -54,19 +62,41 @@ function handleLogin() {
         sendJsonResponse(false, 'パスワードが無効です', null, 400);
     }
     
-    $db = getDatabase();
-    $stmt = $db->prepare('SELECT id, name, email, password, role, department FROM users WHERE email = ?');
-    $stmt->execute([$email]);
-    $user = $stmt->fetch();
+    try {
+        $db = getDatabase();
+        $stmt = $db->prepare('SELECT id, name, email, password, role, department FROM users WHERE email = ?');
+        $stmt->execute([$email]);
+        $user = $stmt->fetch();
+    } catch (Exception $e) {
+        error_log("データベースエラー: " . $e->getMessage());
+        sendJsonResponse(false, 'システムエラーが発生しました', null, 500);
+    }
     
     if (!$user || !password_verify($password, $user['password'])) {
         // ログイン失敗をログ記録（簡易版）
-        error_log("ログイン失敗: {$email} from {$_SERVER['REMOTE_ADDR']}");
+        $remoteAddr = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        error_log("ログイン失敗: {$email} from {$remoteAddr}");
         sendJsonResponse(false, 'メールアドレスまたはパスワードが間違っています', null, 401);
     }
     
     // セッション再生成でセッションハイジャック対策
     session_regenerate_id(true);
+    
+    // remember_meがチェックされている場合、クッキーの有効期限を延長
+    $rememberMe = isset($_POST['remember_me']) && $_POST['remember_me'] === 'on';
+    if ($rememberMe) {
+        // 180日間セッションを保持
+        $cookieLifetime = 180 * 24 * 60 * 60; // 180日
+        ini_set('session.cookie_lifetime', $cookieLifetime);
+        
+        // 新しい設定でセッションクッキーを再設定
+        $sessionName = session_name();
+        $sessionId = session_id();
+        setcookie($sessionName, $sessionId, time() + $cookieLifetime, '/', '', false, true);
+    } else {
+        // ブラウザを閉じたら削除（デフォルト）
+        ini_set('session.cookie_lifetime', 0);
+    }
     
     // セッションに保存
     $_SESSION['user_id'] = $user['id'];
@@ -74,6 +104,7 @@ function handleLogin() {
     $_SESSION['email'] = sanitizeInput($user['email']);
     $_SESSION['role'] = sanitizeInput($user['role']);
     $_SESSION['department'] = sanitizeInput($user['department'] ?? '');
+    $_SESSION['remember_me'] = $rememberMe;
     
     sendJsonResponse(true, 'ログインしました', [
         'user' => [
@@ -113,18 +144,9 @@ function handleRegister() {
         sendJsonResponse(false, '部署名は50文字以内で入力してください', null, 400);
     }
     
-    // パスワード強度チェック
-    if (strlen($password) < 6) {
-        sendJsonResponse(false, 'パスワードは6文字以上で入力してください', null, 400);
-    }
-    
+    // パスワード長制限のみ
     if (strlen($password) > 100) {
         sendJsonResponse(false, 'パスワードは100文字以内で入力してください', null, 400);
-    }
-    
-    // パスワード複雑性チェック（英数字含む）
-    if (!preg_match('/^(?=.*[a-zA-Z])(?=.*\d)/', $password)) {
-        sendJsonResponse(false, 'パスワードは英字と数字を含む必要があります', null, 400);
     }
     
     $db = getDatabase();

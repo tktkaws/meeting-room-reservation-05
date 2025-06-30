@@ -1,0 +1,2173 @@
+/* ベーススタイル */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans JP', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #F8FAFD;
+}
+
+/* 認証ページスタイル */
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.auth-card {
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.auth-card h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #333;
+    font-size: 1.5rem;
+}
+
+.form-container h2 {
+    margin-bottom: 1.5rem;
+    color: #333;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #555;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+}
+
+.form-group #is-recurring{
+    background-color: #FFF;
+    border: 1px solid #667eea;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 0.25rem;
+    color: #666;
+    font-size: 0.875rem;
+}
+
+.radio-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-weight: normal;
+    margin-bottom: 0;
+}
+
+.radio-label input[type="radio"] {
+    width: auto;
+    margin: 0;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+}
+
+/* 時間選択グループ */
+.time-select-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.time-select-group select {
+    width: auto;
+    min-width: 60px;
+}
+
+.time-separator {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 500;
+}
+
+/* Required field indicator */
+.required {
+    color: #e53e3e;
+    font-weight: 600;
+}
+
+/* Recurring dates preview container */
+.recurring-dates-preview {
+    background: #f8f9fa;
+    border: 1px solid #e2e8f0;
+    border-radius: 5px;
+    padding: 1rem;
+    margin-top: 0.75rem;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+/* Individual recurring date items */
+.recurring-date-item {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 3px;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    color: #495057;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.recurring-date-item:last-child {
+    margin-bottom: 0;
+}
+
+.form-switch {
+    text-align: center;
+    margin-top: 1rem;
+    color: #666;
+}
+
+.form-switch a {
+    color: #667eea;
+    text-decoration: none;
+}
+
+.form-switch a:hover {
+    text-decoration: underline;
+}
+
+/* ボタンスタイル */
+.btn-primary {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background: #5a67d8;
+}
+
+.btn-secondary {
+    background: #e2e8f0;
+    color: #4a5568;
+    color: #000;
+    /* border: 1px solid #cbd5e0; */
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* .btn-secondary:hover {
+    background: #cbd5e0;
+} */
+
+.btn-today {
+    border: solid 1px;
+    padding: 0.5rem 1.5rem;
+    border-radius: 1.2rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    background-color: inherit;
+}
+
+.btn-today:hover {
+    background-color: #667eea;
+    color: white;
+}
+
+.btn-new-reservation {
+    max-width: 120px;
+}
+
+
+.btn-icon {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 3px;
+    transition: background-color 0.3s;
+}
+
+.btn-icon:hover {
+    background: #e2e8f0;
+}
+
+.btn-view {
+    background: #f7fafc;
+    border: 1px solid #e2e8f0;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-view.active,
+.btn-view:hover {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+/* メインレイアウト */
+.header {
+    border-bottom: 1px solid #e2e8f0;
+    padding: 1rem 0;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.header-content h1 a {
+    color: #333;
+    text-decoration: none;
+}
+
+
+.header h1 {
+    color: #333;
+    font-size: 1.5rem;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+#user-info {
+    color: #666;
+    font-size: 0.875rem;
+}
+
+.main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 1rem;
+}
+
+/* ツールバー */
+.toolbar {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: auto 1fr auto;
+    gap: 2rem;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+}
+
+.view-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+#current-period {
+    font-size: 1.25rem;
+    font-weight: 600;
+    min-width: 200px;
+    text-align: center;
+}
+
+.view-options {
+    display: flex;
+    gap: 0.5rem;
+}
+
+
+/* カレンダー */
+.calendar-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    gap: 2px;
+}
+
+#calendar-view {
+    min-height: 600px;
+}
+
+/* カレンダーグリッド */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+}
+
+/* 平日のみカレンダーグリッド */
+.calendar-grid.weekdays-only {
+    grid-template-columns: repeat(5, 20%);
+}
+
+
+.calendar-header {
+    padding: 1rem;
+    text-align: center;
+    font-weight: 600;
+    color: #4a5568;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.calendar-day {
+    background: white;
+    min-height: 120px;
+    padding: 0.5rem;
+    border-bottom: 1px solid #e2e8f0;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.calendar-day:hover {
+    background: #f7fafc;
+}
+
+.calendar-day.other-month {
+    color: #a0aec0;
+    background: #f9f9f9;
+}
+
+.calendar-day.today  {
+}
+
+.day-number {
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: .5rem;
+}
+.calendar-day.today .day-number {
+    color: #FFF;
+    width: fit-content;
+    margin-inline: auto;
+    display: grid;
+}
+.calendar-day.today .day-number span {
+    grid-area: 1/1;
+    color: #FFF;
+    transform: translateY(-1px);
+}
+.calendar-day.today .day-number::before {
+    grid-area: 1/1;
+    display: block;
+    content: '';
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    background: #166BC1;
+}
+
+
+.reservation-item {
+    background: #EDF7FF;
+    color: #166BC1;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
+.reservation-item.recurring {
+    border-left: 4px solid #166BC1;
+}
+
+.reservation-item.past {
+    opacity: 0.5;
+}
+
+.reservation-item.editable {
+    border: 1px solid #166BC1;
+}
+.reservation-item.recurring.editable {
+    border: 1px solid #166BC1;
+    border-left: 4px solid #166BC1;
+}
+
+
+
+.reservation-title {
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+}
+
+.reservation-time {
+    width: 100%;
+}
+
+.btn-danger {
+    background: #e53e3e;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-danger:hover {
+    background: #c53030;
+}
+
+/* 予約詳細モーダル */
+.detail-content {
+    padding: 1.5rem 0;
+}
+
+.detail-section {
+    margin-bottom: 1rem;
+    padding: 0 1.5rem;
+}
+
+.detail-item {
+    display: flex;
+    margin-bottom: 0.75rem;
+    align-items: flex-start;
+}
+
+.detail-item label {
+    font-weight: 600;
+    min-width: 100px;
+    color: #555;
+    margin-right: 1rem;
+}
+
+.detail-item span {
+    flex: 1;
+    color: #333;
+}
+
+.detail-actions {
+    padding: 0 1.5rem;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    align-items: stretch;
+}
+
+.action-row {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.group-list {
+    background: #f8f9fa;
+    border-radius: 5px;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.group-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.group-item:last-child {
+    border-bottom: none;
+}
+
+#recurring-section {
+    margin-top: 2rem;
+}
+
+
+.group-item-info {
+    font-weight: 500;
+    color: #495057;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.group-date {
+    width: 40px;
+    text-align: left;
+}
+
+.group-day {
+    width: 30px;
+    text-align: center;
+    color: #666;
+}
+
+.group-time {
+    width: 100px;
+    text-align: left;
+    font-weight: 600;
+}
+
+.group-item-date {
+    font-weight: 600;
+    color: #495057;
+}
+
+.group-item-time {
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+.btn-edit-single,
+.btn-edit-group {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-edit-single:hover,
+.btn-edit-group:hover {
+    background: #5a67d8;
+}
+
+/* グループ編集モーダル */
+.large-modal {
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+}
+
+.group-edit-content {
+    /* padding: 1.5rem; */
+}
+
+.group-basic-info {
+}
+
+.group-time-info {
+}
+
+.group-time-info h3 {
+    color: #333;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+}
+
+.time-form-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.time-form-row .form-group {
+    flex: 1;
+}
+
+.group-reservations {
+    margin-bottom: 1rem;
+}
+
+.group-reservations h3 {
+    color: #333;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+}
+
+.info-text {
+    background: #f8f9fa;
+    padding: 0.75rem;
+    border-radius: 5px;
+    color: #6c757d;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+.reservation-display-item {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 5px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.reservation-info {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    justify-content: start;
+    gap: 1rem;
+}
+
+.reservation-date {
+    font-weight: 600;
+    font-size: .7rem;
+}
+
+.reservation-time {
+    font-weight: 600;
+}
+
+/* リスト表示 */
+.list-view {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 200px);
+}
+:root {
+    --columns: 10% 12% 1fr 14% 10%;
+}
+.list-header-fixed {
+    display: grid;
+    grid-template-columns: var(--columns);
+    /* gap: 2rem; */
+    padding: 1rem 2rem;
+    padding-right: calc(2rem + 15px);
+    border-bottom: 1px solid #e2e8f0;
+    font-weight: 600;
+    color: #4a5568;
+    background: white;
+    flex-shrink: 0;
+}
+
+.list-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+    flex-shrink: 0;
+}
+
+.list-actions .btn-secondary {
+    background: #f7fafc;
+    border: 1px solid #e2e8f0;
+    color: #4a5568;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.list-actions .btn-secondary:hover {
+    background: #edf2f7;
+    border-color: #cbd5e0;
+}
+
+.list-content-scrollable {
+    flex: 1;
+    overflow-y: auto;
+    background: white;
+}
+
+.list-header-item {
+    text-align: left;
+}
+.list-header-item.list-title {
+    text-align: left;
+}
+.list-header-item.list-user {
+    text-align: left;
+}
+.list-header-item.list-department {
+    text-align: left;
+}
+
+.list-item {
+    display: grid;
+    grid-template-columns: var(--columns);
+    /* gap: 2rem; */
+    padding: 1rem 2rem;
+    border-bottom: 1px solid #e2e8f0;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: 500;
+    color: #2d3748;
+}
+
+.list-item:hover {
+    background: #f7fafc;
+}
+
+.list-item.today {
+    background: #f7fafc;
+}
+
+.list-item.past {
+    opacity: 0.5;
+}
+
+.list-item-cell {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    text-align: left;
+}
+
+.list-date {
+    /* justify-self: start; */
+}
+
+.list-time {
+    /* justify-self: start; */
+}
+
+.list-title {
+    text-align: left;
+    justify-content: flex-start;
+}
+
+.list-user {
+    justify-self: start;
+}
+
+.list-department {
+    justify-self: start;
+}
+
+/* .list-user.editable {
+    text-decoration: underline;
+} */
+
+.list-empty {
+    text-align: center;
+    padding: 3rem;
+    color: #a0aec0;
+    font-size: 1.125rem;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .list-header-fixed,
+    .list-item {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+    }
+    
+    .list-user {
+        display: none;
+    }
+}
+
+/* 時間編集関連のCSSは削除されました */
+
+/* モーダル */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-header h2 {
+    font-size: 1.2em;
+    margin: 0;
+    color: #333;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 32px;
+    cursor: pointer;
+    color: #666;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-btn:hover {
+    color: #333;
+}
+
+.modal form {
+    padding: 1.5rem;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+    border-top: 1px solid #e9ecef;
+    padding-top: 1rem;
+}
+
+.modal-actions .btn-primary,
+.modal-actions .btn-secondary {
+    width: auto;
+}
+
+/* 文字数カウンター */
+.char-counter {
+    font-size: 0.875rem;
+    color: #666;
+    font-weight: normal;
+    float: right;
+}
+
+
+.char-counter.error {
+    color: #e74c3c;
+}
+
+/* メッセージ */
+.message {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 1rem 1.5rem;
+    border-radius: 5px;
+    font-weight: 500;
+    z-index: 1001;
+}
+
+.message.show {
+    transform: translateX(0);
+}
+
+.message.success {
+    background: #c6f6d5;
+    color: #22543d;
+    border: 1px solid #9ae6b4;
+}
+
+.message.error {
+    background: #fed7d7;
+    color: #742a2a;
+    border: 1px solid #fc8181;
+}
+
+/* ローディング */
+.loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1002;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e2e8f0;
+    border-top: 4px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* テスト用アカウント情報 */
+.test-accounts {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 1rem;
+    border-radius: 5px;
+    font-size: 0.875rem;
+}
+
+.test-accounts h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+/* レスポンシブ */
+@media (max-width: 768px) {
+    .toolbar {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .view-controls {
+        order: 2;
+    }
+    
+    .view-options {
+        order: 1;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .calendar-day {
+        min-height: 80px;
+    }
+    
+    .test-accounts {
+        position: relative;
+        margin: 1rem;
+        bottom: auto;
+        left: auto;
+    }
+}
+
+/* 週間表示 */
+.week-view {
+    overflow-x: auto;
+}
+
+.week-header-row {
+    display: grid;
+    grid-template-columns: 80px repeat(5, 1fr);
+    border: 1px solid #e2e8f0;
+    border-bottom: none;
+    min-width: 800px;
+}
+
+.week-content-grid {
+    display: grid;
+    grid-template-columns: 80px repeat(5, 1fr);
+    border: 1px solid #e2e8f0;
+    border-top: none;
+    min-width: 800px;
+}
+
+.week-grid {
+    display: flex;
+    flex-direction: column;
+    min-width: 800px;
+}
+
+.week-day-column {
+    position: relative;
+    border-left: 1px solid #e2e8f0;
+}
+
+.week-day-column:first-child {
+    border-left: none;
+}
+
+.week-time-header {
+    padding: 0.5rem;
+    text-align: center;
+    font-weight: 600;
+    color: #4a5568;
+    /* border-right: 1px solid #e2e8f0; */
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.week-day-header {
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    font-weight: 600;
+    color: #4a5568;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.week-day-header .day-name {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.week-day-header .day-date {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #718096;
+}
+
+.week-day-header.today .day-name {
+}
+
+.week-day-header.today .day-date {
+    font-weight: 600;
+    display: grid;
+    transform: translateY(-1px);
+
+}
+.week-day-header.today .day-date span {
+    grid-area: 1/1;
+    color: #FFF;
+    transform: translateY(1px);
+}
+.week-day-header.today .day-date::before {
+    grid-area: 1/1;
+    display: block;
+    content: '';
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: #166BC1;
+}
+
+.week-time-label {
+    background: #FFF;
+    color: #FFF;
+    text-align: right;
+    padding-right: 0.5rem;
+    /* padding: 0.25rem 0.5rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #718096;
+    border-right: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center; */
+}
+
+.week-time-column {
+    display: grid;
+    grid-template-rows: repeat(36, 20px);
+    transform: translateY(-12px);
+}
+
+.week-day-column {
+    display: grid;
+    grid-template-rows: repeat(36, 20px);
+    position: relative;
+}
+
+.week-cell {
+    background: white;
+    height: 20px;
+    border-bottom: 1px solid #e2e8f0;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    position: relative;
+}
+
+.week-cell:hover {
+    background: #edf2f7;
+}
+
+.week-cell.has-reservation {
+    background: #bee3f8;
+    cursor: default;
+}
+
+.week-cell.has-reservation:hover {
+    background: #90cdf4;
+}
+
+.week-reservation {
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    background: #EDF7FF;
+    color: #166BC1;
+    padding: 0.25rem 0.5rem;
+    padding-top: 0;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    z-index: 3;
+    display: grid;
+    grid-auto-flow: row;
+    align-items: center;
+    justify-content: start;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    /* border: 1px solid #166BC1; */
+    line-height: 1;
+}
+
+/* .week-reservation:hover {
+    background: #5a67d8;
+} */
+
+.week-reservation.recurring {
+    border-left: 4px solid #166BC1;
+}
+
+.week-reservation.past {
+    opacity: 0.5;
+}
+
+.week-reservation.editable {
+    border: 1px solid #166BC1;
+}
+.week-reservation.recurring.editable {
+    border: 1px solid #166BC1;
+    border-left: 4px solid #166BC1;
+}
+
+/* 部署別テーマカラー */
+/* 部署01 - 青紫系 */
+.reservation-item.dept--01,
+.week-reservation.dept--01 {
+    background: #EBF4FF;
+    color: #3C366B;
+}
+
+.reservation-item.dept--01.recurring,
+.week-reservation.dept--01.recurring {
+    border-left-color: #667eea;
+}
+
+.reservation-item.dept--01.editable,
+.week-reservation.dept--01.editable {
+    border-color: #667eea;
+}
+
+.reservation-item.dept--01.recurring.editable,
+.week-reservation.dept--01.recurring.editable {
+    border-color: #667eea;
+    border-left-color: #667eea;
+}
+
+/* 部署02 - 緑系 */
+.reservation-item.dept--02,
+.week-reservation.dept--02 {
+    background: #F0FDF4;
+    color: #14532D;
+}
+
+.reservation-item.dept--02.recurring,
+.week-reservation.dept--02.recurring {
+    border-left-color: #48bb78;
+}
+
+.reservation-item.dept--02.editable,
+.week-reservation.dept--02.editable {
+    border-color: #48bb78;
+}
+
+.reservation-item.dept--02.recurring.editable,
+.week-reservation.dept--02.recurring.editable {
+    border-color: #48bb78;
+    border-left-color: #48bb78;
+}
+
+/* 部署03 - オレンジ系 */
+.reservation-item.dept--03,
+.week-reservation.dept--03 {
+    background: #FFFBEB;
+    color: #9A3412;
+}
+
+.reservation-item.dept--03.recurring,
+.week-reservation.dept--03.recurring {
+    border-left-color: #ed8936;
+}
+
+.reservation-item.dept--03.editable,
+.week-reservation.dept--03.editable {
+    border-color: #ed8936;
+}
+
+.reservation-item.dept--03.recurring.editable,
+.week-reservation.dept--03.recurring.editable {
+    border-color: #ed8936;
+    border-left-color: #ed8936;
+}
+
+/* 部署04 - 赤系 */
+.reservation-item.dept--04,
+.week-reservation.dept--04 {
+    background: #FEF2F2;
+    color: #7F1D1D;
+}
+
+.reservation-item.dept--04.recurring,
+.week-reservation.dept--04.recurring {
+    border-left-color: #e53e3e;
+}
+
+.reservation-item.dept--04.editable,
+.week-reservation.dept--04.editable {
+    border-color: #e53e3e;
+}
+
+.reservation-item.dept--04.recurring.editable,
+.week-reservation.dept--04.recurring.editable {
+    border-color: #e53e3e;
+    border-left-color: #e53e3e;
+}
+
+/* 部署05 - 紫系 */
+.reservation-item.dept--05,
+.week-reservation.dept--05 {
+    background: #FAF5FF;
+    color: #581C87;
+}
+
+.reservation-item.dept--05.recurring,
+.week-reservation.dept--05.recurring {
+    border-left-color: #9f7aea;
+}
+
+.reservation-item.dept--05.editable,
+.week-reservation.dept--05.editable {
+    border-color: #9f7aea;
+}
+
+.reservation-item.dept--05.recurring.editable,
+.week-reservation.dept--05.recurring.editable {
+    border-color: #9f7aea;
+    border-left-color: #9f7aea;
+}
+
+/* 部署06 - ティール系 */
+.reservation-item.dept--06,
+.week-reservation.dept--06 {
+    background: #F0FDFA;
+    color: #134E4A;
+}
+
+.reservation-item.dept--06.recurring,
+.week-reservation.dept--06.recurring {
+    border-left-color: #38b2ac;
+}
+
+.reservation-item.dept--06.editable,
+.week-reservation.dept--06.editable {
+    border-color: #38b2ac;
+}
+
+.reservation-item.dept--06.recurring.editable,
+.week-reservation.dept--06.recurring.editable {
+    border-color: #38b2ac;
+    border-left-color: #38b2ac;
+}
+
+/* 部署07 - 青系 */
+.reservation-item.dept--07,
+.week-reservation.dept--07 {
+    background: #EFF6FF;
+    color: #1E3A8A;
+}
+
+.reservation-item.dept--07.recurring,
+.week-reservation.dept--07.recurring {
+    border-left-color: #3182ce;
+}
+
+.reservation-item.dept--07.editable,
+.week-reservation.dept--07.editable {
+    border-color: #3182ce;
+}
+
+.reservation-item.dept--07.recurring.editable,
+.week-reservation.dept--07.recurring.editable {
+    border-color: #3182ce;
+    border-left-color: #3182ce;
+}
+
+/* 部署08 - 黄色系 */
+.reservation-item.dept--08,
+.week-reservation.dept--08 {
+    background: #FEFCE8;
+    color: #92400E;
+}
+
+.reservation-item.dept--08.recurring,
+.week-reservation.dept--08.recurring {
+    border-left-color: #d69e2e;
+}
+
+.reservation-item.dept--08.editable,
+.week-reservation.dept--08.editable {
+    border-color: #d69e2e;
+}
+
+.reservation-item.dept--08.recurring.editable,
+.week-reservation.dept--08.recurring.editable {
+    border-color: #d69e2e;
+    border-left-color: #d69e2e;
+}
+
+/* 部署未設定 - グレー系 */
+.reservation-item.dept--00,
+.week-reservation.dept--00 {
+    background: #F9FAFB;
+    color: #374151;
+}
+
+.reservation-item.dept--00.recurring,
+.week-reservation.dept--00.recurring {
+    border-left-color: #718096;
+}
+
+.reservation-item.dept--00.editable,
+.week-reservation.dept--00.editable {
+    border-color: #718096;
+}
+
+.reservation-item.dept--00.recurring.editable,
+.week-reservation.dept--00.recurring.editable {
+    border-color: #718096;
+    border-left-color: #718096;
+}
+
+/* 現在時刻ライン */
+.current-time-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #e53e3e;
+    z-index: 4;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.current-time-marker {
+    position: absolute;
+    left: -4px;
+    top: -4px;
+    width: 8px;
+    height: 8px;
+    background: #e53e3e;
+    border-radius: 50%;
+    z-index: 5;
+}
+
+/* 時間ラベルを30分ごとに強調 */
+.week-time-label.hour-mark {
+    font-weight: 400;
+    color: #2d3748;
+    font-size: 14px;
+    /* background: #edf2f7; */
+}
+
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .week-header-row,
+    .week-content-grid {
+        min-width: 600px;
+        grid-template-columns: 60px repeat(5, 1fr);
+    }
+    
+    .week-time-column {
+        grid-template-rows: repeat(36, 17px);
+    }
+    
+    .week-day-column {
+        grid-template-rows: repeat(36, 17px);
+    }
+    
+    .week-time-label {
+        font-size: 0.625rem;
+        padding: 0.125rem 0.25rem;
+    }
+    
+    .week-day-header {
+        padding: 0.5rem 0.25rem;
+        font-size: 0.875rem;
+        gap: 0.125rem;
+    }
+    
+    .week-day-header .day-name {
+        font-size: 0.875rem;
+    }
+    
+    .week-day-header .day-date {
+        font-size: 0.75rem;
+    }
+    
+    .week-cell {
+        height: 17px;
+    }
+    
+    .week-reservation {
+        font-size: 0.6rem;
+        padding: 0.125rem 0.25rem;
+    }
+}
+
+/* コンフィグページ */
+.config-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.config-section {
+    background: white;
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+}
+
+.config-section h2 {
+    margin: 0 0 1.5rem 0;
+    color: #2d3748;
+    font-size: 1.5rem;
+    font-weight: 600;
+    border-bottom: 2px solid #4299e1;
+    padding-bottom: 0.5rem;
+}
+
+.config-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.required {
+    color: #e53e3e;
+}
+
+.form-group input,
+.form-group select {
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+.form-group input:disabled,
+.form-group select:disabled {
+    background-color: #f7fafc;
+    color: #a0aec0;
+    cursor: not-allowed;
+}
+
+.form-help {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #718096;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.btn-secondary {
+    border: none;
+    background: #e2e8f0;
+    color: #000;
+    /* border: 1px solid #cbd5e0; */
+}
+
+.btn-secondary:hover {
+    background: #cbd5e0;
+    border-color: #a0aec0;
+}
+
+.btn-primary {
+    background: #667eea;
+    color: white;
+    border: 1px solid #667eea;
+}
+
+.btn-primary:hover {
+    background: #5a67d8;
+}
+
+.btn-danger {
+    background: #e53e3e;
+    color: white;
+    padding: 0.5rem 1rem;
+}
+
+.btn-danger:hover {
+    background: #c53030;
+    border-color: #9c1b1b;
+}
+
+/* 認証モーダル */
+.auth-modal-content {
+    max-width: 450px;
+    width: 90%;
+}
+
+.auth-form {
+    padding: 1.5rem;
+}
+
+.auth-form .form-switch {
+    text-align: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.auth-form .form-switch a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-form .form-switch a:hover {
+    text-decoration: underline;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-weight: normal;
+    margin-bottom: 0;
+    font-size: 0.875rem;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: auto;
+    margin-right: .5em;
+    transform: translateY(.1em);
+}
+input[type="checkbox"]#remember-me {
+    width: 1rem;
+    height: 1rem;
+    align-content: center;
+    line-height: 1;
+    
+}
+
+.checkbox-group span {
+    font-size: 1rem;
+}
+
+
+.test-accounts-modal {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 1rem;
+    border-radius: 0 0 10px 10px;
+    font-size: 0.875rem;
+}
+
+.test-accounts-modal h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.test-accounts-modal p {
+    margin: 0.25rem 0;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .config-container {
+        padding: 1rem;
+    }
+    
+    .config-section {
+        padding: 1.5rem;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .form-actions button {
+        width: 100%;
+    }
+    
+    .auth-modal-content {
+        width: 95%;
+        max-width: none;
+    }
+}
+
+/* 部署管理スタイル */
+.department-item {
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+    background: white;
+}
+
+.department-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.department-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.department-order {
+    font-size: 0.875rem;
+    color: #666;
+}
+
+.department-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-small {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+}
+
+.form-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-row label {
+    min-width: 100px;
+    font-weight: bold;
+}
+
+.form-row input {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* CSV出力ページスタイル */
+.export-card {
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.export-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.form-section {
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 1.5rem;
+}
+
+.form-section:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 1rem;
+}
+
+.quick-select h3 {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #4a5568;
+    margin: 1rem 0 0.5rem 0;
+}
+
+.quick-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.btn-quick {
+    background: #f7fafc;
+    border: 1px solid #e2e8f0;
+    color: #4a5568;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-quick:hover {
+    background: #edf2f7;
+    border-color: #cbd5e0;
+}
+
+.btn-quick:active {
+    background: #e2e8f0;
+}
+
+.preview-section {
+    background: #f8f9fa;
+    border: 1px solid #e2e8f0;
+    border-radius: 5px;
+    padding: 1rem;
+}
+
+.preview-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.preview-stats {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.preview-range {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+/* CSV取り込みページスタイル */
+.import-card {
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.upload-section {
+    margin-bottom: 2rem;
+}
+
+.file-upload-area {
+    border: 2px dashed #cbd5e0;
+    border-radius: 10px;
+    padding: 3rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: #f7fafc;
+}
+
+.file-upload-area:hover {
+    border-color: #667eea;
+    background: #edf2f7;
+}
+
+.file-upload-area.drag-over {
+    border-color: #667eea;
+    background: #e6fffa;
+}
+
+.upload-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.upload-text {
+    color: #4a5568;
+    font-size: 1rem;
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    color: #667eea;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: inherit;
+}
+
+.btn-link:hover {
+    color: #5a67d8;
+}
+
+.file-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: #f7fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 5px;
+    margin-top: 1rem;
+}
+
+.file-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.file-name {
+    font-weight: 500;
+    color: #2d3748;
+}
+
+.file-size {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.btn-text {
+    background: none;
+    border: none;
+    color: #e53e3e;
+    cursor: pointer;
+    font-size: 0.875rem;
+    text-decoration: underline;
+}
+
+.btn-text:hover {
+    color: #c53030;
+}
+
+.import-options {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.import-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+/* プレビューテーブル */
+.preview-table-container {
+    max-height: 400px;
+    overflow: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 5px;
+    margin: 1rem 0;
+}
+
+.preview-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.preview-table th,
+.preview-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.preview-table th {
+    background: #f7fafc;
+    font-weight: 600;
+    color: #4a5568;
+    position: sticky;
+    top: 0;
+}
+
+.preview-table .error-row {
+    background: #fed7d7;
+}
+
+.preview-table .valid-row {
+    background: white;
+}
+
+.preview-table .more-rows {
+    text-align: center;
+    color: #6b7280;
+    font-style: italic;
+}
+
+.status-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.status-badge.valid {
+    background: #c6f6d5;
+    color: #22543d;
+}
+
+.status-badge.error {
+    background: #fed7d7;
+    color: #742a2a;
+}
+
+/* 統計情報 */
+.preview-stats {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: #f7fafc;
+    border-radius: 5px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.stat-value.error {
+    color: #e53e3e;
+}
+
+/* エラーリスト */
+.error-list {
+    margin-top: 1rem;
+}
+
+.error-list h3 {
+    font-size: 1rem;
+    color: #e53e3e;
+    margin-bottom: 0.5rem;
+}
+
+.error-item {
+    padding: 0.75rem;
+    background: #fed7d7;
+    border: 1px solid #feb2b2;
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+}
+
+.error-line {
+    font-weight: 600;
+    color: #742a2a;
+}
+
+.error-message {
+    color: #742a2a;
+    font-size: 0.875rem;
+}
+
+/* フォーマットガイド */
+.format-guide {
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.format-example {
+    background: #f7fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 5px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+}
+
+.format-example h3 {
+    margin-bottom: 1rem;
+    color: #2d3748;
+}
+
+.format-example ul {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.format-example li {
+    margin-bottom: 0.5rem;
+    color: #4a5568;
+}
+
+.sample-download {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+/* 進行状況モーダル */
+.progress-content {
+    padding: 2rem;
+    text-align: center;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 20px;
+    background: #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: #2d3748;
+    margin-bottom: 0.5rem;
+}
+
+.progress-status {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+/* ページヘッダースタイル */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #ddd;
+}
+
+.page-header h1 {
+    margin: 0;
+    color: #333;
+}
+
+.header-buttons {
+    display: flex;
+    gap: 0.5rem;
+}

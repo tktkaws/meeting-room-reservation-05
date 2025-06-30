@@ -3,7 +3,11 @@
 // グループ全体編集
 async function editGroupReservations(groupId) {
     try {
-        showLoading(true);
+        // ローディング表示
+        const loadingEl = document.getElementById('loading');
+        if (loadingEl) {
+            loadingEl.style.display = 'flex';
+        }
         
         // グループ情報と予約一覧を取得
         const response = await fetch(`api/group_edit.php?group_id=${groupId}`);
@@ -24,7 +28,11 @@ async function editGroupReservations(groupId) {
         console.error('グループ編集データ取得エラー:', error);
         showMessage('グループ編集データの取得に失敗しました', 'error');
     } finally {
-        showLoading(false);
+        // ローディング非表示
+        const loadingEl = document.getElementById('loading');
+        if (loadingEl) {
+            loadingEl.style.display = 'none';
+        }
     }
 }
 
@@ -43,37 +51,48 @@ function showGroupEditModal(group, reservations) {
     // 時間フォームの初期化（最初の予約の時間を設定）
     if (reservations.length > 0) {
         const firstReservation = reservations[0];
-        const startTime = normalizeTimeString(firstReservation.start_datetime.split(' ')[1].substring(0, 5));
-        const endTime = normalizeTimeString(firstReservation.end_datetime.split(' ')[1].substring(0, 5));
+        const startTimeStr = firstReservation.start_datetime.split(' ')[1].substring(0, 5);
+        const endTimeStr = firstReservation.end_datetime.split(' ')[1].substring(0, 5);
+        const [startHour, startMinute] = startTimeStr.split(':').map(Number);
+        const [endHour, endMinute] = endTimeStr.split(':').map(Number);
         
-        populateTimeSelect(document.getElementById('group-start-time'), startTime);
-        populateTimeSelect(document.getElementById('group-end-time'), endTime);
+        // 新しいフォーム要素に値を設定
+        document.getElementById('group-start-hour').value = startHour;
+        document.getElementById('group-start-minute').value = startMinute;
+        document.getElementById('group-end-hour').value = endHour;
+        document.getElementById('group-end-minute').value = endMinute;
     }
     
     // グループIDを保存
     form.setAttribute('data-group-id', group.id);
     
-    // 予約リスト生成
+    // 予約リスト生成（予約詳細と同じ体裁）
     const reservationsList = document.getElementById('group-reservations-list');
-    reservationsList.innerHTML = '';
-    
-    reservations.forEach(reservation => {
-        const startTime = reservation.start_datetime.split(' ')[1].substring(0, 5);
-        const endTime = reservation.end_datetime.split(' ')[1].substring(0, 5);
-        
-        const itemDiv = document.createElement('div');
-        itemDiv.className = 'reservation-display-item';
-        itemDiv.innerHTML = `
-            <div class="reservation-info">
-                <div class="reservation-date">${reservation.date}</div>
-                <div class="reservation-time">${startTime} - ${endTime}</div>
-            </div>
-        `;
-        
-        reservationsList.appendChild(itemDiv);
-    });
+    reservationsList.innerHTML = '<div class="group-list">' + 
+        reservations.map(reservation => {
+            const date = new Date(reservation.date);
+            const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
+            const monthDay = `${date.getMonth() + 1}/${date.getDate()}`;
+            const startTime = reservation.start_datetime.split(' ')[1].substring(0, 5);
+            const endTime = reservation.end_datetime.split(' ')[1].substring(0, 5);
+            
+            return `
+                <div class="group-item">
+                    <div class="group-item-info">
+                        <span class="group-date">${monthDay}</span>
+                        <span class="group-day">(${dayOfWeek})</span>
+                        <span class="group-time">${startTime}-${endTime}</span>
+                    </div>
+                </div>
+            `;
+        }).join('') + '</div>';
     
     modal.style.display = 'flex';
+    
+    // 文字数カウンターを更新
+    if (window.refreshCharCounters) {
+        window.refreshCharCounters();
+    }
 }
 
 // グループ編集フォーム送信
@@ -84,8 +103,14 @@ async function handleGroupEditSubmit(e) {
     const groupId = form.getAttribute('data-group-id');
     const formData = new FormData(form);
     
-    const newStartTime = formData.get('start_time');
-    const newEndTime = formData.get('end_time');
+    // 時間を組み立て
+    const startHour = formData.get('start_hour') || document.getElementById('group-start-hour')?.value;
+    const startMinute = formData.get('start_minute') || document.getElementById('group-start-minute')?.value;
+    const endHour = formData.get('end_hour') || document.getElementById('group-end-hour')?.value;
+    const endMinute = formData.get('end_minute') || document.getElementById('group-end-minute')?.value;
+    
+    const newStartTime = `${startHour.toString().padStart(2, '0')}:${startMinute.toString().padStart(2, '0')}`;
+    const newEndTime = `${endHour.toString().padStart(2, '0')}:${endMinute.toString().padStart(2, '0')}`;
     
     // 入力検証
     if (newStartTime && newEndTime) {
@@ -106,7 +131,11 @@ async function handleGroupEditSubmit(e) {
     };
     
     try {
-        showLoading(true);
+        // ローディング表示
+        const loadingEl = document.getElementById('loading');
+        if (loadingEl) {
+            loadingEl.style.display = 'flex';
+        }
         
         const response = await fetch('api/group_edit.php', {
             method: 'PUT',
@@ -131,7 +160,11 @@ async function handleGroupEditSubmit(e) {
         console.error('グループ編集エラー:', error);
         showMessage('グループ編集に失敗しました', 'error');
     } finally {
-        showLoading(false);
+        // ローディング非表示
+        const loadingEl = document.getElementById('loading');
+        if (loadingEl) {
+            loadingEl.style.display = 'none';
+        }
     }
 }
 

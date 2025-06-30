@@ -100,8 +100,10 @@ function generateTimeSlots() {
     const startHour = 9;
     const endHour = 18;
     
-    for (let hour = startHour; hour < endHour; hour++) {
-        for (let minute = 0; minute < 60; minute += 15) {
+    for (let hour = startHour; hour <= endHour; hour++) {
+        // 18時の場合は00分のみを追加（18:00で終了）
+        const maxMinute = hour === endHour ? 0 : 60;
+        for (let minute = 0; minute < maxMinute; minute += 15) {
             const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
             slots.push(timeString);
         }

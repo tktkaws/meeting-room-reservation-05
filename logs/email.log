@@ -1,0 +1,47 @@
+[2025-06-23 10:57:38] メール送信開始: to=takayuki.takahashi@jama.co.jp, subject=会議室予約新規登録 - テスト
+[2025-06-23 10:57:38] ヘッダー設定完了
+[2025-06-23 10:57:38] 件名エンコード完了: =?UTF-8?B?5Lya6K2w5a6k5LqI57SE5paw6KaP55m76YyyIC0g44OG44K544OI?=
+[2025-06-23 10:57:38] mail()関数実行中...
+[2025-06-23 10:57:38] ✅ メール送信成功: takayuki.takahashi@jama.co.jp
+[2025-06-23 12:22:36] メール送信開始: to=takayuki.takahashi@jama.co.jp, subject=会議室予約更新 - テスト
+[2025-06-23 12:22:36] ヘッダー設定完了
+[2025-06-23 12:22:36] ヘッダー内容: From: =?UTF-8?B?5Lya6K2w5a6k5LqI57SE44K344K544OG44Og?= <meeting-room-reservation-05@jama.co.jp> | Reply-To: meeting-room-reservation-05@jama.co.jp | Return-Path: meeting-room-reservation-05@jama.co.jp | X-Mailer: PHP/8.2.21 | MIME-Version: 1.0 | Content-Type: text/plain; charset=UTF-8 | Content-Transfer-Encoding: 8bit
+[2025-06-23 12:22:36] 件名エンコード完了: =?UTF-8?B?5Lya6K2w5a6k5LqI57SE5pu05pawIC0g44OG44K544OI?=
+[2025-06-23 12:22:36] mail()関数実行中...
+[2025-06-23 12:22:36] ✅ メール送信成功: takayuki.takahashi@jama.co.jp
+[2025-06-23 12:27:33] メール送信開始: to=takayuki.takahashi@jama.co.jp, subject=会議室予約削除 - テスト
+[2025-06-23 12:27:33] ヘッダー設定完了
+[2025-06-23 12:27:33] ヘッダー内容: From: =?UTF-8?B?5Lya6K2w5a6k5LqI57SE44K344K544OG44Og?= <meeting-room-reservation-05@jama.co.jp> | Reply-To: meeting-room-reservation-05@jama.co.jp | Return-Path: meeting-room-reservation-05@jama.co.jp | X-Mailer: PHP/8.2.21 | MIME-Version: 1.0 | Content-Type: text/plain; charset=UTF-8 | Content-Transfer-Encoding: 8bit
+[2025-06-23 12:27:33] 件名エンコード完了: =?UTF-8?B?5Lya6K2w5a6k5LqI57SE5YmK6ZmkIC0g44OG44K544OI?=
+[2025-06-23 12:27:33] mail()関数実行中...
+[2025-06-23 12:27:33] ✅ メール送信成功: takayuki.takahashi@jama.co.jp
+[2025-06-23 12:29:26] メール送信開始: to=takayuki.takahashi@jama.co.jp, subject=会議室予約新規登録 - あああ
+[2025-06-23 12:29:26] ヘッダー設定完了
+[2025-06-23 12:29:26] ヘッダー内容: From: =?UTF-8?B?5Lya6K2w5a6k5LqI57SE44K344K544OG44Og?= <meeting-room-reservation-05@jama.co.jp> | Reply-To: meeting-room-reservation-05@jama.co.jp | Return-Path: meeting-room-reservation-05@jama.co.jp | X-Mailer: PHP/8.2.21 | MIME-Version: 1.0 | Content-Type: text/plain; charset=UTF-8 | Content-Transfer-Encoding: 8bit
+[2025-06-23 12:29:26] 件名エンコード完了: =?UTF-8?B?5Lya6K2w5a6k5LqI57SE5paw6KaP55m76YyyIC0g44GC44GC44GC?=
+[2025-06-23 12:29:26] mail()関数実行中...
+[2025-06-23 12:29:26] ✅ メール送信成功: takayuki.takahashi@jama.co.jp
+[2025-06-23 12:31:54] メール送信開始: to=takayuki.takahashi@jama.co.jp, subject=会議室予約更新 - あああ
+[2025-06-23 12:31:54] ヘッダー設定完了
+[2025-06-23 12:31:54] ヘッダー内容: From: 会議室予約システム <meeting-room-reservation-05@jama.co.jp> | Reply-To: meeting-room-reservation-05@jama.co.jp | Return-Path: meeting-room-reservation-05@jama.co.jp | X-Mailer: PHP/8.2.21 | MIME-Version: 1.0 | Content-Type: text/plain; charset=UTF-8 | Content-Transfer-Encoding: 8bit | 
+[2025-06-23 12:31:54] 件名エンコード完了: 会議室予約更新 - あああ
+[2025-06-23 12:31:54] mail()関数実行中...
+[2025-06-23 12:31:54] ✅ メール送信成功: takayuki.takahashi@jama.co.jp
+[2025-06-23 12:34:50] メール送信開始: to=takayuki.takahashi@jama.co.jp, subject=会議室予約新規登録 - あああ
+[2025-06-23 12:34:50] ヘッダー設定完了
+[2025-06-23 12:34:50] ヘッダー内容: From: 会議室予約システム <takayuki.takahashi@jama.co.jp> | Reply-To: takayuki.takahashi@jama.co.jp | Return-Path: takayuki.takahashi@jama.co.jp | X-Mailer: PHP/8.2.21 | MIME-Version: 1.0 | Content-Type: text/plain; charset=UTF-8 | Content-Transfer-Encoding: 8bit | 
+[2025-06-23 12:34:50] 件名エンコード完了: 会議室予約新規登録 - あああ
+[2025-06-23 12:34:50] mail()関数実行中...
+[2025-06-23 12:34:50] ✅ メール送信成功: takayuki.takahashi@jama.co.jp
+[2025-06-23 12:38:48] メール送信開始: to=takayuki.takahashi@jama.co.jp, subject=会議室予約新規登録 - あああ
+[2025-06-23 12:38:48] ヘッダー設定完了
+[2025-06-23 12:38:48] ヘッダー内容: From: =?UTF-8?B?5Lya6K2w5a6k5LqI57SE44K344K544OG44Og?= <takayuki.takahashi@jama.co.jp> | Reply-To: takayuki.takahashi@jama.co.jp | X-Mailer: PHP/8.2.21 | MIME-Version: 1.0 | Content-Type: text/plain; charset=UTF-8 | Content-Transfer-Encoding: 8bit
+[2025-06-23 12:38:48] 件名エンコード完了: =?UTF-8?B?5Lya6K2w5a6k5LqI57SE5paw6KaP55m76YyyIC0g44GC44GC44GC?=
+[2025-06-23 12:38:48] mail()関数実行中...
+[2025-06-23 12:38:48] ✅ メール送信成功: takayuki.takahashi@jama.co.jp
+[2025-06-23 12:44:36] メール送信開始: to=takayuki.takahashi@jama.co.jp, subject=予約作成: あああ
+[2025-06-23 12:44:36] ヘッダー設定完了
+[2025-06-23 12:44:36] ヘッダー内容: From: =?UTF-8?B?5Lya6K2w5a6k5LqI57SE44K344K544OG44Og?= <takayuki.takahashi@jama.co.jp> | Reply-To: takayuki.takahashi@jama.co.jp | X-Mailer: PHP/8.2.21 | MIME-Version: 1.0 | Content-Type: text/plain; charset=UTF-8 | Content-Transfer-Encoding: 8bit
+[2025-06-23 12:44:36] 件名エンコード完了: =?UTF-8?B?5LqI57SE5L2c5oiQOiDjgYLjgYLjgYI=?=
+[2025-06-23 12:44:36] mail()関数実行中...
+[2025-06-23 12:44:36] ✅ メール送信成功: takayuki.takahashi@jama.co.jp

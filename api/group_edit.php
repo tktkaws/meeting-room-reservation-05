@@ -12,6 +12,9 @@ switch ($method) {
     case 'PUT':
         handleUpdateGroupReservations();
         break;
+    case 'DELETE':
+        handleDeleteGroupReservations();
+        break;
     default:
         sendJsonResponse(false, 'サポートされていないメソッドです', null, 405);
 }
@@ -31,7 +34,7 @@ function handleGetGroupReservations() {
     try {
         // グループ情報取得
         $stmt = $db->prepare("
-            SELECT rg.*, u.name as user_name 
+            SELECT rg.*, u.name as user_name, u.department 
             FROM reservation_groups rg 
             JOIN users u ON rg.user_id = u.id 
             WHERE rg.id = ?
@@ -43,8 +46,8 @@ function handleGetGroupReservations() {
             sendJsonResponse(false, '繰り返し予約グループが見つかりません', null, 404);
         }
         
-        // 権限チェック
-        if ($group['user_id'] != $_SESSION['user_id'] && $_SESSION['role'] !== 'admin') {
+        // 権限チェック（同じ部署の予約も編集可能）
+        if (!canEditGroupReservation($group)) {
             sendJsonResponse(false, 'この繰り返し予約を編集する権限がありません', null, 403);
         }
         
@@ -93,12 +96,12 @@ function handleUpdateGroupReservations() {
     }
     
     // 入力検証
-    if (!validateInput($title, 'string', 100)) {
-        sendJsonResponse(false, 'タイトルは100文字以内で入力してください', null, 400);
+    if (!validateInput($title, 'string', 50)) {
+        sendJsonResponse(false, 'タイトルは50文字以内で入力してください', null, 400);
     }
     
-    if (!validateInput($description, 'string', 500)) {
-        sendJsonResponse(false, '説明は500文字以内で入力してください', null, 400);
+    if (!validateInput($description, 'string', 400)) {
+        sendJsonResponse(false, '説明は400文字以内で入力してください', null, 400);
     }
     
     $db = getDatabase();
@@ -106,7 +109,12 @@ function handleUpdateGroupReservations() {
     
     try {
         // グループの権限チェック
-        $stmt = $db->prepare("SELECT user_id FROM reservation_groups WHERE id = ?");
+        $stmt = $db->prepare("
+            SELECT rg.user_id, u.department 
+            FROM reservation_groups rg 
+            JOIN users u ON rg.user_id = u.id 
+            WHERE rg.id = ?
+        ");
         $stmt->execute([$groupId]);
         $group = $stmt->fetch();
         
@@ -114,7 +122,8 @@ function handleUpdateGroupReservations() {
             sendJsonResponse(false, '繰り返し予約グループが見つかりません', null, 404);
         }
         
-        if ($group['user_id'] != $_SESSION['user_id'] && $_SESSION['role'] !== 'admin') {
+        // 権限チェック（同じ部署の予約も編集可能）
+        if (!canEditGroupReservation($group)) {
             sendJsonResponse(false, 'この繰り返し予約を編集する権限がありません', null, 403);
         }
         
@@ -208,5 +217,87 @@ function checkTimeConflictForGroup($date, $startDatetime, $endDatetime, $exclude
     $stmt->execute($params);
     
     return !$stmt->fetch();
+}
+
+// グループの全予約削除
+function handleDeleteGroupReservations() {
+    requireAuth();
+    
+    $groupId = $_GET['group_id'] ?? 0;
+    
+    if (!$groupId) {
+        sendJsonResponse(false, 'グループIDが必要です', null, 400);
+    }
+    
+    $db = getDatabase();
+    $db->beginTransaction();
+    
+    try {
+        // グループの権限チェック
+        $stmt = $db->prepare("
+            SELECT rg.user_id, u.department 
+            FROM reservation_groups rg 
+            JOIN users u ON rg.user_id = u.id 
+            WHERE rg.id = ?
+        ");
+        $stmt->execute([$groupId]);
+        $group = $stmt->fetch();
+        
+        if (!$group) {
+            sendJsonResponse(false, '繰り返し予約グループが見つかりません', null, 404);
+        }
+        
+        // 削除権限チェック（編集権限と同じロジック）
+        if (!canEditGroupReservation($group)) {
+            sendJsonResponse(false, 'この繰り返し予約を削除する権限がありません', null, 403);
+        }
+        
+        // グループに属する全ての予約を削除
+        $stmt = $db->prepare("DELETE FROM reservations WHERE group_id = ?");
+        $stmt->execute([$groupId]);
+        $deletedReservations = $stmt->rowCount();
+        
+        // グループリレーションを削除
+        $stmt = $db->prepare("DELETE FROM reservation_group_relations WHERE group_id = ?");
+        $stmt->execute([$groupId]);
+        
+        // グループを削除
+        $stmt = $db->prepare("DELETE FROM reservation_groups WHERE id = ?");
+        $stmt->execute([$groupId]);
+        
+        $db->commit();
+        
+        sendJsonResponse(true, "{$deletedReservations}件の繰り返し予約を削除しました");
+        
+    } catch (Exception $e) {
+        $db->rollback();
+        sendJsonResponse(false, '繰り返し予約の削除に失敗しました: ' . $e->getMessage(), null, 500);
+    }
+}
+
+// グループ予約編集権限チェック関数
+function canEditGroupReservation($group) {
+    // 非ログインユーザーは編集不可
+    if (!isset($_SESSION['user_id'])) {
+        return false;
+    }
+    
+    // 管理者は全ての予約を編集可能
+    if ($_SESSION['role'] === 'admin') {
+        return true;
+    }
+    
+    // 自分が作成したグループは編集可能
+    if ($_SESSION['user_id'] == $group['user_id']) {
+        return true;
+    }
+    
+    // 同じ部署のグループは編集可能
+    if (isset($_SESSION['department']) && isset($group['department']) && 
+        $_SESSION['department'] == $group['department']) {
+        return true;
+    }
+    
+    return false;
 }
 ?>

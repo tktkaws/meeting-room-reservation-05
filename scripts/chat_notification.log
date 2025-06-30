@@ -1,0 +1,2579 @@
+[2025-06-19 16:34:31] notifyReservationUpdated called with ID: 91
+[2025-06-19 16:34:31] Chat通知開始: ID=91, Action=updated
+[2025-06-19 16:34:31] Chat通知: 予約詳細取得成功 - タイトル: iiiiiiiiiiiiiiiiiii
+[2025-06-19 16:34:31] Chat通知: メッセージ作成完了 - サイズ: 715 bytes
+[2025-06-19 16:34:31] Chat通知: 送信結果 - 失敗
+[2025-06-19 16:36:51] notifyReservationDeleted called with ID: 91
+[2025-06-19 16:36:51] Chat通知開始: ID=91, Action=deleted
+[2025-06-19 16:36:51] Chat通知: 予約詳細の取得に失敗 - ID: 91
+[2025-06-19 16:37:04] notifyReservationUpdated called with ID: 99
+[2025-06-19 16:37:04] Chat通知開始: ID=99, Action=updated
+[2025-06-19 16:37:04] Chat通知: 予約詳細取得成功 - タイトル: aaaaaaaaaaaaaaaaaa
+[2025-06-19 16:37:04] Chat通知: メッセージ作成完了 - サイズ: 713 bytes
+[2025-06-19 16:37:04] Google Chat送信開始
+[2025-06-19 16:37:04] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAW4CXATk/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-19 16:37:04] 送信データサイズ: 713 bytes
+[2025-06-19 16:37:04] cURL実行開始
+[2025-06-19 16:37:05] cURL実行完了 - HTTPコード: 400
+[2025-06-19 16:37:05] Google Chat送信エラー (HTTP 400): {
+  "error": {
+    "code": 400,
+    "message": "Invalid value at 'message.cards[0].sections[0].widgets[0].key_value.icon' (type.googleapis.com/google.chat.v1.WidgetMarkup.Icon), \"CALENDAR\"",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadRequest",
+        "fieldViolations": [
+          {
+            "field": "message.cards[0].sections[0].widgets[0].key_value.icon",
+            "description": "Invalid value at 'message.cards[0].sections[0].widgets[0].key_value.icon' (type.googleapis.com/google.chat.v1.WidgetMarkup.Icon), \"CALENDAR\""
+          }
+        ]
+      }
+    ]
+  }
+}
+
+[2025-06-19 16:37:05] Chat通知: 送信結果 - 失敗
+[2025-06-19 16:37:23] notifyReservationUpdated called with ID: 93
+[2025-06-19 16:37:23] Chat通知開始: ID=93, Action=updated
+[2025-06-19 16:37:23] Chat通知: 予約詳細取得成功 - タイトル: 毎月では
+[2025-06-19 16:37:23] Chat通知: メッセージ作成完了 - サイズ: 718 bytes
+[2025-06-19 16:37:23] Google Chat送信開始
+[2025-06-19 16:37:23] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAW4CXATk/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-19 16:37:23] 送信データサイズ: 718 bytes
+[2025-06-19 16:37:23] cURL実行開始
+[2025-06-19 16:37:23] cURL実行完了 - HTTPコード: 400
+[2025-06-19 16:37:23] Google Chat送信エラー (HTTP 400): {
+  "error": {
+    "code": 400,
+    "message": "Invalid value at 'message.cards[0].sections[0].widgets[0].key_value.icon' (type.googleapis.com/google.chat.v1.WidgetMarkup.Icon), \"CALENDAR\"",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadRequest",
+        "fieldViolations": [
+          {
+            "field": "message.cards[0].sections[0].widgets[0].key_value.icon",
+            "description": "Invalid value at 'message.cards[0].sections[0].widgets[0].key_value.icon' (type.googleapis.com/google.chat.v1.WidgetMarkup.Icon), \"CALENDAR\""
+          }
+        ]
+      }
+    ]
+  }
+}
+
+[2025-06-19 16:37:23] Chat通知: 送信結果 - 失敗
+[2025-06-19 16:37:35] notifyReservationCreated called with ID: 100
+[2025-06-19 16:37:35] Chat通知開始: ID=100, Action=created
+[2025-06-19 16:37:35] Chat通知: 予約詳細取得成功 - タイトル: aaaaaaaa
+[2025-06-19 16:37:35] Chat通知: メッセージ作成完了 - サイズ: 721 bytes
+[2025-06-19 16:37:35] Google Chat送信開始
+[2025-06-19 16:37:35] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAW4CXATk/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-19 16:37:35] 送信データサイズ: 721 bytes
+[2025-06-19 16:37:35] cURL実行開始
+[2025-06-19 16:37:35] cURL実行完了 - HTTPコード: 400
+[2025-06-19 16:37:35] Google Chat送信エラー (HTTP 400): {
+  "error": {
+    "code": 400,
+    "message": "Invalid value at 'message.cards[0].sections[0].widgets[0].key_value.icon' (type.googleapis.com/google.chat.v1.WidgetMarkup.Icon), \"CALENDAR\"",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadRequest",
+        "fieldViolations": [
+          {
+            "field": "message.cards[0].sections[0].widgets[0].key_value.icon",
+            "description": "Invalid value at 'message.cards[0].sections[0].widgets[0].key_value.icon' (type.googleapis.com/google.chat.v1.WidgetMarkup.Icon), \"CALENDAR\""
+          }
+        ]
+      }
+    ]
+  }
+}
+
+[2025-06-19 16:37:35] Chat通知: 送信結果 - 失敗
+[2025-06-19 16:41:57] notifyReservationCreated called with ID: 101
+[2025-06-19 16:41:57] Chat通知開始: ID=101, Action=created
+[2025-06-19 16:41:57] Chat通知: 予約詳細取得成功 - タイトル: a
+[2025-06-19 16:41:57] Chat通知: メッセージ作成完了 - サイズ: 714 bytes
+[2025-06-19 16:41:57] Google Chat送信開始
+[2025-06-19 16:41:57] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-19 16:41:57] 送信データサイズ: 714 bytes
+[2025-06-19 16:41:57] cURL実行開始
+[2025-06-19 16:41:58] cURL実行完了 - HTTPコード: 400
+[2025-06-19 16:41:58] Google Chat送信エラー (HTTP 400): {
+  "error": {
+    "code": 400,
+    "message": "Invalid value at 'message.cards[0].sections[0].widgets[0].key_value.icon' (type.googleapis.com/google.chat.v1.WidgetMarkup.Icon), \"CALENDAR\"",
+    "status": "INVALID_ARGUMENT",
+    "details": [
+      {
+        "@type": "type.googleapis.com/google.rpc.BadRequest",
+        "fieldViolations": [
+          {
+            "field": "message.cards[0].sections[0].widgets[0].key_value.icon",
+            "description": "Invalid value at 'message.cards[0].sections[0].widgets[0].key_value.icon' (type.googleapis.com/google.chat.v1.WidgetMarkup.Icon), \"CALENDAR\""
+          }
+        ]
+      }
+    ]
+  }
+}
+
+[2025-06-19 16:41:58] Chat通知: 送信結果 - 失敗
+[2025-06-19 16:44:08] notifyReservationCreated called with ID: 102
+[2025-06-19 16:44:08] Chat通知開始: ID=102, Action=created
+[2025-06-19 16:44:08] Chat通知: 予約詳細取得成功 - タイトル: a
+[2025-06-19 16:44:08] Chat通知: メッセージ作成完了 - サイズ: 646 bytes
+[2025-06-19 16:44:08] Google Chat送信開始
+[2025-06-19 16:44:08] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-19 16:44:08] 送信データサイズ: 646 bytes
+[2025-06-19 16:44:08] cURL実行開始
+[2025-06-19 16:44:08] cURL実行完了 - HTTPコード: 200
+[2025-06-19 16:44:08] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/C0w2C8QxbK4.C0w2C8QxbK4",
+  "cards": [
+    {
+      "header": {
+        "title": "📅 新しい予約が作成されました",
+        "subtitle": "会議室予約システム",
+        "imageUrl": "https://developers.google.com/chat/images/quickstart-app-avatar.png"
+      },
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "9月9日(火)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "16:45 - 17:45"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "a"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/C0w2C8QxbK4"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-19 16:44:08] Chat通知: 送信結果 - 成功
+[2025-06-19 16:44:34] notifyReservationUpdated called with ID: 100
+[2025-06-19 16:44:34] Chat通知開始: ID=100, Action=updated
+[2025-06-19 16:44:34] Chat通知: 予約詳細取得成功 - タイトル: 編集しました
+[2025-06-19 16:44:34] Chat通知: メッセージ作成完了 - サイズ: 664 bytes
+[2025-06-19 16:44:34] Google Chat送信開始
+[2025-06-19 16:44:34] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-19 16:44:34] 送信データサイズ: 664 bytes
+[2025-06-19 16:44:34] cURL実行開始
+[2025-06-19 16:44:35] cURL実行完了 - HTTPコード: 200
+[2025-06-19 16:44:35] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/cykEcwNDf9U.cykEcwNDf9U",
+  "cards": [
+    {
+      "header": {
+        "title": "✏️ 予約が更新されました",
+        "subtitle": "会議室予約システム",
+        "imageUrl": "https://developers.google.com/chat/images/quickstart-app-avatar.png"
+      },
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "9月25日(木)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "16:45 - 17:45"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "編集しました"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/cykEcwNDf9U"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-19 16:44:35] Chat通知: 送信結果 - 成功
+[2025-06-19 16:45:08] notifyReservationDeleted called with ID: 100
+[2025-06-19 16:45:08] Chat通知開始: ID=100, Action=deleted
+[2025-06-19 16:45:08] Chat通知: 予約詳細の取得に失敗 - ID: 100
+[2025-06-19 16:45:48] notifyReservationCreated called with ID: 103
+[2025-06-19 16:45:48] Chat通知開始: ID=103, Action=created
+[2025-06-19 16:45:48] Chat通知: 予約詳細取得成功 - タイトル: 毎月
+[2025-06-19 16:45:48] Chat通知: メッセージ作成完了 - サイズ: 748 bytes
+[2025-06-19 16:45:48] Google Chat送信開始
+[2025-06-19 16:45:48] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-19 16:45:48] 送信データサイズ: 748 bytes
+[2025-06-19 16:45:48] cURL実行開始
+[2025-06-19 16:45:48] cURL実行完了 - HTTPコード: 200
+[2025-06-19 16:45:48] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/BZvaRD6wxAk.BZvaRD6wxAk",
+  "cards": [
+    {
+      "header": {
+        "title": "📅 新しい予約が作成されました",
+        "subtitle": "会議室予約システム",
+        "imageUrl": "https://developers.google.com/chat/images/quickstart-app-avatar.png"
+      },
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "7月2日(水)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "16:45 - 17:45"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "毎月"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "繰り返し",
+                "content": "🔁 毎月"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/BZvaRD6wxAk"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-19 16:45:48] Chat通知: 送信結果 - 成功
+[2025-06-19 16:46:34] notifyReservationCreated called with ID: 107
+[2025-06-19 16:46:34] Chat通知開始: ID=107, Action=created
+[2025-06-19 16:46:34] Chat通知: 予約詳細取得成功 - タイトル: あｓｆ
+[2025-06-19 16:46:34] Chat通知: メッセージ作成完了 - サイズ: 664 bytes
+[2025-06-19 16:46:34] Google Chat送信開始
+[2025-06-19 16:46:34] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-19 16:46:34] 送信データサイズ: 664 bytes
+[2025-06-19 16:46:34] cURL実行開始
+[2025-06-19 16:46:35] cURL実行完了 - HTTPコード: 200
+[2025-06-19 16:46:35] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/Ex5mMKWaeNw.Ex5mMKWaeNw",
+  "cards": [
+    {
+      "header": {
+        "title": "📅 新しい予約が作成されました",
+        "subtitle": "会議室予約システム",
+        "imageUrl": "https://developers.google.com/chat/images/quickstart-app-avatar.png"
+      },
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "6月20日(金)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "17:00 - 18:00"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "あｓｆ"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/Ex5mMKWaeNw"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-19 16:46:35] Chat通知: 送信結果 - 成功
+[2025-06-19 16:46:59] notifyReservationUpdated called with ID: 107
+[2025-06-19 16:46:59] Chat通知開始: ID=107, Action=updated
+[2025-06-19 16:46:59] Chat通知: 予約詳細取得成功 - タイトル: あｓｆ
+[2025-06-19 16:46:59] Chat通知: メッセージ作成完了 - サイズ: 646 bytes
+[2025-06-19 16:46:59] Google Chat送信開始
+[2025-06-19 16:46:59] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-19 16:46:59] 送信データサイズ: 646 bytes
+[2025-06-19 16:46:59] cURL実行開始
+[2025-06-19 16:47:00] cURL実行完了 - HTTPコード: 200
+[2025-06-19 16:47:00] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/IKQLG7AChFI.IKQLG7AChFI",
+  "cards": [
+    {
+      "header": {
+        "title": "✏️ 予約が更新されました",
+        "subtitle": "会議室予約システム",
+        "imageUrl": "https://developers.google.com/chat/images/quickstart-app-avatar.png"
+      },
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "6月20日(金)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "17:00 - 17:15"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "あｓｆ"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/IKQLG7AChFI"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-19 16:47:00] Chat通知: 送信結果 - 成功
+[2025-06-19 16:48:33] notifyReservationUpdated called with ID: 107
+[2025-06-19 16:48:33] Chat通知開始: ID=107, Action=updated
+[2025-06-19 16:48:33] Chat通知: 予約詳細取得成功 - タイトル: あｓｆ
+[2025-06-19 16:48:33] Chat通知: メッセージ作成完了 - サイズ: 646 bytes
+[2025-06-19 16:48:33] Google Chat送信開始
+[2025-06-19 16:48:33] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-19 16:48:33] 送信データサイズ: 646 bytes
+[2025-06-19 16:48:33] cURL実行開始
+[2025-06-19 16:48:33] cURL実行完了 - HTTPコード: 200
+[2025-06-19 16:48:33] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/B9uontZy4ns.B9uontZy4ns",
+  "cards": [
+    {
+      "header": {
+        "title": "✏️ 予約が更新されました",
+        "subtitle": "会議室予約システム",
+        "imageUrl": "https://developers.google.com/chat/images/quickstart-app-avatar.png"
+      },
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "6月20日(金)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "17:00 - 17:30"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "あｓｆ"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/B9uontZy4ns"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-19 16:48:33] Chat通知: 送信結果 - 成功
+[2025-06-19 17:04:31] 非同期Chat通知リクエスト: ID=102, Action=created
+[2025-06-19 17:04:31] Chat通知開始: ID=102, Action=created
+[2025-06-19 17:04:31] Chat通知: 予約詳細取得成功 - タイトル: a
+[2025-06-19 17:04:31] Chat通知: メッセージ作成完了 - サイズ: 646 bytes
+[2025-06-19 17:04:31] Google Chat送信開始
+[2025-06-19 17:04:31] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-19 17:04:31] 送信データサイズ: 646 bytes
+[2025-06-19 17:04:31] cURL実行開始
+[2025-06-19 17:04:32] cURL実行完了 - HTTPコード: 200
+[2025-06-19 17:04:32] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/Q51ytt-9-s8.Q51ytt-9-s8",
+  "cards": [
+    {
+      "header": {
+        "title": "📅 新しい予約が作成されました",
+        "subtitle": "会議室予約システム",
+        "imageUrl": "https://developers.google.com/chat/images/quickstart-app-avatar.png"
+      },
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "9月9日(火)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "16:45 - 17:45"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "a"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/Q51ytt-9-s8"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-19 17:04:32] Chat通知: 送信結果 - 成功
+[2025-06-19 17:05:00] 非同期Chat通知リクエスト: ID=101, Action=created
+[2025-06-19 17:05:00] Chat通知開始: ID=101, Action=created
+[2025-06-19 17:05:00] Chat通知: 予約詳細取得成功 - タイトル: a
+[2025-06-19 17:05:00] Chat通知: メッセージ作成完了 - サイズ: 647 bytes
+[2025-06-19 17:05:00] Google Chat送信開始
+[2025-06-19 17:05:00] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-19 17:05:00] 送信データサイズ: 647 bytes
+[2025-06-19 17:05:00] cURL実行開始
+[2025-06-19 17:05:00] cURL実行完了 - HTTPコード: 200
+[2025-06-19 17:05:00] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/Lc8MwbCIgDA.Lc8MwbCIgDA",
+  "cards": [
+    {
+      "header": {
+        "title": "📅 新しい予約が作成されました",
+        "subtitle": "会議室予約システム",
+        "imageUrl": "https://developers.google.com/chat/images/quickstart-app-avatar.png"
+      },
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "6月30日(月)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "16:45 - 17:45"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "a"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/Lc8MwbCIgDA"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-19 17:05:00] Chat通知: 送信結果 - 成功
+[2025-06-19 17:05:13] 非同期Chat通知リクエスト: ID=100, Action=created
+[2025-06-19 17:05:13] Chat通知開始: ID=100, Action=created
+[2025-06-19 17:05:13] Chat通知: 予約詳細の取得に失敗 - ID: 100
+[2025-06-19 17:05:16] 非同期Chat通知リクエスト: ID=99, Action=created
+[2025-06-19 17:05:16] Chat通知開始: ID=99, Action=created
+[2025-06-19 17:05:16] Chat通知: 予約詳細取得成功 - タイトル: aaaaaaaaaaaaaaaaaa
+[2025-06-19 17:05:16] Chat通知: メッセージ作成完了 - サイズ: 664 bytes
+[2025-06-19 17:05:16] Google Chat送信開始
+[2025-06-19 17:05:16] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-19 17:05:16] 送信データサイズ: 664 bytes
+[2025-06-19 17:05:16] cURL実行開始
+[2025-06-19 17:05:16] cURL実行完了 - HTTPコード: 200
+[2025-06-19 17:05:16] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/Y0VURjeRmWI.Y0VURjeRmWI",
+  "cards": [
+    {
+      "header": {
+        "title": "📅 新しい予約が作成されました",
+        "subtitle": "会議室予約システム",
+        "imageUrl": "https://developers.google.com/chat/images/quickstart-app-avatar.png"
+      },
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "6月23日(月)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "16:45 - 17:45"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "aaaaaaaaaaaaaaaaaa"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/Y0VURjeRmWI"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-19 17:05:16] Chat通知: 送信結果 - 成功
+[2025-06-19 17:15:49] 非同期Chat通知リクエスト: ID=118, Action=created
+[2025-06-19 17:15:49] Chat通知開始: ID=118, Action=created
+[2025-06-19 17:15:49] 予約詳細取得開始: ID=118
+[2025-06-19 17:15:49] 予約詳細取得成功: ID=118, Title=あ, Date=2025-07-28
+[2025-06-19 17:15:49] Chat通知: 予約詳細取得成功 - タイトル: あ
+[2025-06-19 17:15:49] Chat通知: メッセージ作成完了 - サイズ: 652 bytes
+[2025-06-19 17:15:49] Google Chat送信開始
+[2025-06-19 17:15:49] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-19 17:15:49] 送信データサイズ: 652 bytes
+[2025-06-19 17:15:49] cURL実行開始
+[2025-06-19 17:15:50] cURL実行完了 - HTTPコード: 200
+[2025-06-19 17:15:50] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/boJYMyYQPl4.boJYMyYQPl4",
+  "cards": [
+    {
+      "header": {
+        "title": "📅 新しい予約が作成されました",
+        "subtitle": "会議室予約システム",
+        "imageUrl": "https://developers.google.com/chat/images/quickstart-app-avatar.png"
+      },
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "7月28日(月)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "17:15 - 18:00"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "あ"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/boJYMyYQPl4"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-19 17:15:50] Chat通知: 送信結果 - 成功
+[2025-06-19 17:15:58] 非同期Chat通知リクエスト: ID=119, Action=created
+[2025-06-19 17:15:58] Chat通知開始: ID=119, Action=created
+[2025-06-19 17:15:58] 予約詳細取得開始: ID=119
+[2025-06-19 17:15:58] 予約詳細取得成功: ID=119, Title=あ, Date=2025-07-29
+[2025-06-19 17:15:58] Chat通知: 予約詳細取得成功 - タイトル: あ
+[2025-06-19 17:15:58] Chat通知: メッセージ作成完了 - サイズ: 652 bytes
+[2025-06-19 17:15:58] Google Chat送信開始
+[2025-06-19 17:15:58] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-19 17:15:58] 送信データサイズ: 652 bytes
+[2025-06-19 17:15:58] cURL実行開始
+[2025-06-19 17:15:59] cURL実行完了 - HTTPコード: 200
+[2025-06-19 17:15:59] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/jGTitUmbC34.jGTitUmbC34",
+  "cards": [
+    {
+      "header": {
+        "title": "📅 新しい予約が作成されました",
+        "subtitle": "会議室予約システム",
+        "imageUrl": "https://developers.google.com/chat/images/quickstart-app-avatar.png"
+      },
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "7月29日(火)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "17:15 - 18:00"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "あ"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/jGTitUmbC34"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-19 17:15:59] Chat通知: 送信結果 - 成功
+[2025-06-19 17:16:22] 非同期Chat通知リクエスト: ID=120, Action=created
+[2025-06-19 17:16:22] Chat通知開始: ID=120, Action=created
+[2025-06-19 17:16:22] 予約詳細取得開始: ID=120
+[2025-06-19 17:16:22] 予約詳細取得成功: ID=120, Title=あ, Date=2025-07-16
+[2025-06-19 17:16:22] Chat通知: 予約詳細取得成功 - タイトル: あ
+[2025-06-19 17:16:22] Chat通知: メッセージ作成完了 - サイズ: 652 bytes
+[2025-06-19 17:16:22] Google Chat送信開始
+[2025-06-19 17:16:22] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-19 17:16:22] 送信データサイズ: 652 bytes
+[2025-06-19 17:16:22] cURL実行開始
+[2025-06-19 17:16:23] cURL実行完了 - HTTPコード: 200
+[2025-06-19 17:16:23] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/xaJJR1pehqU.xaJJR1pehqU",
+  "cards": [
+    {
+      "header": {
+        "title": "📅 新しい予約が作成されました",
+        "subtitle": "会議室予約システム",
+        "imageUrl": "https://developers.google.com/chat/images/quickstart-app-avatar.png"
+      },
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "7月16日(水)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "17:30 - 18:00"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "あ"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/xaJJR1pehqU"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-19 17:16:23] Chat通知: 送信結果 - 成功
+[2025-06-19 17:16:32] 非同期Chat通知リクエスト: ID=120, Action=updated
+[2025-06-19 17:16:32] Chat通知開始: ID=120, Action=updated
+[2025-06-19 17:16:32] 予約詳細取得開始: ID=120
+[2025-06-19 17:16:32] 予約詳細取得成功: ID=120, Title=あ, Date=2025-07-16
+[2025-06-19 17:16:32] Chat通知: 予約詳細取得成功 - タイトル: あ
+[2025-06-19 17:16:32] Chat通知: メッセージ作成完了 - サイズ: 634 bytes
+[2025-06-19 17:16:32] Google Chat送信開始
+[2025-06-19 17:16:32] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-19 17:16:32] 送信データサイズ: 634 bytes
+[2025-06-19 17:16:32] cURL実行開始
+[2025-06-19 17:16:33] cURL実行完了 - HTTPコード: 200
+[2025-06-19 17:16:33] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/N_gUO8MhwDM.N_gUO8MhwDM",
+  "cards": [
+    {
+      "header": {
+        "title": "✏️ 予約が更新されました",
+        "subtitle": "会議室予約システム",
+        "imageUrl": "https://developers.google.com/chat/images/quickstart-app-avatar.png"
+      },
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "7月16日(水)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "09:30 - 10:30"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "あ"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/N_gUO8MhwDM"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-19 17:16:33] Chat通知: 送信結果 - 成功
+[2025-06-19 17:16:39] 非同期Chat通知リクエスト: ID=120, Action=deleted
+[2025-06-19 17:16:39] Chat通知開始: ID=120, Action=deleted
+[2025-06-19 17:16:39] 予約詳細取得開始: ID=120
+[2025-06-19 17:16:39] 予約が見つかりません: ID=120
+[2025-06-19 17:16:39] Chat通知: 予約詳細の取得に失敗 - ID: 120
+[2025-06-19 17:17:59] 非同期Chat通知リクエスト: ID=119, Action=deleted
+[2025-06-19 17:17:59] Chat通知開始: ID=119, Action=deleted
+[2025-06-19 17:17:59] 予約詳細取得開始: ID=119
+[2025-06-19 17:17:59] 予約が見つかりません: ID=119
+[2025-06-19 17:17:59] Chat通知: 予約詳細の取得に失敗 - ID: 119
+[2025-06-19 17:20:28] 削除用Chat通知開始: ID=116
+[2025-06-19 17:20:28] Chat通知: メッセージ作成完了 - サイズ: 640 bytes
+[2025-06-19 17:20:28] Google Chat送信開始
+[2025-06-19 17:20:28] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-19 17:20:28] 送信データサイズ: 640 bytes
+[2025-06-19 17:20:28] cURL実行開始
+[2025-06-19 17:20:28] cURL実行完了 - HTTPコード: 200
+[2025-06-19 17:20:28] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/PN1pOW4GIiQ.PN1pOW4GIiQ",
+  "cards": [
+    {
+      "header": {
+        "title": "🗑️ 予約が削除されました",
+        "subtitle": "会議室予約システム",
+        "imageUrl": "https://developers.google.com/chat/images/quickstart-app-avatar.png"
+      },
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "7月14日(月)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "17:15 - 18:00"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "ｆ"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/PN1pOW4GIiQ"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-19 17:20:28] Chat通知: 送信結果 - 成功
+[2025-06-19 17:20:51] 非同期Chat通知リクエスト: ID=121, Action=created
+[2025-06-19 17:20:51] Chat通知開始: ID=121, Action=created
+[2025-06-19 17:20:51] 予約詳細取得開始: ID=121
+[2025-06-19 17:20:51] 予約詳細取得成功: ID=121, Title=あ, Date=2025-07-17
+[2025-06-19 17:20:51] Chat通知: 予約詳細取得成功 - タイトル: あ
+[2025-06-19 17:20:51] Chat通知: メッセージ作成完了 - サイズ: 652 bytes
+[2025-06-19 17:20:51] Google Chat送信開始
+[2025-06-19 17:20:51] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-19 17:20:51] 送信データサイズ: 652 bytes
+[2025-06-19 17:20:51] cURL実行開始
+[2025-06-19 17:20:51] cURL実行完了 - HTTPコード: 200
+[2025-06-19 17:20:51] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/05_ANadTCPg.05_ANadTCPg",
+  "cards": [
+    {
+      "header": {
+        "title": "📅 新しい予約が作成されました",
+        "subtitle": "会議室予約システム",
+        "imageUrl": "https://developers.google.com/chat/images/quickstart-app-avatar.png"
+      },
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "7月17日(木)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "17:30 - 18:00"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "あ"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/05_ANadTCPg"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-19 17:20:51] Chat通知: 送信結果 - 成功
+[2025-06-19 17:22:40] 非同期Chat通知リクエスト: ID=122, Action=created
+[2025-06-19 17:22:40] Chat通知開始: ID=122, Action=created
+[2025-06-19 17:22:40] 予約詳細取得開始: ID=122
+[2025-06-19 17:22:40] 予約詳細取得成功: ID=122, Title=あｓｄ, Date=2025-07-23
+[2025-06-19 17:22:40] Chat通知: 予約詳細取得成功 - タイトル: あｓｄ
+[2025-06-19 17:22:40] Chat通知: メッセージ作成完了 - サイズ: 651 bytes
+[2025-06-19 17:22:40] Google Chat送信開始
+[2025-06-19 17:22:40] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-19 17:22:40] 送信データサイズ: 651 bytes
+[2025-06-19 17:22:40] cURL実行開始
+[2025-06-19 17:22:41] cURL実行完了 - HTTPコード: 200
+[2025-06-19 17:22:41] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/vL49GlIcZAo.vL49GlIcZAo",
+  "cards": [
+    {
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "アクション",
+                "content": "📅 新しい予約が作成されました"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "7月23日(水)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "17:30 - 18:00"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "あｓｄ"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "繰り返し",
+                "content": "🔁 毎日"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/vL49GlIcZAo"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-19 17:22:41] Chat通知: 送信結果 - 成功
+[2025-06-19 17:22:56] 削除用Chat通知開始: ID=124
+[2025-06-19 17:22:56] Chat通知: メッセージ作成完了 - サイズ: 639 bytes
+[2025-06-19 17:22:56] Google Chat送信開始
+[2025-06-19 17:22:56] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-19 17:22:56] 送信データサイズ: 639 bytes
+[2025-06-19 17:22:56] cURL実行開始
+[2025-06-19 17:22:57] cURL実行完了 - HTTPコード: 200
+[2025-06-19 17:22:57] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/hW_Ovlpm5yA.hW_Ovlpm5yA",
+  "cards": [
+    {
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "アクション",
+                "content": "🗑️ 予約が削除されました"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "7月25日(金)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "17:30 - 18:00"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "あｓｄ"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "繰り返し",
+                "content": "🔁 毎日"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/hW_Ovlpm5yA"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-19 17:22:57] Chat通知: 送信結果 - 成功
+[2025-06-19 17:46:54] 削除用Chat通知開始: ID=98
+[2025-06-19 17:46:54] Chat通知: メッセージ作成完了 - サイズ: 531 bytes
+[2025-06-19 17:46:54] Google Chat送信開始
+[2025-06-19 17:46:54] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-19 17:46:54] 送信データサイズ: 531 bytes
+[2025-06-19 17:46:54] cURL実行開始
+[2025-06-19 17:46:55] cURL実行完了 - HTTPコード: 200
+[2025-06-19 17:46:55] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/Bb8QkMN7vZ8.Bb8QkMN7vZ8",
+  "cards": [
+    {
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "アクション",
+                "content": "🗑️ 予約が削除されました"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "6月19日(木)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "16:30 - 17:30"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "a"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/Bb8QkMN7vZ8"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-19 17:46:55] Chat通知: 送信結果 - 成功
+[2025-06-20 10:22:37] 非同期Chat通知リクエスト: ID=125, Action=created
+[2025-06-20 10:22:37] Chat通知開始: ID=125, Action=created
+[2025-06-20 10:22:37] 予約詳細取得開始: ID=125
+[2025-06-20 10:22:37] 予約詳細取得成功: ID=125, Title=9時, Date=2025-06-20
+[2025-06-20 10:22:37] Chat通知: 予約詳細取得成功 - タイトル: 9時
+[2025-06-20 10:22:37] Chat通知: メッセージ作成完了 - サイズ: 549 bytes
+[2025-06-20 10:22:37] Google Chat送信開始
+[2025-06-20 10:22:37] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-20 10:22:37] 送信データサイズ: 549 bytes
+[2025-06-20 10:22:37] cURL実行開始
+[2025-06-20 10:22:38] cURL実行完了 - HTTPコード: 200
+[2025-06-20 10:22:38] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/YJdys3KSV9A.YJdys3KSV9A",
+  "cards": [
+    {
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "アクション",
+                "content": "📅 新しい予約が作成されました"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "6月20日(金)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "09:00 - 10:00"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "9時"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/YJdys3KSV9A"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-20 10:22:38] Chat通知: 送信結果 - 成功
+[2025-06-20 10:57:32] 非同期Chat通知リクエスト: ID=126, Action=created
+[2025-06-20 10:57:32] Chat通知開始: ID=126, Action=created
+[2025-06-20 10:57:32] 予約詳細取得開始: ID=126
+[2025-06-20 10:57:32] 予約詳細取得成功: ID=126, Title=毎日, Date=2025-07-08
+[2025-06-20 10:57:32] Chat通知: 予約詳細取得成功 - タイトル: 毎日
+[2025-06-20 10:57:32] Chat通知: メッセージ作成完了 - サイズ: 644 bytes
+[2025-06-20 10:57:32] Google Chat送信開始
+[2025-06-20 10:57:32] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-20 10:57:32] 送信データサイズ: 644 bytes
+[2025-06-20 10:57:32] cURL実行開始
+[2025-06-20 10:57:32] cURL実行完了 - HTTPコード: 200
+[2025-06-20 10:57:32] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/xFEuMSHCYcc.xFEuMSHCYcc",
+  "cards": [
+    {
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "アクション",
+                "content": "📅 新しい予約が作成されました"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "7月8日(火)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "11:00 - 12:00"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "毎日"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "繰り返し",
+                "content": "🔁 毎日"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/xFEuMSHCYcc"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-20 10:57:32] Chat通知: 送信結果 - 成功
+[2025-06-20 11:03:46] 削除用Chat通知開始: ID=108
+[2025-06-20 11:03:46] Chat通知: メッセージ作成完了 - サイズ: 536 bytes
+[2025-06-20 11:03:46] Google Chat送信開始
+[2025-06-20 11:03:46] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-20 11:03:46] 送信データサイズ: 536 bytes
+[2025-06-20 11:03:46] cURL実行開始
+[2025-06-20 11:03:46] cURL実行完了 - HTTPコード: 200
+[2025-06-20 11:03:46] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/AhbodjSkFKk.AhbodjSkFKk",
+  "cards": [
+    {
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "アクション",
+                "content": "🗑️ 予約が削除されました"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "6月26日(木)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "17:15 - 18:00"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "あ"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/AhbodjSkFKk"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-20 11:03:46] Chat通知: 送信結果 - 成功
+[2025-06-20 11:03:53] 削除用Chat通知開始: ID=112
+[2025-06-20 11:03:53] Chat通知: メッセージ作成完了 - サイズ: 536 bytes
+[2025-06-20 11:03:53] Google Chat送信開始
+[2025-06-20 11:03:53] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-20 11:03:53] 送信データサイズ: 536 bytes
+[2025-06-20 11:03:53] cURL実行開始
+[2025-06-20 11:03:53] cURL実行完了 - HTTPコード: 200
+[2025-06-20 11:03:53] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/BTCNG-rXN3w.BTCNG-rXN3w",
+  "cards": [
+    {
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "アクション",
+                "content": "🗑️ 予約が削除されました"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "6月27日(金)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "09:15 - 10:00"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "あ"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/BTCNG-rXN3w"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-20 11:03:53] Chat通知: 送信結果 - 成功
+[2025-06-20 11:18:56] 削除用Chat通知開始: ID=122
+[2025-06-20 11:18:56] Chat通知: メッセージ作成完了 - サイズ: 639 bytes
+[2025-06-20 11:18:56] Google Chat送信開始
+[2025-06-20 11:18:56] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-20 11:18:56] 送信データサイズ: 639 bytes
+[2025-06-20 11:18:56] cURL実行開始
+[2025-06-20 11:18:56] cURL実行完了 - HTTPコード: 200
+[2025-06-20 11:18:56] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/Asoe3UGofIg.Asoe3UGofIg",
+  "cards": [
+    {
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "アクション",
+                "content": "🗑️ 予約が削除されました"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "7月23日(水)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "17:30 - 18:00"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "あｓｄ"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "繰り返し",
+                "content": "🔁 毎日"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/Asoe3UGofIg"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-20 11:18:56] Chat通知: 送信結果 - 成功
+[2025-06-20 13:27:23] 非同期Chat通知リクエスト: ID=129, Action=created
+[2025-06-20 13:27:23] Chat通知開始: ID=129, Action=created
+[2025-06-20 13:27:23] 予約詳細取得開始: ID=129
+[2025-06-20 13:27:23] 予約詳細取得成功: ID=129, Title=a, Date=2025-06-26
+[2025-06-20 13:27:23] Chat通知: 予約詳細取得成功 - タイトル: a
+[2025-06-20 13:27:23] Chat通知: メッセージ作成完了 - サイズ: 543 bytes
+[2025-06-20 13:27:23] Google Chat送信開始
+[2025-06-20 13:27:23] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-20 13:27:23] 送信データサイズ: 543 bytes
+[2025-06-20 13:27:23] cURL実行開始
+[2025-06-20 13:27:23] cURL実行完了 - HTTPコード: 200
+[2025-06-20 13:27:23] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/6m3kSLxfBcg.6m3kSLxfBcg",
+  "cards": [
+    {
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "アクション",
+                "content": "📅 新しい予約が作成されました"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "6月26日(木)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "13:30 - 14:30"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "a"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/6m3kSLxfBcg"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-20 13:27:23] Chat通知: 送信結果 - 成功
+[2025-06-20 15:45:03] 非同期Chat通知リクエスト: ID=130, Action=created
+[2025-06-20 15:45:03] Chat通知開始: ID=130, Action=created
+[2025-06-20 15:45:03] 予約詳細取得開始: ID=130
+[2025-06-20 15:45:03] 予約詳細取得成功: ID=130, Title=あ, Date=2025-06-20
+[2025-06-20 15:45:03] Chat通知: 予約詳細取得成功 - タイトル: あ
+[2025-06-20 15:45:03] Chat通知: メッセージ作成完了 - サイズ: 548 bytes
+[2025-06-20 15:45:03] Google Chat送信開始
+[2025-06-20 15:45:03] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-20 15:45:03] 送信データサイズ: 548 bytes
+[2025-06-20 15:45:03] cURL実行開始
+[2025-06-20 15:45:04] cURL実行完了 - HTTPコード: 200
+[2025-06-20 15:45:04] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/0RAnOSsKGlU.0RAnOSsKGlU",
+  "cards": [
+    {
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "アクション",
+                "content": "📅 新しい予約が作成されました"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "6月20日(金)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "10:45 - 11:00"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "あ"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/0RAnOSsKGlU"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-20 15:45:04] Chat通知: 送信結果 - 成功
+[2025-06-20 15:50:55] 非同期Chat通知リクエスト: ID=131, Action=created
+[2025-06-20 15:50:55] Chat通知開始: ID=131, Action=created
+[2025-06-20 15:50:55] 予約詳細取得開始: ID=131
+[2025-06-20 15:50:55] 予約詳細取得成功: ID=131, Title=あ, Date=2025-06-26
+[2025-06-20 15:50:55] Chat通知: 予約詳細取得成功 - タイトル: あ
+[2025-06-20 15:50:55] Chat通知: メッセージ作成完了 - サイズ: 548 bytes
+[2025-06-20 15:50:55] Google Chat送信開始
+[2025-06-20 15:50:55] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-20 15:50:55] 送信データサイズ: 548 bytes
+[2025-06-20 15:50:55] cURL実行開始
+[2025-06-20 15:50:56] cURL実行完了 - HTTPコード: 200
+[2025-06-20 15:50:56] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/pQd-6a2AUz0.pQd-6a2AUz0",
+  "cards": [
+    {
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "アクション",
+                "content": "📅 新しい予約が作成されました"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "6月26日(木)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "17:45 - 18:00"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "あ"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/pQd-6a2AUz0"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-20 15:50:56] Chat通知: 送信結果 - 成功
+[2025-06-20 15:51:53] 非同期Chat通知リクエスト: ID=132, Action=created
+[2025-06-20 15:51:53] Chat通知開始: ID=132, Action=created
+[2025-06-20 15:51:53] 予約詳細取得開始: ID=132
+[2025-06-20 15:51:53] 予約詳細取得成功: ID=132, Title=あ, Date=2025-06-27
+[2025-06-20 15:51:53] Chat通知: 予約詳細取得成功 - タイトル: あ
+[2025-06-20 15:51:53] Chat通知: メッセージ作成完了 - サイズ: 548 bytes
+[2025-06-20 15:51:53] Google Chat送信開始
+[2025-06-20 15:51:53] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-20 15:51:53] 送信データサイズ: 548 bytes
+[2025-06-20 15:51:53] cURL実行開始
+[2025-06-20 15:51:54] cURL実行完了 - HTTPコード: 200
+[2025-06-20 15:51:54] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/HmUd2McHCfk.HmUd2McHCfk",
+  "cards": [
+    {
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "アクション",
+                "content": "📅 新しい予約が作成されました"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "6月27日(金)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "16:00 - 17:00"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "あ"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/HmUd2McHCfk"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-20 15:51:54] Chat通知: 送信結果 - 成功
+[2025-06-20 15:55:00] 非同期Chat通知リクエスト: ID=133, Action=created
+[2025-06-20 15:55:00] Chat通知開始: ID=133, Action=created
+[2025-06-20 15:55:00] 予約詳細取得開始: ID=133
+[2025-06-20 15:55:00] 予約詳細取得成功: ID=133, Title=あ, Date=2025-06-20
+[2025-06-20 15:55:00] Chat通知: 予約詳細取得成功 - タイトル: あ
+[2025-06-20 15:55:00] Chat通知: メッセージ作成完了 - サイズ: 548 bytes
+[2025-06-20 15:55:00] Google Chat送信開始
+[2025-06-20 15:55:00] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-20 15:55:00] 送信データサイズ: 548 bytes
+[2025-06-20 15:55:00] cURL実行開始
+[2025-06-20 15:55:01] cURL実行完了 - HTTPコード: 200
+[2025-06-20 15:55:01] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/bNj6tn3rwl0.bNj6tn3rwl0",
+  "cards": [
+    {
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "アクション",
+                "content": "📅 新しい予約が作成されました"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "6月20日(金)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "17:45 - 18:00"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "あ"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/bNj6tn3rwl0"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-20 15:55:01] Chat通知: 送信結果 - 成功
+[2025-06-20 15:55:15] 削除用Chat通知開始: ID=107
+[2025-06-20 15:55:15] Chat通知: メッセージ作成完了 - サイズ: 548 bytes
+[2025-06-20 15:55:15] Google Chat送信開始
+[2025-06-20 15:55:15] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-20 15:55:15] 送信データサイズ: 548 bytes
+[2025-06-20 15:55:15] cURL実行開始
+[2025-06-20 15:55:15] cURL実行完了 - HTTPコード: 200
+[2025-06-20 15:55:15] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/65DJOSLItes.65DJOSLItes",
+  "cards": [
+    {
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "アクション",
+                "content": "🗑️ 予約が削除されました"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "6月20日(金)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "17:00 - 17:45"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "あｓｆ"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/65DJOSLItes"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-20 15:55:15] Chat通知: 送信結果 - 成功
+[2025-06-20 15:55:21] 削除用Chat通知開始: ID=133
+[2025-06-20 15:55:21] Chat通知: メッセージ作成完了 - サイズ: 536 bytes
+[2025-06-20 15:55:21] Google Chat送信開始
+[2025-06-20 15:55:21] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-20 15:55:21] 送信データサイズ: 536 bytes
+[2025-06-20 15:55:21] cURL実行開始
+[2025-06-20 15:55:22] cURL実行完了 - HTTPコード: 200
+[2025-06-20 15:55:22] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/c_OVPFt1nSQ.c_OVPFt1nSQ",
+  "cards": [
+    {
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "アクション",
+                "content": "🗑️ 予約が削除されました"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "6月20日(金)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "17:45 - 18:00"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "あ"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "タカハシタカユキ (制作部)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/c_OVPFt1nSQ"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-20 15:55:22] Chat通知: 送信結果 - 成功
+[2025-06-20 16:00:20] 非同期Chat通知リクエスト: ID=134, Action=created
+[2025-06-20 16:00:20] Chat通知開始: ID=134, Action=created
+[2025-06-20 16:00:20] 予約詳細取得開始: ID=134
+[2025-06-20 16:00:20] 予約詳細取得成功: ID=134, Title=あを, Date=2025-06-20
+[2025-06-20 16:00:20] Chat通知: 予約詳細取得成功 - タイトル: あを
+[2025-06-20 16:00:20] Chat通知: メッセージ作成完了 - サイズ: 536 bytes
+[2025-06-20 16:00:20] Google Chat送信開始
+[2025-06-20 16:00:20] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-20 16:00:20] 送信データサイズ: 536 bytes
+[2025-06-20 16:00:20] cURL実行開始
+[2025-06-20 16:00:20] cURL実行完了 - HTTPコード: 200
+[2025-06-20 16:00:20] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/RQvnuW8Kw7A.RQvnuW8Kw7A",
+  "cards": [
+    {
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "アクション",
+                "content": "📅 新しい予約が作成されました"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "6月20日(金)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "16:15 - 17:15"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "あを"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "管理者 (部署未設定)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/RQvnuW8Kw7A"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-20 16:00:20] Chat通知: 送信結果 - 成功
+[2025-06-20 16:00:45] 削除用Chat通知開始: ID=134
+[2025-06-20 16:00:45] Chat通知: メッセージ作成完了 - サイズ: 524 bytes
+[2025-06-20 16:00:45] Google Chat送信開始
+[2025-06-20 16:00:45] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-20 16:00:45] 送信データサイズ: 524 bytes
+[2025-06-20 16:00:45] cURL実行開始
+[2025-06-20 16:00:46] cURL実行完了 - HTTPコード: 200
+[2025-06-20 16:00:46] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/HFR3rUvt2Qo.HFR3rUvt2Qo",
+  "cards": [
+    {
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "アクション",
+                "content": "🗑️ 予約が削除されました"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "6月20日(金)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "16:15 - 17:15"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "あを"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "管理者 (部署未設定)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/HFR3rUvt2Qo"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-20 16:00:46] Chat通知: 送信結果 - 成功
+[2025-06-20 16:01:16] 削除用Chat通知開始: ID=110
+[2025-06-20 16:01:16] Chat通知: メッセージ作成完了 - サイズ: 518 bytes
+[2025-06-20 16:01:16] Google Chat送信開始
+[2025-06-20 16:01:16] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-20 16:01:16] 送信データサイズ: 518 bytes
+[2025-06-20 16:01:16] cURL実行開始
+[2025-06-20 16:01:16] cURL実行完了 - HTTPコード: 200
+[2025-06-20 16:01:16] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/e-nr8i0sx9k.e-nr8i0sx9k",
+  "cards": [
+    {
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "アクション",
+                "content": "🗑️ 予約が削除されました"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "6月20日(金)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "15:15 - 16:15"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "あ"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "管理者 (部署未設定)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/e-nr8i0sx9k"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-20 16:01:16] Chat通知: 送信結果 - 成功
+[2025-06-20 16:01:31] 非同期Chat通知リクエスト: ID=135, Action=created
+[2025-06-20 16:01:31] Chat通知開始: ID=135, Action=created
+[2025-06-20 16:01:31] 予約詳細取得開始: ID=135
+[2025-06-20 16:01:31] 予約詳細取得成功: ID=135, Title=あ, Date=2025-06-20
+[2025-06-20 16:01:31] Chat通知: 予約詳細取得成功 - タイトル: あ
+[2025-06-20 16:01:31] Chat通知: メッセージ作成完了 - サイズ: 530 bytes
+[2025-06-20 16:01:31] Google Chat送信開始
+[2025-06-20 16:01:31] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-20 16:01:31] 送信データサイズ: 530 bytes
+[2025-06-20 16:01:31] cURL実行開始
+[2025-06-20 16:01:31] cURL実行完了 - HTTPコード: 200
+[2025-06-20 16:01:31] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/N_RDVQ0bXps.N_RDVQ0bXps",
+  "cards": [
+    {
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "アクション",
+                "content": "📅 新しい予約が作成されました"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "6月20日(金)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "15:15 - 16:15"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "あ"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "管理者 (部署未設定)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/N_RDVQ0bXps"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-20 16:01:31] Chat通知: 送信結果 - 成功
+[2025-06-20 16:02:07] 非同期Chat通知リクエスト: ID=135, Action=updated
+[2025-06-20 16:02:07] Chat通知開始: ID=135, Action=updated
+[2025-06-20 16:02:07] 予約詳細取得開始: ID=135
+[2025-06-20 16:02:07] 予約詳細取得成功: ID=135, Title=あ, Date=2025-06-20
+[2025-06-20 16:02:07] Chat通知: 予約詳細取得成功 - タイトル: あ
+[2025-06-20 16:02:07] Chat通知: メッセージ作成完了 - サイズ: 512 bytes
+[2025-06-20 16:02:07] Google Chat送信開始
+[2025-06-20 16:02:07] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-20 16:02:07] 送信データサイズ: 512 bytes
+[2025-06-20 16:02:07] cURL実行開始
+[2025-06-20 16:02:08] cURL実行完了 - HTTPコード: 200
+[2025-06-20 16:02:08] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/3R7Ok_xResI.3R7Ok_xResI",
+  "cards": [
+    {
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "アクション",
+                "content": "✏️ 予約が更新されました"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "6月20日(金)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "15:15 - 16:00"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "あ"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "管理者 (部署未設定)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/3R7Ok_xResI"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-20 16:02:08] Chat通知: 送信結果 - 成功
+[2025-06-20 16:39:26] 非同期Chat通知リクエスト: ID=136, Action=created
+[2025-06-20 16:39:26] Chat通知開始: ID=136, Action=created
+[2025-06-20 16:39:26] 予約詳細取得開始: ID=136
+[2025-06-20 16:39:26] 予約詳細取得成功: ID=136, Title=毎日, Date=2025-06-20
+[2025-06-20 16:39:26] Chat通知: 予約詳細取得成功 - タイトル: 毎日
+[2025-06-20 16:39:26] Chat通知: メッセージ作成完了 - サイズ: 627 bytes
+[2025-06-20 16:39:26] Google Chat送信開始
+[2025-06-20 16:39:26] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-20 16:39:26] 送信データサイズ: 627 bytes
+[2025-06-20 16:39:26] cURL実行開始
+[2025-06-20 16:39:27] cURL実行完了 - HTTPコード: 200
+[2025-06-20 16:39:27] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/PQv6iwD1XmI.PQv6iwD1XmI",
+  "cards": [
+    {
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "アクション",
+                "content": "📅 新しい予約が作成されました"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "6月20日(金)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "16:45 - 17:45"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "毎日"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "管理者 (部署未設定)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "繰り返し",
+                "content": "🔁 毎日"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/PQv6iwD1XmI"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-20 16:39:27] Chat通知: 送信結果 - 成功
+[2025-06-20 17:46:21] 削除用Chat通知開始: ID=132
+[2025-06-20 17:46:21] Chat通知: メッセージ作成完了 - サイズ: 518 bytes
+[2025-06-20 17:46:21] Google Chat送信開始
+[2025-06-20 17:46:21] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-20 17:46:21] 送信データサイズ: 518 bytes
+[2025-06-20 17:46:21] cURL実行開始
+[2025-06-20 17:46:22] cURL実行完了 - HTTPコード: 200
+[2025-06-20 17:46:22] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/7IOn7-ZsXrY.7IOn7-ZsXrY",
+  "cards": [
+    {
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "アクション",
+                "content": "🗑️ 予約が削除されました"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "6月27日(金)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "16:00 - 17:00"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "あ"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "管理者 (部署未設定)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/7IOn7-ZsXrY"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-20 17:46:22] Chat通知: 送信結果 - 成功
+[2025-06-23 09:59:29] 非同期Chat通知リクエスト: ID=140, Action=created
+[2025-06-23 09:59:29] Chat通知開始: ID=140, Action=created
+[2025-06-23 09:59:29] 予約詳細取得開始: ID=140
+[2025-06-23 09:59:29] 予約詳細取得成功: ID=140, Title=新規予約, Date=2025-06-23
+[2025-06-23 09:59:29] Chat通知: 予約詳細取得成功 - タイトル: 新規予約
+[2025-06-23 09:59:29] Chat通知: メッセージ作成完了 - サイズ: 548 bytes
+[2025-06-23 09:59:29] Google Chat送信開始
+[2025-06-23 09:59:29] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-23 09:59:29] 送信データサイズ: 548 bytes
+[2025-06-23 09:59:29] cURL実行開始
+[2025-06-23 09:59:29] cURL実行完了 - HTTPコード: 200
+[2025-06-23 09:59:29] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/H6UslXLPOkI.H6UslXLPOkI",
+  "cards": [
+    {
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "アクション",
+                "content": "📅 新しい予約が作成されました"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "6月23日(月)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "10:00 - 11:00"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "新規予約"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "管理者 (部署未設定)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/H6UslXLPOkI"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-23 09:59:29] Chat通知: 送信結果 - 成功
+[2025-06-23 10:44:43] 非同期Chat通知リクエスト: ID=141, Action=created
+[2025-06-23 10:44:43] Chat通知開始: ID=141, Action=created
+[2025-06-23 10:44:43] 予約詳細取得開始: ID=141
+[2025-06-23 10:44:43] 予約詳細取得成功: ID=141, Title=aaa, Date=2025-06-25
+[2025-06-23 10:44:43] Chat通知: 予約詳細取得成功 - タイトル: aaa
+[2025-06-23 10:44:43] Chat通知: メッセージ作成完了 - サイズ: 527 bytes
+[2025-06-23 10:44:43] Google Chat送信開始
+[2025-06-23 10:44:43] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-23 10:44:43] 送信データサイズ: 527 bytes
+[2025-06-23 10:44:43] cURL実行開始
+[2025-06-23 10:44:44] cURL実行完了 - HTTPコード: 200
+[2025-06-23 10:44:44] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/UxDkEAEg9rQ.UxDkEAEg9rQ",
+  "cards": [
+    {
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "アクション",
+                "content": "📅 新しい予約が作成されました"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "6月25日(水)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "09:00 - 10:00"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "aaa"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "管理者 (部署未設定)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/UxDkEAEg9rQ"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-23 10:44:44] Chat通知: 送信結果 - 成功
+[2025-06-23 13:20:31] 非同期Chat通知リクエスト: ID=142, Action=created
+[2025-06-23 13:20:31] Chat通知開始: ID=142, Action=created
+[2025-06-23 13:20:31] 予約詳細取得開始: ID=142
+[2025-06-23 13:20:31] 予約詳細取得成功: ID=142, Title=a, Date=2025-06-23
+[2025-06-23 13:20:31] Chat通知: 予約詳細取得成功 - タイトル: a
+[2025-06-23 13:20:31] Chat通知: メッセージ作成完了 - サイズ: 513 bytes
+[2025-06-23 13:20:31] Google Chat送信開始
+[2025-06-23 13:20:31] 送信URL: https://chat.googleapis.com/v1/spaces/AAQAeweySDs/messages?key=AIzaSyDdI0hCZtE6v...
+[2025-06-23 13:20:31] 送信データサイズ: 513 bytes
+[2025-06-23 13:20:31] cURL実行開始
+[2025-06-23 13:20:32] cURL実行完了 - HTTPコード: 200
+[2025-06-23 13:20:32] Google Chat通知送信成功: {
+  "name": "spaces/AAQAeweySDs/messages/HF4t6NxrGZ8.HF4t6NxrGZ8",
+  "cards": [
+    {
+      "sections": [
+        {
+          "widgets": [
+            {
+              "keyValue": {
+                "topLabel": "アクション",
+                "content": "📅 新しい予約が作成されました"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "日付",
+                "content": "6月23日(月)"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "時間",
+                "content": "13:30 - 14:30"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "タイトル",
+                "content": "a"
+              }
+            },
+            {
+              "keyValue": {
+                "topLabel": "予約者",
+                "content": "管理者 (制作部)"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "thread": {
+    "name": "spaces/AAQAeweySDs/threads/HF4t6NxrGZ8"
+  },
+  "space": {
+    "name": "spaces/AAQAeweySDs"
+  }
+}
+
+[2025-06-23 13:20:32] Chat通知: 送信結果 - 成功

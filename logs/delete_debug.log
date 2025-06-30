@@ -1,0 +1,113 @@
+[2025-06-23 16:25:07] 削除Email通知関数を呼び出し開始: 予約ID=147
+[2025-06-23 16:25:07] sendReservationEmailNotificationForDeleted開始: ID=147
+[2025-06-23 16:25:07] Email送信準備: 対象ユーザー=1名
+[2025-06-23 16:25:07] メール送信: takayuki.takahashi@jama.co.jp
+[2025-06-23 16:25:09] ✅ メール送信成功: takayuki.takahashi@jama.co.jp
+[2025-06-23 16:25:09] 削除Email通知完了: 成功=1, 失敗=0
+[2025-06-23 16:25:09] 削除Email通知関数結果: 成功
+[2025-06-25 10:40:38] 削除Email通知関数を呼び出し開始: 予約ID=unknown
+[2025-06-25 10:40:38] sendReservationEmailNotificationForDeleted開始: ID=150
+[2025-06-25 10:40:38] Email送信準備: 対象ユーザー=1名
+[2025-06-25 10:40:38] メール送信: takayuki.takahashi@jama.co.jp
+[2025-06-25 10:40:40] ❌ メール送信失敗: takayuki.takahashi@jama.co.jp
+[2025-06-25 10:40:40] 削除Email通知完了: 成功=0, 失敗=1
+[2025-06-25 10:40:40] 削除Email通知関数結果: 失敗
+[2025-06-25 10:55:04] 削除Email通知関数を呼び出し開始: 予約ID=unknown
+[2025-06-25 10:55:04] sendReservationEmailNotificationForDeleted開始: ID=154
+[2025-06-25 10:55:04] Email送信準備: 対象ユーザー=1名
+[2025-06-25 10:55:04] メール送信: takayuki.takahashi@jama.co.jp
+[2025-06-25 10:55:06] ❌ メール送信失敗: takayuki.takahashi@jama.co.jp
+[2025-06-25 10:55:06] 削除Email通知完了: 成功=0, 失敗=1
+[2025-06-25 10:55:06] 削除Email通知関数結果: 失敗
+[2025-06-25 11:17:45] 削除Email通知関数を呼び出し開始: 予約ID=unknown
+[2025-06-25 11:17:45] sendReservationEmailNotificationForDeleted開始: ID=170
+[2025-06-25 11:17:45] Email送信準備: 対象ユーザー=1名
+[2025-06-25 11:17:45] メール送信: takayuki.takahashi@jama.co.jp
+[2025-06-25 11:17:47] ❌ メール送信失敗: takayuki.takahashi@jama.co.jp
+[2025-06-25 11:17:47] 削除Email通知完了: 成功=0, 失敗=1
+[2025-06-25 11:17:47] 削除Email通知関数結果: 失敗
+[2025-06-25 11:17:57] 削除Email通知関数を呼び出し開始: 予約ID=unknown
+[2025-06-25 11:17:57] sendReservationEmailNotificationForDeleted開始: ID=173
+[2025-06-25 11:17:57] Email送信準備: 対象ユーザー=1名
+[2025-06-25 11:17:57] メール送信: takayuki.takahashi@jama.co.jp
+[2025-06-25 11:17:59] ❌ メール送信失敗: takayuki.takahashi@jama.co.jp
+[2025-06-25 11:17:59] 削除Email通知完了: 成功=0, 失敗=1
+[2025-06-25 11:17:59] 削除Email通知関数結果: 失敗
+[2025-06-25 11:30:29] 削除Email通知関数を呼び出し開始: 予約ID=unknown
+[2025-06-25 11:30:29] sendReservationEmailNotificationForDeleted開始: ID=172
+[2025-06-25 11:30:29] Email送信準備: 対象ユーザー=1名
+[2025-06-25 11:30:29] メール送信: takayuki.takahashi@jama.co.jp
+[2025-06-25 11:30:31] ❌ メール送信失敗: takayuki.takahashi@jama.co.jp
+[2025-06-25 11:30:31] 削除Email通知完了: 成功=0, 失敗=1
+[2025-06-25 11:30:31] 削除Email通知関数結果: 失敗
+[2025-06-25 13:10:55] 削除Email通知関数を呼び出し開始: 予約ID=unknown
+[2025-06-25 13:10:55] sendReservationEmailNotificationForDeleted開始: ID=143
+[2025-06-25 13:10:55] Email送信準備: 対象ユーザー=1名
+[2025-06-25 13:17:51] 削除Email通知関数を呼び出し開始: 予約ID=unknown
+[2025-06-25 13:17:51] sendReservationEmailNotificationForDeleted開始: ID=151
+[2025-06-25 13:17:51] Email送信準備: 対象ユーザー=1名
+[2025-06-25 13:20:09] 削除Email通知関数を呼び出し開始: 予約ID=unknown
+[2025-06-25 13:20:09] sendReservationEmailNotificationForDeleted開始: ID=157
+[2025-06-25 13:20:09] Email送信準備: 対象ユーザー=1名
+[2025-06-25 13:20:23] 削除Email通知関数を呼び出し開始: 予約ID=unknown
+[2025-06-25 13:20:23] sendReservationEmailNotificationForDeleted開始: ID=153
+[2025-06-25 13:20:23] Email送信準備: 対象ユーザー=1名
+[2025-06-27 09:42:19] 削除Email通知関数を呼び出し開始: 予約ID=287
+[2025-06-27 09:42:19] sendReservationEmailNotificationForDeleted開始: ID=287
+[2025-06-27 09:42:19] Email送信準備: 対象ユーザー=1名
+[2025-06-27 09:42:19] メール送信: takayuki.takahashi@jama.co.jp
+[2025-06-27 09:42:21] ❌ メール送信失敗: takayuki.takahashi@jama.co.jp
+[2025-06-27 09:42:21] 削除Email通知完了: 成功=0, 失敗=1
+[2025-06-27 09:42:21] 削除Email通知関数結果: 失敗
+[2025-06-27 13:06:03] 削除Email通知関数を呼び出し開始: 予約ID=149
+[2025-06-27 13:06:03] sendReservationEmailNotificationForDeleted開始: ID=149
+[2025-06-27 13:06:03] Email送信準備: 対象ユーザー=1名
+[2025-06-27 13:06:03] メール送信: takayuki.takahashi@jama.co.jp
+[2025-06-27 13:06:05] ❌ メール送信失敗: takayuki.takahashi@jama.co.jp
+[2025-06-27 13:06:05] 削除Email通知完了: 成功=0, 失敗=1
+[2025-06-27 13:06:05] 削除Email通知関数結果: 失敗
+[2025-06-27 13:38:09] 削除Email通知関数を呼び出し開始: 予約ID=288
+[2025-06-27 13:38:09] sendReservationEmailNotificationForDeleted開始: ID=288
+[2025-06-27 13:38:09] Email送信準備: 対象ユーザー=1名
+[2025-06-27 13:38:09] メール送信: takayuki.takahashi@jama.co.jp
+[2025-06-27 13:38:11] ❌ メール送信失敗: takayuki.takahashi@jama.co.jp
+[2025-06-27 13:38:11] 削除Email通知完了: 成功=0, 失敗=1
+[2025-06-27 13:38:11] 削除Email通知関数結果: 失敗
+[2025-06-27 13:45:12] 削除Email通知関数を呼び出し開始: 予約ID=289
+[2025-06-27 13:45:12] sendReservationEmailNotificationForDeleted開始: ID=289
+[2025-06-27 13:45:12] Email送信準備: 対象ユーザー=1名
+[2025-06-27 13:45:12] メール送信: takayuki.takahashi@jama.co.jp
+[2025-06-27 13:45:14] ❌ メール送信失敗: takayuki.takahashi@jama.co.jp
+[2025-06-27 13:45:14] 削除Email通知完了: 成功=0, 失敗=1
+[2025-06-27 13:45:14] 削除Email通知関数結果: 失敗
+[2025-06-27 14:45:48] 削除Email通知関数を呼び出し開始: 予約ID=276
+[2025-06-27 14:45:48] sendReservationEmailNotificationForDeleted開始: ID=276
+[2025-06-27 14:45:48] Email送信準備: 対象ユーザー=1名
+[2025-06-27 14:45:48] メール送信: takayuki.takahashi@jama.co.jp
+[2025-06-27 14:45:50] ❌ メール送信失敗: takayuki.takahashi@jama.co.jp
+[2025-06-27 14:45:50] 削除Email通知完了: 成功=0, 失敗=1
+[2025-06-27 14:45:50] 削除Email通知関数結果: 失敗
+[2025-06-30 09:57:54] 削除Email通知関数を呼び出し開始: 予約ID=293
+[2025-06-30 09:57:54] sendReservationEmailNotificationForDeleted開始: ID=293
+[2025-06-30 09:57:54] 通知対象ユーザーがいません
+[2025-06-30 09:57:54] 削除Email通知関数結果: 成功
+[2025-06-30 10:53:03] 削除Email通知関数を呼び出し開始: 予約ID=323
+[2025-06-30 10:53:03] sendReservationEmailNotificationForDeleted開始: ID=323
+[2025-06-30 10:53:03] 通知対象ユーザーがいません
+[2025-06-30 10:53:03] 削除Email通知関数結果: 成功
+[2025-06-30 11:03:29] 削除Email通知関数を呼び出し開始: 予約ID=332
+[2025-06-30 11:03:29] sendReservationEmailNotificationForDeleted開始: ID=332
+[2025-06-30 11:03:29] 通知対象ユーザーがいません
+[2025-06-30 11:03:29] 削除Email通知関数結果: 成功
+[2025-06-30 11:09:27] 削除Email通知関数を呼び出し開始: 予約ID=335
+[2025-06-30 11:09:27] sendReservationEmailNotificationForDeleted開始: ID=335
+[2025-06-30 11:09:27] 通知対象ユーザーがいません
+[2025-06-30 11:09:27] 削除Email通知関数結果: 成功
+[2025-06-30 11:09:50] 削除Email通知関数を呼び出し開始: 予約ID=339
+[2025-06-30 11:09:50] sendReservationEmailNotificationForDeleted開始: ID=339
+[2025-06-30 11:09:50] 通知対象ユーザーがいません
+[2025-06-30 11:09:50] 削除Email通知関数結果: 成功
+[2025-06-30 11:40:41] 削除Email通知関数を呼び出し開始: 予約ID=338
+[2025-06-30 11:40:41] sendReservationEmailNotificationForDeleted開始: ID=338
+[2025-06-30 11:40:41] 通知対象ユーザーがいません
+[2025-06-30 11:40:41] 削除Email通知関数結果: 成功

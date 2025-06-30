@@ -5,7 +5,9 @@ CREATE TABLE users (
     email TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL,
     role TEXT DEFAULT 'user', -- 'user' or 'admin'
-    department TEXT,
+    department INTEGER DEFAULT 1,
+    email_notification_type INTEGER DEFAULT 2, -- 1: 予約変更通知, 2: 送信しない
+    department_theme_colors TEXT, -- JSON format: {"1": "#4299E1", "2": "#48BB78", "3": "#ED8936", "4": "#9F7AEA", "5": "#38B2AC"}
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
@@ -39,4 +41,13 @@ CREATE TABLE reservations (
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (group_id) REFERENCES reservation_groups(id)
+);
+
+-- Department master table
+CREATE TABLE departments (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL UNIQUE,
+    display_order INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );

@@ -94,7 +94,8 @@ async function handleLogout() {
         const result = await response.json();
         
         if (result.success) {
-            window.location.href = 'auth.html';
+            // ホームページに遷移
+            window.location.href = 'index.html';
         }
     } catch (error) {
         console.error('ログアウトエラー:', error);
@@ -103,9 +104,84 @@ async function handleLogout() {
 
 // ユーザー情報更新
 function updateUserInfo() {
+    if (!currentUser) {
+        console.warn('updateUserInfo called without currentUser');
+        return;
+    }
+    
+    // console.log('updateUserInfo called with user:', currentUser);
     const userInfo = document.getElementById('user-info');
-    if (userInfo && currentUser) {
-        userInfo.textContent = `${currentUser.name} (${currentUser.department || '部署未設定'})`;
+    if (userInfo) {
+        // 部署IDから部署名を取得するために部署データをロード
+        loadUserInfoWithDepartment();
+    }
+    
+    // サイドバーのユーザー情報も同時に更新
+    updateSidebarUserInfo();
+}
+
+// サイドバーのユーザー情報を更新する専用関数
+function updateSidebarUserInfo() {
+    if (!currentUser) return;
+    
+    const sidebarUserInfo = document.getElementById('sidebar-user-info');
+    if (sidebarUserInfo) {
+        // console.log('Updating sidebar with user:', currentUser.name);
+        sidebarUserInfo.textContent = currentUser.name || 'ユーザー名不明';
+    }
+}
+
+// 部署名付きでユーザー情報を更新
+async function loadUserInfoWithDepartment() {
+    try {
+        // 部署データを取得
+        const deptResponse = await fetch('api/departments.php');
+        const deptData = await deptResponse.json();
+        
+        let departmentName = '部署未設定';
+        if (deptData.success && currentUser.department) {
+            const dept = deptData.departments.find(d => d.id == currentUser.department);
+            if (dept) {
+                departmentName = dept.name;
+            }
+        }
+        
+        const userInfo = document.getElementById('user-info');
+        if (userInfo) {
+            userInfo.textContent = `${currentUser.name} (${departmentName})`;
+        }
+    } catch (error) {
+        console.error('部署情報の取得に失敗しました:', error);
+        const userInfo = document.getElementById('user-info');
+        if (userInfo && currentUser) {
+            userInfo.textContent = `${currentUser.name} (部署未設定)`;
+        }
+    }
+}
+
+// セッションストレージからユーザー情報を更新（設定ページから戻った時用）
+function refreshUserInfoFromSession() {
+    if (typeof Storage !== 'undefined') {
+        try {
+            const authData = JSON.parse(sessionStorage.getItem('authData') || '{}');
+            if (authData.user && authData.timestamp && currentUser) {
+                // セッションストレージのデータが現在のcurrentUserより新しい場合のみ更新
+                const sessionTimestamp = authData.timestamp || 0;
+                const currentTimestamp = currentUser.lastUpdated || 0;
+                
+                if (sessionTimestamp > currentTimestamp) {
+                    console.log('セッションストレージから新しいユーザー情報を更新:', authData.user);
+                    currentUser = { ...authData.user, lastUpdated: sessionTimestamp };
+                    updateUserInfo();
+                    // サイドバーも確実に更新
+                    if (typeof updateSidebarVisibility === 'function') {
+                        updateSidebarVisibility();
+                    }
+                }
+            }
+        } catch (error) {
+            console.warn('セッションストレージからの更新に失敗しました:', error);
+        }
     }
 }
 

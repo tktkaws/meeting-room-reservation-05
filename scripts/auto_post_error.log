@@ -1,0 +1,20 @@
+[19-Jun-2025 11:38:46 Asia/Tokyo] PHP Warning:  Constant DB_PATH already defined in C:\Program Files\Ampps\www\meeting-room-reservation-05\api\config.php on line 6
+[19-Jun-2025 11:38:46 Asia/Tokyo] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in C:\Program Files\Ampps\www\meeting-room-reservation-05\api\config.php on line 10
+[19-Jun-2025 11:39:08 Asia/Tokyo] PHP Warning:  Constant DB_PATH already defined in C:\Program Files\Ampps\www\meeting-room-reservation-05\api\config.php on line 6
+[19-Jun-2025 11:39:08 Asia/Tokyo] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in C:\Program Files\Ampps\www\meeting-room-reservation-05\api\config.php on line 10
+[19-Jun-2025 11:39:28 Asia/Tokyo] PHP Warning:  Constant DB_PATH already defined in C:\Program Files\Ampps\www\meeting-room-reservation-05\api\config.php on line 6
+[19-Jun-2025 11:39:28 Asia/Tokyo] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in C:\Program Files\Ampps\www\meeting-room-reservation-05\api\config.php on line 10
+[19-Jun-2025 12:45:26 Asia/Tokyo] PHP Warning:  Constant DB_PATH already defined in C:\Program Files\Ampps\www\meeting-room-reservation-05\api\config.php on line 6
+[19-Jun-2025 12:45:26 Asia/Tokyo] PHP Warning:  ini_set(): Session ini settings cannot be changed after headers have already been sent in C:\Program Files\Ampps\www\meeting-room-reservation-05\api\config.php on line 11
+[19-Jun-2025 12:45:26 Asia/Tokyo] PHP Warning:  ini_set(): Session ini settings cannot be changed after headers have already been sent in C:\Program Files\Ampps\www\meeting-room-reservation-05\api\config.php on line 12
+[19-Jun-2025 12:45:26 Asia/Tokyo] PHP Warning:  ini_set(): Session ini settings cannot be changed after headers have already been sent in C:\Program Files\Ampps\www\meeting-room-reservation-05\api\config.php on line 15
+[19-Jun-2025 12:45:26 Asia/Tokyo] PHP Warning:  ini_set(): Session ini settings cannot be changed after headers have already been sent in C:\Program Files\Ampps\www\meeting-room-reservation-05\api\config.php on line 16
+[19-Jun-2025 12:45:26 Asia/Tokyo] PHP Warning:  ini_set(): Session ini settings cannot be changed after headers have already been sent in C:\Program Files\Ampps\www\meeting-room-reservation-05\api\config.php on line 17
+[19-Jun-2025 12:45:26 Asia/Tokyo] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in C:\Program Files\Ampps\www\meeting-room-reservation-05\api\config.php on line 19
+[19-Jun-2025 12:45:48 Asia/Tokyo] PHP Warning:  Constant DB_PATH already defined in C:\Program Files\Ampps\www\meeting-room-reservation-05\api\config.php on line 6
+[19-Jun-2025 12:45:48 Asia/Tokyo] PHP Warning:  ini_set(): Session ini settings cannot be changed after headers have already been sent in C:\Program Files\Ampps\www\meeting-room-reservation-05\api\config.php on line 11
+[19-Jun-2025 12:45:48 Asia/Tokyo] PHP Warning:  ini_set(): Session ini settings cannot be changed after headers have already been sent in C:\Program Files\Ampps\www\meeting-room-reservation-05\api\config.php on line 12
+[19-Jun-2025 12:45:48 Asia/Tokyo] PHP Warning:  ini_set(): Session ini settings cannot be changed after headers have already been sent in C:\Program Files\Ampps\www\meeting-room-reservation-05\api\config.php on line 15
+[19-Jun-2025 12:45:48 Asia/Tokyo] PHP Warning:  ini_set(): Session ini settings cannot be changed after headers have already been sent in C:\Program Files\Ampps\www\meeting-room-reservation-05\api\config.php on line 16
+[19-Jun-2025 12:45:48 Asia/Tokyo] PHP Warning:  ini_set(): Session ini settings cannot be changed after headers have already been sent in C:\Program Files\Ampps\www\meeting-room-reservation-05\api\config.php on line 17
+[19-Jun-2025 12:45:48 Asia/Tokyo] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in C:\Program Files\Ampps\www\meeting-room-reservation-05\api\config.php on line 19

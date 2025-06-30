@@ -1,18 +1,7 @@
-// グローバル変数
-let currentUser = null;
-let currentView = 'month';
-let currentDate = new Date();
-let reservations = [];
+// Chat通知キュー
+let chatNotificationQueue = [];
 
-// ページ読み込み時の初期化
-document.addEventListener('DOMContentLoaded', function() {
-    // 現在のページが認証ページかどうかチェック
-    if (window.location.pathname.includes('auth.html')) {
-        initAuthPage();
-    } else {
-        initMainPage();
-    }
-});
+// Chat通知機能のみを提供するファイル
 
 // 認証ページの初期化
 function initAuthPage() {
@@ -66,7 +55,19 @@ async function initMainPage() {
     
     // カレンダー初期表示
     await loadReservations();
+    
+    // テーマカラーを読み込み
+    await loadDepartmentThemeColors();
+    
+    // カレンダーを描画
     renderCalendar();
+    
+    // MutationObserver を設定（まだ設定されていない場合）
+    setTimeout(() => {
+        if (typeof setupThemeColorObserver === 'function') {
+            setupThemeColorObserver();
+        }
+    }, 500);
 }
 
 // 認証状態チェック
@@ -166,16 +167,6 @@ async function handleLogout() {
 function setupEventListeners() {
     // ログアウトボタン
     document.getElementById('logout-btn')?.addEventListener('click', handleLogout);
-    
-    // ナビゲーションボタン
-    document.getElementById('prev-btn')?.addEventListener('click', () => navigateDate(-1));
-    document.getElementById('next-btn')?.addEventListener('click', () => navigateDate(1));
-    document.getElementById('today-btn')?.addEventListener('click', goToToday);
-    
-    // ビュー切り替え
-    document.getElementById('month-view')?.addEventListener('click', () => switchView('month'));
-    document.getElementById('week-view')?.addEventListener('click', () => switchView('week'));
-    document.getElementById('day-view')?.addEventListener('click', () => switchView('day'));
     
     // 新規予約ボタン
     document.getElementById('new-reservation-btn')?.addEventListener('click', openNewReservationModal);
@@ -288,7 +279,7 @@ function renderMonthView(container) {
                     <div class="reservations">
                         ${dayReservations.map(res => `
                             <div class="reservation-item ${res.group_id ? 'recurring' : ''}" onclick="event.stopPropagation(); showReservationDetail(${res.id})" title="${res.title} (${res.start_datetime.split(' ')[1].substring(0,5)}-${res.end_datetime.split(' ')[1].substring(0,5)})${res.group_id ? ' - 繰り返し予約' : ''}">
-                                <div class="reservation-title">${res.title}${res.group_id ? ' ♻' : ''}</div>
+                                <div class="reservation-title">${res.title}</div>
                                 <div class="reservation-time">${res.start_datetime.split(' ')[1].substring(0,5)}-${res.end_datetime.split(' ')[1].substring(0,5)}</div>
                             </div>
                         `).join('')}
@@ -328,13 +319,23 @@ function navigateDate(direction) {
     if (currentView === 'month') {
         currentDate.setMonth(currentDate.getMonth() + direction);
     }
-    loadReservations().then(() => renderCalendar());
+    loadReservations().then(() => {
+        renderCalendar();
+        setTimeout(() => {
+            applyDepartmentThemeColors();
+        }, 100);
+    });
 }
 
 // 今日に移動
 function goToToday() {
     currentDate = new Date();
-    loadReservations().then(() => renderCalendar());
+    loadReservations().then(() => {
+        renderCalendar();
+        setTimeout(() => {
+            applyDepartmentThemeColors();
+        }, 100);
+    });
 }
 
 // ビュー切り替え
@@ -346,6 +347,11 @@ function switchView(view) {
     document.getElementById(`${view}-view`).classList.add('active');
     
     renderCalendar();
+    
+    // ビュー切り替え後にテーマカラーを再適用
+    setTimeout(() => {
+        applyDepartmentThemeColors();
+    }, 100);
 }
 
 // 新規予約モーダルを開く
@@ -419,14 +425,16 @@ async function showReservationDetail(reservationId) {
             const groupList = document.getElementById('group-list');
             if (groupReservations.length > 0) {
                 groupList.innerHTML = '<div class="group-list">' + 
-                    groupReservations.map(gr => `
-                        <div class="group-item">
-                            <div>
-                                <div class="group-item-date">${gr.date}</div>
-                                <div class="group-item-time">${gr.start_datetime.split(' ')[1].substring(0,5)} - ${gr.end_datetime.split(' ')[1].substring(0,5)}</div>
+                    groupReservations.map(gr => {
+                        const formattedDate = formatDateWithDayOfWeek(gr.date);
+                        const startTime = gr.start_datetime.split(' ')[1].substring(0,5);
+                        const endTime = gr.end_datetime.split(' ')[1].substring(0,5);
+                        return `
+                            <div class="group-item">
+                                <div class="group-item-info">${formattedDate} ${startTime}-${endTime}</div>
                             </div>
-                        </div>
-                    `).join('') + '</div>';
+                        `;
+                    }).join('') + '</div>';
             } else {
                 groupList.innerHTML = '<p>他の関連予約はありません</p>';
             }
@@ -708,6 +716,11 @@ async function handleGroupEditSubmit(e) {
             closeGroupEditModal();
             await loadReservations();
             renderCalendar();
+            
+            // カレンダー再描画後にテーマカラーを再適用
+            setTimeout(() => {
+                applyDepartmentThemeColors();
+            }, 100);
         } else {
             showMessage(result.error || 'グループ編集に失敗しました', 'error');
         }
@@ -734,7 +747,7 @@ function closeGroupEditModal() {
 
 // 予約削除
 async function deleteReservation(reservationId) {
-    if (!confirm('この予約を削除しますか？')) {
+    if (!confirm('この予約のみ削除しますか？')) {
         return;
     }
     
@@ -751,6 +764,11 @@ async function deleteReservation(reservationId) {
             closeModal();
             await loadReservations();
             renderCalendar();
+            
+            // カレンダー再描画後にテーマカラーを再適用
+            setTimeout(() => {
+                applyDepartmentThemeColors();
+            }, 100);
         } else {
             showMessage(result.error || '予約の削除に失敗しました', 'error');
         }
@@ -811,65 +829,7 @@ function toggleRecurringOptions() {
     }
 }
 
-// 予約フォーム送信
-async function handleReservationSubmit(e) {
-    e.preventDefault();
-    
-    const form = e.target;
-    const editId = form.getAttribute('data-edit-id');
-    const formData = new FormData(form);
-    
-    const data = {
-        title: formData.get('title'),
-        description: formData.get('description'),
-        date: formData.get('date'),
-        start_time: formData.get('start_time'),
-        end_time: formData.get('end_time'),
-        is_recurring: formData.get('is_recurring') === 'on',
-        repeat_type: formData.get('repeat_type'),
-        repeat_end_date: formData.get('repeat_end_date')
-    };
-    
-    // 編集の場合はIDと編集タイプを追加
-    if (editId) {
-        data.id = editId;
-        data.edit_type = form.getAttribute('data-edit-type') || 'single';
-    }
-    
-    try {
-        showLoading(true);
-        
-        const url = 'api/reservations.php';
-        const method = editId ? 'PUT' : 'POST';
-        
-        const response = await fetch(url, {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-            const message = editId ? '予約を更新しました' : '予約を作成しました';
-            showMessage(message, 'success');
-            closeModal();
-            await loadReservations();
-            renderCalendar();
-        } else {
-            const message = editId ? '予約の更新に失敗しました' : '予約の作成に失敗しました';
-            showMessage(result.error || message, 'error');
-        }
-    } catch (error) {
-        console.error('予約処理エラー:', error);
-        const message = editId ? '予約の更新に失敗しました' : '予約の作成に失敗しました';
-        showMessage(message, 'error');
-    } finally {
-        showLoading(false);
-    }
-}
+// handleReservationSubmit は reservation-api.js で定義されています
 
 // ユーティリティ関数
 function formatDate(date) {
@@ -970,3 +930,141 @@ function showLoading(show) {
         loadingEl.style.display = show ? 'flex' : 'none';
     }
 }
+
+// =====================
+// Chat通知関連の機能
+// =====================
+
+/**
+ * Chat通知をキューに追加
+ * @param {number} reservationId 予約ID
+ * @param {string} action アクション種別（created, updated, deleted）
+ */
+function queueChatNotification(reservationId, action) {
+    console.log(`[Chat通知] キューに追加: ID=${reservationId}, Action=${action}`);
+    
+    chatNotificationQueue.push({
+        reservationId: reservationId,
+        action: action,
+        timestamp: Date.now()
+    });
+    
+    console.log(`[Chat通知] キューサイズ: ${chatNotificationQueue.length}`);
+    
+    // 少し遅延を入れてから処理開始
+    setTimeout(() => {
+        processChatNotificationQueue();
+    }, 500);
+}
+
+/**
+ * Chat通知キューを処理
+ */
+async function processChatNotificationQueue() {
+    console.log(`[Chat通知] キュー処理開始 - 残り件数: ${chatNotificationQueue.length}`);
+    
+    if (chatNotificationQueue.length === 0) {
+        console.log(`[Chat通知] キューが空のため処理終了`);
+        return;
+    }
+    
+    const notification = chatNotificationQueue.shift();
+    console.log(`[Chat通知] 処理中: ID=${notification.reservationId}, Action=${notification.action}`);
+    
+    try {
+        await sendAsyncChatNotification(notification.reservationId, notification.action);
+        console.log(`[Chat通知] 送信完了: ID=${notification.reservationId}, Action=${notification.action}`);
+    } catch (error) {
+        console.error('[Chat通知] 送信エラー:', error);
+    }
+    
+    // 次の通知を処理（重複を避けるため少し間隔を空ける）
+    if (chatNotificationQueue.length > 0) {
+        console.log(`[Chat通知] 次の通知を1秒後に処理 - 残り: ${chatNotificationQueue.length}件`);
+        setTimeout(() => {
+            processChatNotificationQueue();
+        }, 1000);
+    }
+}
+
+/**
+ * 非同期でChat通知を送信
+ * @param {number} reservationId 予約ID  
+ * @param {string} action アクション種別
+ */
+async function sendAsyncChatNotification(reservationId, action) {
+    try {
+        console.log(`[Chat通知] API呼び出し開始: ID=${reservationId}, Action=${action}`);
+        
+        const response = await fetch('api/send_chat_notification.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                reservation_id: reservationId,
+                action: action
+            })
+        });
+        
+        console.log(`[Chat通知] APIレスポンス: ${response.status} ${response.statusText}`);
+        
+        const result = await response.json();
+        console.log(`[Chat通知] APIレスポンス内容:`, result);
+        
+        if (!result.success) {
+            throw new Error(result.message || 'Chat通知の送信に失敗しました');
+        }
+        
+        return result;
+        
+    } catch (error) {
+        console.error('[Chat通知] 送信例外:', error);
+        throw error;
+    }
+}
+
+// 他のウィンドウからのテーマカラー変更メッセージを受信
+window.addEventListener('message', function(event) {
+    if (event.data.type === 'themeColorUpdate') {
+        // departmentColors を更新
+        if (typeof departmentColors !== 'undefined') {
+            departmentColors[String(event.data.deptId)] = event.data.color;
+        }
+        
+        // 特定の部署のみカラー適用（最適化）
+        if (typeof applyColorToDepartment === 'function') {
+            applyColorToDepartment(event.data.deptId, event.data.color);
+        } else if (typeof applyDepartmentThemeColors === 'function') {
+            // フォールバック: 全体適用
+            applyDepartmentThemeColors();
+        }
+    }
+});
+
+// LocalStorage イベントでテーマカラー変更を検知
+window.addEventListener('storage', function(event) {
+    if (event.key === 'themeColorUpdate' && event.newValue) {
+        try {
+            const themeUpdate = JSON.parse(event.newValue);
+            if (themeUpdate.type === 'themeColorUpdate') {
+                // departmentColors を更新
+                if (typeof departmentColors !== 'undefined') {
+                    departmentColors[String(themeUpdate.deptId)] = themeUpdate.color;
+                }
+                
+                // 特定の部署のみカラー適用（最適化）
+                if (typeof applyColorToDepartment === 'function') {
+                    applyColorToDepartment(themeUpdate.deptId, themeUpdate.color);
+                } else if (typeof applyDepartmentThemeColors === 'function') {
+                    // フォールバック: 全体適用
+                    applyDepartmentThemeColors();
+                }
+                
+                console.log('他のタブからテーマカラー更新を受信:', themeUpdate);
+            }
+        } catch (e) {
+            console.warn('テーマカラー更新の解析に失敗:', e);
+        }
+    }
+});

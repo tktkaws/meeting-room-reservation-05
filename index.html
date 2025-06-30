@@ -1,27 +1,104 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>会議室予約システム</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📅</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <div id="app">
-        <!-- ヘッダー -->
-        <header class="header">
-            <div class="header-content">
-                <h1>会議室予約システム</h1>
-                <div class="header-actions">
-                    <span id="user-info"></span>
-                    <button id="config-btn" class="btn-secondary">設定</button>
-                    <button id="logout-btn" class="btn-secondary">ログアウト</button>
+        <!-- サイドバー -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-content">
+                <!-- サイドバーヘッダー -->
+                <div class="sidebar-header">
+                    <h1 class="sidebar-title">
+                        <a href="index.html">📅 会議室予約システム</a>
+                    </h1>
+                    <button type="button" id="hamburger-close-btn" class="hamburger-close-btn">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+
+                <!-- ユーザー情報セクション -->
+                <div class="sidebar-section sidebar-user-info" id="sidebar-user-section" style="display: none;">
+                    <div class="sidebar-user-card">
+                        <div class="sidebar-user-details">
+                            <span class="material-symbols-outlined sidebar-user-icon">account_circle</span>
+                            <span class="sidebar-user-name" id="sidebar-user-info"></span>
+                        </div>
+                        <div class="sidebar-user-details">
+                            <span class="material-symbols-outlined">corporate_fare</span>
+                            <span id="sidebar-department-name"></span>
+                        </div>
+                    </div>
+
+                    <!-- テーマカラー設定 -->
+                    <div id="sidebar-theme-color-controls" class="sidebar-theme-colors" style="display: none;">
+                        <!-- 部署ごとのテーマカラー設定がここに表示されます -->
+                    </div>
+                </div>
+
+                <!-- ナビゲーションセクション -->
+                <div class="sidebar-section">
+                    <button type="button" id="sidebar-config-btn" class="sidebar-btn" style="display: none;">
+                        <span class="material-symbols-outlined">settings</span>
+                        <span class="sidebar-btn-text">設定</span>
+                    </button>
+                    <button type="button" id="sidebar-login-btn" class="sidebar-btn">
+                        <span class="material-symbols-outlined">login</span>
+                        <span class="sidebar-btn-text">ログイン</span>
+                    </button>
+                    <button type="button" id="sidebar-logout-btn" class="sidebar-btn" style="display: none;">
+                        <span class="material-symbols-outlined">logout</span>
+                        <span class="sidebar-btn-text">ログアウト</span>
+                    </button>
+                </div>
+
+                <div class="sidebar-section" id="admin-section" style="display: none;">
+                    <div class="sidebar-section-title">管理</div>
+                    <button type="button" id="sidebar-department-btn" class="sidebar-btn">
+                        <span class="material-symbols-outlined">corporate_fare</span>
+                        <span class="sidebar-btn-text">部署管理</span>
+                    </button>
+                    <button type="button" id="sidebar-email-btn" class="sidebar-btn">
+                        <span class="material-symbols-outlined">email</span>
+                        <span class="sidebar-btn-text">メール設定</span>
+                    </button>
+                    <button type="button" id="sidebar-export-btn" class="sidebar-btn">
+                        <span class="material-symbols-outlined">download</span>
+                        <span class="sidebar-btn-text">データ出力</span>
+                    </button>
+                    <button type="button" id="sidebar-import-btn" class="sidebar-btn">
+                        <span class="material-symbols-outlined">upload</span>
+                        <span class="sidebar-btn-text">データ取込</span>
+                    </button>
                 </div>
             </div>
-        </header>
-        
+        </aside>
+
+        <!-- サイドバーオーバーレイ（モバイル用） -->
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
         <!-- メインコンテンツ -->
         <main class="main-content">
+            <!-- モバイル用ハンバーガーボタン -->
+            <button type="button" id="mobile-hamburger-btn" class="mobile-hamburger-btn">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+
             <!-- ツールバー -->
             <div class="toolbar">
                 <div class="view-options">
@@ -35,58 +112,54 @@
                     <button id="next-btn" class="btn-icon">›</button>
                     <span id="current-period"></span>
                 </div>
-                <button id="new-reservation-btn" class="btn-primary btn-new-reservation">新規予約</button>
+                <button id="new-reservation-btn" class="btn-primary btn-new-reservation"
+                    style="display: none;">新規予約</button>
             </div>
-            
+
             <!-- カレンダー表示エリア -->
             <div class="calendar-container">
                 <div id="calendar-view"></div>
             </div>
         </main>
-        
+
         <!-- 予約詳細モーダル -->
         <div id="reservation-detail-modal" class="modal" style="display: none;">
             <div class="modal-content">
                 <div class="modal-header">
+                    <h2>予約詳細</h2>
                     <button class="close-btn" id="close-detail-modal">&times;</button>
                 </div>
                 <div class="detail-content">
                     <div class="detail-section">
                         <div class="detail-item">
-                            <label>タイトル:</label>
-                            <span id="detail-title"></span>
-                        </div>
-                        <div class="detail-item">
-                            <label>日付:</label>
+                            <label>日付</label>
                             <span id="detail-date"></span>
                         </div>
                         <div class="detail-item">
-                            <label>時間:</label>
+                            <label>時間</label>
                             <span id="detail-time"></span>
                         </div>
-                        
                         <div class="detail-item">
-                            <label>予約者:</label>
+                            <label>タイトル</label>
+                            <span id="detail-title"></span>
+                        </div>
+                        <div class="detail-item">
+                            <label>予約者</label>
                             <span id="detail-user"></span>
                         </div>
                         <div class="detail-item">
-                            <label>説明:</label>
+                            <label>説明</label>
                             <span id="detail-description"></span>
                         </div>
                     </div>
-                    
+
                     <div id="recurring-section" class="detail-section" style="display: none;">
                         <h3>繰り返し予約情報</h3>
-                        <div class="detail-item">
-                            <label>繰り返しパターン:</label>
-                            <span id="detail-repeat-type"></span>
-                        </div>
                         <div id="group-reservations">
-                            <label>関連する予約:</label>
                             <div id="group-list"></div>
                         </div>
                     </div>
-                    
+
                     <div class="detail-actions" id="detail-actions">
                         <!-- 編集ボタンは権限に応じて動的に追加 -->
                     </div>
@@ -104,45 +177,80 @@
                 <form id="group-edit-form">
                     <div class="group-edit-content">
                         <div class="group-basic-info">
-                            <h3>基本情報</h3>
                             <div class="form-group">
-                                <label for="group-title">タイトル</label>
-                                <input type="text" id="group-title" name="title" required>
+                                <label for="group-title">タイトル <span class="char-counter"
+                                        id="group-title-counter">0/50</span></label>
+                                <input type="text" id="group-title" name="title" required maxlength="50">
                             </div>
                             <div class="form-group">
-                                <label for="group-description">説明</label>
-                                <textarea id="group-description" name="description" rows="3"></textarea>
+                                <label for="group-description">説明 <span class="char-counter"
+                                        id="group-description-counter">0/400</span></label>
+                                <textarea id="group-description" name="description" rows="3" maxlength="400"></textarea>
                             </div>
                         </div>
-                        
+
                         <div class="group-time-info">
-                            <h3>時間設定</h3>
-                            <p class="info-text">開始時間・終了時間を変更すると、グループ内の全ての予約の時間が一括で更新されます。</p>
                             <div class="time-form-row">
                                 <div class="form-group">
-                                    <label for="group-start-time">開始時間</label>
-                                    <select id="group-start-time" name="start_time">
-                                        <!-- 15分単位の時間選択肢を動的に生成 -->
-                                    </select>
+                                    <label for="group-start-hour">開始時間</label>
+                                    <div class="time-select-group">
+                                        <select id="group-start-hour" name="start_hour">
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                            <option value="12">12</option>
+                                            <option value="13">13</option>
+                                            <option value="14">14</option>
+                                            <option value="15">15</option>
+                                            <option value="16">16</option>
+                                            <option value="17">17</option>
+                                        </select>
+                                        <span class="time-separator">時</span>
+                                        <select id="group-start-minute" name="start_minute">
+                                            <option value="0">00</option>
+                                            <option value="15">15</option>
+                                            <option value="30">30</option>
+                                            <option value="45">45</option>
+                                        </select>
+                                        <span class="time-separator">分</span>
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="group-end-time">終了時間</label>
-                                    <select id="group-end-time" name="end_time">
-                                        <!-- 15分単位の時間選択肢を動的に生成 -->
-                                    </select>
+                                    <label for="group-end-hour">終了時間</label>
+                                    <div class="time-select-group">
+                                        <select id="group-end-hour" name="end_hour">
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                            <option value="12">12</option>
+                                            <option value="13">13</option>
+                                            <option value="14">14</option>
+                                            <option value="15">15</option>
+                                            <option value="16">16</option>
+                                            <option value="17">17</option>
+                                            <option value="18">18</option>
+                                        </select>
+                                        <span class="time-separator">時</span>
+                                        <select id="group-end-minute" name="end_minute">
+                                            <option value="0">00</option>
+                                            <option value="15">15</option>
+                                            <option value="30">30</option>
+                                            <option value="45">45</option>
+                                        </select>
+                                        <span class="time-separator">分</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="group-reservations">
-                            <h3>グループ内の予約一覧</h3>
-                            <p class="info-text">このグループに含まれる予約の一覧です。基本情報（タイトル・説明）の変更が全ての予約に適用されます。</p>
+                            <h3>繰り返し予約一覧</h3>
                             <div id="group-reservations-list">
                                 <!-- 動的に生成される予約リスト -->
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="modal-actions">
                         <button type="button" id="group-cancel-btn" class="btn-secondary">キャンセル</button>
                         <button type="submit" class="btn-primary">すべて更新</button>
@@ -160,12 +268,14 @@
                 </div>
                 <form id="reservation-form">
                     <div class="form-group">
-                        <label for="reservation-title">タイトル</label>
-                        <input type="text" id="reservation-title" name="title" required>
+                        <label for="reservation-title">タイトル <span class="char-counter"
+                                id="title-counter">0/50</span></label>
+                        <input type="text" id="reservation-title" name="title" required maxlength="50">
                     </div>
                     <div class="form-group">
-                        <label for="reservation-description">説明</label>
-                        <textarea id="reservation-description" name="description" rows="3"></textarea>
+                        <label for="reservation-description">説明 <span class="char-counter"
+                                id="description-counter">0/400</span></label>
+                        <textarea id="reservation-description" name="description" rows="3" maxlength="400"></textarea>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
@@ -175,16 +285,53 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="start-time">開始時間</label>
-                            <select id="start-time" name="start_time" required>
-                                <!-- 15分単位の時間選択肢を動的に生成 -->
-                            </select>
+                            <label for="start-hour">開始時間</label>
+                            <div class="time-select-group">
+                                <select id="start-hour" name="start_hour" required>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                </select>
+                                <span class="time-separator">時</span>
+                                <select id="start-minute" name="start_minute" required>
+                                    <option value="0">00</option>
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="45">45</option>
+                                </select>
+                                <span class="time-separator">分</span>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label for="end-time">終了時間</label>
-                            <select id="end-time" name="end_time" required>
-                                <!-- 15分単位の時間選択肢を動的に生成 -->
-                            </select>
+                            <label for="end-hour">終了時間</label>
+                            <div class="time-select-group">
+                                <select id="end-hour" name="end_hour" required>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                </select>
+                                <span class="time-separator">時</span>
+                                <select id="end-minute" name="end_minute" required>
+                                    <option value="0">00</option>
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="45">45</option>
+                                </select>
+                                <span class="time-separator">分</span>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -206,6 +353,7 @@
                             <select id="repeat-type" name="repeat_type">
                                 <option value="daily">毎日</option>
                                 <option value="weekly" selected>毎週</option>
+                                <option value="biweekly">隔週</option>
                                 <option value="monthly">毎月</option>
                             </select>
                         </div>
@@ -213,7 +361,16 @@
                             <label for="repeat-end-date">終了日</label>
                             <input type="date" id="repeat-end-date" name="repeat_end_date">
                         </div>
+                        <div class="form-group">
+                            <div id="recurring-preview" style="display: none;">
+                                <label>作成される予約一覧</label>
+                                <div id="recurring-dates-list" class="recurring-dates-preview">
+                                    <!-- 予約日一覧がここに表示される -->
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="modal-actions">
                         <button type="button" id="cancel-btn" class="btn-secondary">キャンセル</button>
                         <button type="submit" class="btn-primary">保存</button>
@@ -221,24 +378,186 @@
                 </form>
             </div>
         </div>
-        
+
         <!-- ローディング表示 -->
         <div id="loading" class="loading" style="display: none;">
             <div class="spinner"></div>
         </div>
-        
+
         <!-- メッセージ表示 -->
         <div id="message" class="message"></div>
+
+        <!-- ログイン・サインアップモーダル -->
+        <div id="auth-modal" class="modal" style="display: none;">
+            <div class="modal-content auth-modal-content">
+                <div class="modal-header">
+                    <h2 id="auth-modal-title">ログイン</h2>
+                    <button class="close-btn" id="close-auth-modal">&times;</button>
+                </div>
+
+                <!-- ログインフォーム -->
+                <div id="login-form" class="auth-form">
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="login-email">メールアドレス</label>
+                            <input type="email" id="login-email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">パスワード</label>
+                            <input type="password" id="login-password" name="password" required>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="remember-me" name="remember_me" checked>
+                                <span>ログイン状態を保持する（180日間）</span>
+                            </label>
+                        </div>
+                        <div class="modal-actions">
+                            <button type="button" id="cancel-auth-btn" class="btn-secondary">キャンセル</button>
+                            <button type="submit" class="btn-primary">ログイン</button>
+                        </div>
+                    </form>
+                    <p class="form-switch">
+                        アカウントをお持ちでない方は
+                        <a href="#" id="show-register">新規登録</a>
+                    </p>
+                </div>
+
+                <!-- 新規登録フォーム -->
+                <div id="register-form" class="auth-form" style="display: none;">
+                    <form id="registerForm">
+                        <div class="form-group">
+                            <label for="register-name">氏名</label>
+                            <input type="text" id="register-name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-email">メールアドレス</label>
+                            <input type="email" id="register-email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password">パスワード</label>
+                            <input type="password" id="register-password" name="password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-department">部署</label>
+                            <input type="text" id="register-department" name="department">
+                        </div>
+                        <div class="modal-actions">
+                            <button type="button" id="cancel-register-btn" class="btn-secondary">キャンセル</button>
+                            <button type="submit" class="btn-primary">登録</button>
+                        </div>
+                    </form>
+                    <p class="form-switch">
+                        既にアカウントをお持ちの方は
+                        <a href="#" id="show-login">ログイン</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 設定モーダル -->
+        <div id="config-modal" class="modal" style="display: none;">
+            <div class="modal-content large-modal">
+                <div class="modal-header">
+                    <h2>ユーザー設定</h2>
+                    <button class="close-btn" id="close-config-modal">&times;</button>
+                </div>
+                <div class="config-content">
+                    <!-- プロフィール設定 -->
+                    <div class="config-section">
+                        <h3>プロフィール設定</h3>
+                        <form id="user-config-form" class="config-form">
+                            <div class="form-group">
+                                <label for="user-name">名前 <span class="required">*</span></label>
+                                <input type="text" id="user-name" name="name" required 
+                                       placeholder="氏名を入力してください"
+                                       maxlength="100">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="user-email">メールアドレス <span class="required">*</span></label>
+                                <input type="email" id="user-email" name="email" required 
+                                       placeholder="email@example.com"
+                                       maxlength="255">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="user-department">部署</label>
+                                <select id="user-department" name="department">
+                                    <!-- 部署データが動的に読み込まれます -->
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email-notification-type">メール通知設定</label>
+                                <select id="email-notification-type" name="email_notification_type">
+                                    <option value="1">予約変更通知</option>
+                                    <option value="2">送信しない</option>
+                                </select>
+                                <small class="form-help">予約の変更時にメールで通知するか選択してください</small>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" id="save-btn" class="btn btn-primary">設定を保存</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- パスワード変更 -->
+                    <div class="config-section">
+                        <h3>パスワード変更</h3>
+                        <form id="password-change-form" class="config-form">
+                            <div class="form-group">
+                                <label for="current-password">現在のパスワード <span class="required">*</span></label>
+                                <input type="password" id="current-password" name="current_password" required 
+                                       placeholder="現在のパスワードを入力">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="new-password">新しいパスワード <span class="required">*</span></label>
+                                <input type="password" id="new-password" name="new_password" required 
+                                       placeholder="新しいパスワードを入力（6文字以上）"
+                                       minlength="6">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="confirm-password">新しいパスワード（確認） <span class="required">*</span></label>
+                                <input type="password" id="confirm-password" name="confirm_password" required 
+                                       placeholder="新しいパスワードを再度入力">
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" id="change-password-btn" class="btn btn-primary">パスワードを変更</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    
+
     <script src="js/shared/ui-utils.js"></script>
     <script src="js/shared/time-utils.js"></script>
+    <script src="js/shared/header.js"></script>
+    <script src="js/shared/theme-colors.js"></script>
     <script src="js/calendar/date-utils.js"></script>
     <script src="js/auth/auth.js"></script>
+    <script src="js/auth/auth-modal.js"></script>
     <script src="js/calendar/calendar.js"></script>
+    <script src="js/chat-notifications.js"></script>
+    <script src="js/email-notifications.js"></script>
     <script src="js/reservations/reservation-api.js"></script>
     <script src="js/reservations/reservation-modal.js"></script>
     <script src="js/reservations/group-edit.js"></script>
+    <script src="js/char-counter.js"></script>
+    <script src="js/config/config-page.js"></script>
     <script src="js/main/main-page.js"></script>
+    <script>
+        // アプリケーション初期化
+        document.addEventListener('DOMContentLoaded', function () {
+            initCommonHeader();
+            initMainPage();
+        });
+    </script>
 </body>
+
 </html>

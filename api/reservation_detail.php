@@ -23,9 +23,10 @@ function getReservationDetail($reservationId) {
     
     // 予約基本情報取得
     $stmt = $db->prepare("
-        SELECT r.*, u.name as user_name, u.department, rg.repeat_type, rg.repeat_interval 
+        SELECT r.*, u.name as user_name, u.department, d.name as department_name, rg.repeat_type, rg.repeat_interval 
         FROM reservations r 
         JOIN users u ON r.user_id = u.id 
+        LEFT JOIN departments d ON u.department = d.id 
         LEFT JOIN reservation_groups rg ON r.group_id = rg.id 
         WHERE r.id = ?
     ");
@@ -42,15 +43,15 @@ function getReservationDetail($reservationId) {
         'group_reservations' => []
     ];
     
-    // 繰り返し予約の場合、同じグループの他の予約を取得
+    // 繰り返し予約の場合、同じグループの全ての予約を取得（現在の予約も含む）
     if ($reservation['group_id']) {
         $stmt = $db->prepare("
             SELECT r.id, r.title, r.date, r.start_datetime, r.end_datetime 
             FROM reservations r 
-            WHERE r.group_id = ? AND r.id != ? 
+            WHERE r.group_id = ? 
             ORDER BY r.start_datetime ASC
         ");
-        $stmt->execute([$reservation['group_id'], $reservationId]);
+        $stmt->execute([$reservation['group_id']]);
         $result['group_reservations'] = $stmt->fetchAll();
     }
     
@@ -64,7 +65,23 @@ function canEditReservation($reservation) {
         return false;
     }
     
-    return $_SESSION['role'] === 'admin' || $_SESSION['user_id'] == $reservation['user_id'];
+    // 管理者は全ての予約を編集可能
+    if ($_SESSION['role'] === 'admin') {
+        return true;
+    }
+    
+    // 自分の予約は編集可能
+    if ($_SESSION['user_id'] == $reservation['user_id']) {
+        return true;
+    }
+    
+    // 同じ部署の予約は編集可能
+    if (isset($_SESSION['department']) && isset($reservation['department']) && 
+        $_SESSION['department'] == $reservation['department']) {
+        return true;
+    }
+    
+    return false;
 }
 
 try {

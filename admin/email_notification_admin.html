@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>メール通知設定 - 会議室予約システム</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* ページ固有のスタイル */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        .email-list {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            min-height: 150px;
+            padding: 10px;
+            background: #fafafa;
+        }
+        .email-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 5px;
+            background: white;
+            border-radius: 3px;
+        }
+        .email-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            margin-right: 10px;
+        }
+        .remove-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .remove-btn:hover {
+            background: #c82333;
+        }
+        .add-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        .add-btn:hover {
+            background: #218838;
+        }
+        .save-btn {
+            background: #007cba;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        .save-btn:hover {
+            background: #005a87;
+        }
+        .result {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #007cba;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- サイドバー -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-content">
+                <!-- サイドバーヘッダー -->
+                <div class="sidebar-header">
+                    <h1 class="sidebar-title">
+                        <a href="../index.html">📅 会議室予約システム</a>
+                    </h1>
+                    <button type="button" id="hamburger-close-btn" class="hamburger-close-btn">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+
+                <!-- ユーザー情報セクション -->
+                <div class="sidebar-section sidebar-user-info" id="sidebar-user-section" style="display: none;">
+                    <div class="sidebar-user-card">
+                        <div class="sidebar-user-details">
+                            <span class="material-symbols-outlined sidebar-user-icon">account_circle</span>
+                            <span class="sidebar-user-name" id="sidebar-user-info"></span>
+                        </div>
+                        <div class="sidebar-user-details">
+                            <span class="material-symbols-outlined">corporate_fare</span>
+                            <span id="sidebar-department-name"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ナビゲーションセクション -->
+                <div class="sidebar-section">
+                    <button type="button" id="sidebar-calendar-btn" class="sidebar-btn">
+                        <span class="material-symbols-outlined">calendar_month</span>
+                        <span class="sidebar-btn-text">カレンダー</span>
+                    </button>
+                    <button type="button" id="sidebar-config-btn" class="sidebar-btn" style="display: none;">
+                        <span class="material-symbols-outlined">settings</span>
+                        <span class="sidebar-btn-text">設定</span>
+                    </button>
+                    <button type="button" id="sidebar-login-btn" class="sidebar-btn">
+                        <span class="material-symbols-outlined">login</span>
+                        <span class="sidebar-btn-text">ログイン</span>
+                    </button>
+                    <button type="button" id="sidebar-logout-btn" class="sidebar-btn" style="display: none;">
+                        <span class="material-symbols-outlined">logout</span>
+                        <span class="sidebar-btn-text">ログアウト</span>
+                    </button>
+                </div>
+
+                <div class="sidebar-section" id="admin-section" style="display: none;">
+                    <div class="sidebar-section-title">管理</div>
+                    <button type="button" id="sidebar-department-btn" class="sidebar-btn">
+                        <span class="material-symbols-outlined">corporate_fare</span>
+                        <span class="sidebar-btn-text">部署管理</span>
+                    </button>
+                    <button type="button" id="sidebar-email-btn" class="sidebar-btn active">
+                        <span class="material-symbols-outlined">email</span>
+                        <span class="sidebar-btn-text">メール設定</span>
+                    </button>
+                    <button type="button" id="sidebar-export-btn" class="sidebar-btn">
+                        <span class="material-symbols-outlined">download</span>
+                        <span class="sidebar-btn-text">データ出力</span>
+                    </button>
+                    <button type="button" id="sidebar-import-btn" class="sidebar-btn">
+                        <span class="material-symbols-outlined">upload</span>
+                        <span class="sidebar-btn-text">データ取込</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- サイドバーオーバーレイ（モバイル用） -->
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+        <!-- メインコンテンツ -->
+        <main class="main-content">
+            <!-- モバイル用ハンバーガーボタン -->
+            <button type="button" id="mobile-hamburger-btn" class="mobile-hamburger-btn">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+            <div class="container">
+        <h1>📧 メール通知設定</h1>
+        
+        <div class="info">
+            <strong>CRUD操作時の通知設定</strong><br>
+            予約の作成・更新・削除が発生した際に、指定したメールアドレスに通知を送信します。<br>
+            simple_mail_test.phpと同じ送信方式を使用します。
+        </div>
+
+        <div id="result"></div>
+
+        <div class="form-group">
+            <label>通知先メールアドレス一覧</label>
+            <div class="email-list" id="emailList">
+                <!-- メールアドレス入力欄が動的に生成される -->
+            </div>
+            <button type="button" class="add-btn" onclick="addEmailField()">➕ メールアドレスを追加</button>
+        </div>
+
+        <button type="button" class="save-btn" onclick="saveSettings()">💾 設定を保存</button>
+
+        <a href="index.html" class="back-link">← 会議室予約システムに戻る</a>
+    </div>
+
+    <script>
+        let emailAddresses = [];
+
+        // ページ読み込み時に設定を取得
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSettings();
+        });
+
+        // 設定を読み込み
+        async function loadSettings() {
+            try {
+                const response = await fetch('api/email_notification_settings.php');
+                const result = await response.json();
+                
+                if (result.success) {
+                    emailAddresses = result.data.addresses || [];
+                    renderEmailList();
+                }
+            } catch (error) {
+                console.error('設定読み込みエラー:', error);
+            }
+        }
+
+        // メールアドレス一覧を表示
+        function renderEmailList() {
+            const emailList = document.getElementById('emailList');
+            emailList.innerHTML = '';
+
+            if (emailAddresses.length === 0) {
+                emailAddresses.push(''); // 最初の空欄を追加
+            }
+
+            emailAddresses.forEach((address, index) => {
+                const emailItem = document.createElement('div');
+                emailItem.className = 'email-item';
+                
+                emailItem.innerHTML = `
+                    <input type="email" class="email-input" value="${address}" 
+                           onchange="updateEmail(${index}, this.value)"
+                           placeholder="example@company.com">
+                    <button type="button" class="remove-btn" onclick="removeEmail(${index})">削除</button>
+                `;
+                
+                emailList.appendChild(emailItem);
+            });
+        }
+
+        // メールアドレス欄を追加
+        function addEmailField() {
+            emailAddresses.push('');
+            renderEmailList();
+        }
+
+        // メールアドレスを更新
+        function updateEmail(index, value) {
+            emailAddresses[index] = value.trim();
+        }
+
+        // メールアドレスを削除
+        function removeEmail(index) {
+            if (emailAddresses.length > 1) {
+                emailAddresses.splice(index, 1);
+                renderEmailList();
+            }
+        }
+
+        // 設定を保存
+        async function saveSettings() {
+            try {
+                // 空の要素を除去
+                const validAddresses = emailAddresses.filter(addr => addr.trim() !== '');
+                
+                const response = await fetch('api/email_notification_settings.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        addresses: validAddresses
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    showResult('設定を保存しました', 'success');
+                    emailAddresses = result.data.addresses;
+                    renderEmailList();
+                } else {
+                    showResult(result.message || '設定の保存に失敗しました', 'error');
+                }
+            } catch (error) {
+                console.error('保存エラー:', error);
+                showResult('設定の保存に失敗しました', 'error');
+            }
+        }
+
+        // 結果メッセージを表示
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `<div class="${type}">${message}</div>`;
+            
+            // 3秒後に消す
+            setTimeout(() => {
+                resultDiv.innerHTML = '';
+            }, 3000);
+        }
+    </script>
+    
+    <script src="../js/auth/auth.js"></script>
+    <script src="../js/shared/header.js"></script>
+    <script src="../js/shared/ui-utils.js"></script>
+    <script src="../js/email-notifications.js"></script>
+    <script>
+        // サイドバー初期化
+        document.addEventListener('DOMContentLoaded', async function() {
+            // 認証状態をチェック（正しいAPIエンドポイントを使用）
+            try {
+                const response = await fetch('../api/check_auth.php');
+                const authStatus = await response.json();
+                const isLoggedIn = authStatus.logged_in;
+                
+                if (isLoggedIn) {
+                    // ユーザー情報を設定
+                    currentUser = { 
+                        id: authStatus.user_id,
+                        name: authStatus.session_data?.name || 'ユーザー名不明',
+                        role: authStatus.session_data?.role || 'user',
+                        department: authStatus.session_data?.department || null,
+                        lastUpdated: Date.now()
+                    };
+                    
+                    // サイドバーの表示状態を更新
+                    updateSidebarVisibility();
+                    
+                    // 部署情報を表示
+                    await updateSidebarDepartmentInfo();
+                    
+                    // 管理者の場合は管理セクションを表示
+                    if (currentUser.role === 'admin') {
+                        document.getElementById('admin-section').style.display = 'block';
+                    }
+                    
+                    // メール通知ページの初期化
+                    if (typeof initEmailNotificationPage === 'function') {
+                        initEmailNotificationPage(false); // 認証チェックをスキップ
+                    }
+                } else {
+                    // 未ログインの場合はメインページにリダイレクト
+                    window.location.href = '../index.html';
+                }
+            } catch (error) {
+                console.error('認証チェックエラー:', error);
+                // エラーの場合もメインページにリダイレクト
+                window.location.href = '../index.html';
+            }
+            
+            // ナビゲーションボタンのイベントリスナー
+            setupSidebarListeners();
+            
+            // ハンバーガーメニュー
+            document.getElementById('mobile-hamburger-btn')?.addEventListener('click', () => {
+                document.getElementById('sidebar').classList.add('open');
+                document.getElementById('sidebar-overlay').style.display = 'block';
+            });
+            
+            document.getElementById('hamburger-close-btn')?.addEventListener('click', () => {
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('sidebar-overlay').style.display = 'none';
+            });
+            
+            document.getElementById('sidebar-overlay')?.addEventListener('click', () => {
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('sidebar-overlay').style.display = 'none';
+            });
+        });
+        
+        // サイドバーの表示状態を更新（認証状態に応じて）
+        function updateSidebarVisibility() {
+            const adminSection = document.getElementById('admin-section');
+            const loginBtn = document.getElementById('sidebar-login-btn');
+            const logoutBtn = document.getElementById('sidebar-logout-btn');
+            const userSection = document.getElementById('sidebar-user-section');
+            const userInfo = document.getElementById('sidebar-user-info');
+            const configBtn = document.getElementById('sidebar-config-btn');
+            const reservationsBtn = document.getElementById('sidebar-calendar-btn');
+            
+            if (currentUser) {
+                // ログイン済み
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'flex';
+                userSection.style.display = 'block';
+                
+                // ユーザー情報を表示
+                if (userInfo && currentUser) {
+                    console.log('updateSidebarVisibility: Setting sidebar user info to:', currentUser.name);
+                    userInfo.textContent = currentUser.name || 'ユーザー名不明';
+                }
+                
+                // 管理者の場合は管理セクションを表示
+                if (currentUser.role === 'admin') {
+                    adminSection.style.display = 'block';
+                } else {
+                    adminSection.style.display = 'none';
+                }
+                
+                // カレンダーボタンをアクティブに設定
+                setActiveSidebarBtn('sidebar-email-btn');
+            } else {
+                // 未ログイン
+                loginBtn.style.display = 'flex';
+                logoutBtn.style.display = 'none';
+                adminSection.style.display = 'none';
+                userSection.style.display = 'none';
+                if (configBtn) configBtn.style.display = 'none';
+                if (reservationsBtn) reservationsBtn.style.display = 'none';
+            }
+        }
+        
+        // サイドバーのアクティブボタンを設定
+        function setActiveSidebarBtn(btnId) {
+            // 全てのサイドバーボタンからactiveクラスを削除
+            document.querySelectorAll('.sidebar-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // 指定されたボタンにactiveクラスを追加
+            document.getElementById(btnId)?.classList.add('active');
+        }
+        
+        // サイドバーの部署情報を更新
+        async function updateSidebarDepartmentInfo() {
+            if (!currentUser) return;
+            
+            const departmentNameElement = document.getElementById('sidebar-department-name');
+            if (!departmentNameElement) return;
+            
+            try {
+                const deptResponse = await fetch('../api/departments.php');
+                const deptResult = await deptResponse.json();
+                
+                if (deptResult.success && currentUser.department) {
+                    const dept = deptResult.departments.find(d => d.id == currentUser.department);
+                    if (dept) {
+                        departmentNameElement.textContent = dept.name;
+                        return;
+                    }
+                }
+                
+                departmentNameElement.textContent = '部署未設定';
+            } catch (error) {
+                console.error('部署情報の取得に失敗:', error);
+                departmentNameElement.textContent = '部署未設定';
+            }
+        }
+        
+        // サイドバーのイベントリスナー設定
+        function setupSidebarListeners() {
+            // カレンダーボタン
+            document.getElementById('sidebar-calendar-btn')?.addEventListener('click', () => {
+                setActiveSidebarBtn('sidebar-calendar-btn');
+                window.location.href = '../index.html';
+            });
+            
+            // 部署管理ボタン
+            document.getElementById('sidebar-department-btn')?.addEventListener('click', () => {
+                setActiveSidebarBtn('sidebar-department-btn');
+                window.location.href = 'department_management.html';
+            });
+            
+            // メール設定ボタン
+            document.getElementById('sidebar-email-btn')?.addEventListener('click', () => {
+                setActiveSidebarBtn('sidebar-email-btn');
+                // 現在のページなので何もしない
+            });
+            
+            // データ出力ボタン
+            document.getElementById('sidebar-export-btn')?.addEventListener('click', () => {
+                setActiveSidebarBtn('sidebar-export-btn');
+                window.location.href = 'csv_export.html';
+            });
+            
+            // データ取込ボタン
+            document.getElementById('sidebar-import-btn')?.addEventListener('click', () => {
+                setActiveSidebarBtn('sidebar-import-btn');
+                window.location.href = 'csv_import.html';
+            });
+            
+            // 設定ボタン
+            document.getElementById('sidebar-config-btn')?.addEventListener('click', () => {
+                setActiveSidebarBtn('sidebar-config-btn');
+                window.location.href = '../config.html';
+            });
+            
+            // ログインボタン
+            document.getElementById('sidebar-login-btn')?.addEventListener('click', () => {
+                setActiveSidebarBtn('sidebar-login-btn');
+                window.location.href = '../index.html';
+            });
+            
+            // ログアウトボタン
+            document.getElementById('sidebar-logout-btn')?.addEventListener('click', () => {
+                if (commonHeader) {
+                    commonHeader.handleLogout();
+                }
+            });
+        }
+    </script>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

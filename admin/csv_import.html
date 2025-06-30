@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV取り込み - 会議室予約システム</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📥</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- サイドバー -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-content">
+                <!-- サイドバーヘッダー -->
+                <div class="sidebar-header">
+                    <h1 class="sidebar-title">
+                        <a href="../index.html">📅 会議室予約システム</a>
+                    </h1>
+                    <button type="button" id="hamburger-close-btn" class="hamburger-close-btn">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+
+                <!-- ユーザー情報セクション -->
+                <div class="sidebar-section sidebar-user-info" id="sidebar-user-section" style="display: none;">
+                    <div class="sidebar-user-card">
+                        <div class="sidebar-user-details">
+                            <span class="material-symbols-outlined sidebar-user-icon">account_circle</span>
+                            <span class="sidebar-user-name" id="sidebar-user-info"></span>
+                        </div>
+                        <div class="sidebar-user-details">
+                            <span class="material-symbols-outlined">corporate_fare</span>
+                            <span id="sidebar-department-name"></span>
+                        </div>
+                    </div>
+
+                    <!-- テーマカラー設定 -->
+                    <div id="sidebar-theme-color-controls" class="sidebar-theme-colors" style="display: none;">
+                        <!-- 部署ごとのテーマカラー設定がここに表示されます -->
+                    </div>
+                </div>
+
+                <!-- ナビゲーションセクション -->
+                <div class="sidebar-section">
+                    <button type="button" id="sidebar-calendar-btn" class="sidebar-btn">
+                        <span class="material-symbols-outlined">calendar_month</span>
+                        <span class="sidebar-btn-text">カレンダー</span>
+                    </button>
+                    <button type="button" id="sidebar-config-btn" class="sidebar-btn" style="display: none;">
+                        <span class="material-symbols-outlined">settings</span>
+                        <span class="sidebar-btn-text">設定</span>
+                    </button>
+                    <button type="button" id="sidebar-login-btn" class="sidebar-btn">
+                        <span class="material-symbols-outlined">login</span>
+                        <span class="sidebar-btn-text">ログイン</span>
+                    </button>
+                    <button type="button" id="sidebar-logout-btn" class="sidebar-btn" style="display: none;">
+                        <span class="material-symbols-outlined">logout</span>
+                        <span class="sidebar-btn-text">ログアウト</span>
+                    </button>
+                </div>
+
+                <div class="sidebar-section" id="admin-section" style="display: none;">
+                    <div class="sidebar-section-title">管理</div>
+                    <button type="button" id="sidebar-department-btn" class="sidebar-btn">
+                        <span class="material-symbols-outlined">corporate_fare</span>
+                        <span class="sidebar-btn-text">部署管理</span>
+                    </button>
+                    <button type="button" id="sidebar-email-btn" class="sidebar-btn">
+                        <span class="material-symbols-outlined">email</span>
+                        <span class="sidebar-btn-text">メール設定</span>
+                    </button>
+                    <button type="button" id="sidebar-export-btn" class="sidebar-btn">
+                        <span class="material-symbols-outlined">download</span>
+                        <span class="sidebar-btn-text">データ出力</span>
+                    </button>
+                    <button type="button" id="sidebar-import-btn" class="sidebar-btn active">
+                        <span class="material-symbols-outlined">upload</span>
+                        <span class="sidebar-btn-text">データ取込</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- サイドバーオーバーレイ（モバイル用） -->
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+        <!-- メインコンテンツ -->
+        <main class="main-content">
+            <!-- モバイル用ハンバーガーボタン -->
+            <button type="button" id="mobile-hamburger-btn" class="mobile-hamburger-btn">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+
+            <div class="container">
+                <div class="page-header">
+                    <h1 class="page-title">CSV取り込み</h1>
+                    <p class="page-description">CSVファイルから予約データを一括取り込みできます</p>
+                </div>
+                
+                <!-- アップロード領域 -->
+                <div class="import-card">
+                    <div class="upload-section">
+                        <h2 class="section-title">CSVファイルアップロード</h2>
+                        
+                        <div class="file-upload-area" id="file-upload-area">
+                            <div class="upload-icon">📁</div>
+                            <div class="upload-text">
+                                <p>CSVファイルをここにドラッグ&ドロップするか、</p>
+                                <button type="button" id="file-select-btn" class="btn-link">ファイルを選択</button>
+                                <p>してください</p>
+                            </div>
+                            <input type="file" id="file-input" accept=".csv,.tsv" style="display: none;">
+                        </div>
+                        
+                        <div class="file-info" id="file-info" style="display: none;">
+                            <div class="file-details">
+                                <span class="file-name" id="file-name"></span>
+                                <span class="file-size" id="file-size"></span>
+                            </div>
+                            <button type="button" id="file-remove-btn" class="btn-text">削除</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 設定オプション -->
+                    <div class="import-options">
+                        <h2 class="section-title">取り込み設定</h2>
+                        
+                        <div class="form-group">
+                            <label>ファイル形式</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="file_format" value="csv" checked>
+                                    CSV（カンマ区切り）
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="file_format" value="tsv">
+                                    TSV（タブ区切り）
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>重複データの処理</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="duplicate_handling" value="skip" checked>
+                                    スキップ（既存データを保持）
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="duplicate_handling" value="update">
+                                    更新（既存データを上書き）
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="duplicate_handling" value="error">
+                                    エラー（取り込み中止）
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="validate_conflicts" checked>
+                                <span>時間重複チェックを行う</span>
+                            </label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="send_notifications">
+                                <span>取り込み完了後にメール通知を送信</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- プレビュー領域 -->
+                    <div class="preview-section" id="preview-section" style="display: none;">
+                        <h2 class="section-title">プレビュー</h2>
+                        
+                        <div class="preview-stats" id="preview-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">総行数:</span>
+                                <span class="stat-value" id="total-rows">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">有効データ:</span>
+                                <span class="stat-value" id="valid-rows">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">エラー:</span>
+                                <span class="stat-value error" id="error-rows">0</span>
+                            </div>
+                        </div>
+                        
+                        <div class="preview-table-container">
+                            <table class="preview-table" id="preview-table">
+                                <thead id="preview-header"></thead>
+                                <tbody id="preview-body"></tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="error-list" id="error-list" style="display: none;">
+                            <h3>エラー詳細</h3>
+                            <div id="error-items"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- アクションボタン -->
+                    <div class="import-actions">
+                        <button type="button" id="preview-btn" class="btn-secondary" disabled>プレビュー</button>
+                        <button type="button" id="import-btn" class="btn-primary" disabled>取り込み実行</button>
+                    </div>
+                </div>
+                
+                <!-- フォーマット説明 -->
+                <div class="format-guide">
+                    <h2>CSVフォーマット</h2>
+                    <p>以下の形式でCSVファイルを作成してください：</p>
+                    
+                    <div class="format-example">
+                        <h3>必須列（順序は問いません）</h3>
+                        <ul>
+                            <li><strong>title</strong>: タイトル（必須、最大50文字）</li>
+                            <li><strong>date</strong>: 日付（必須、YYYY-MM-DD、YYYY/MM/DD、MM/DD/YYYY形式）</li>
+                            <li><strong>start_time</strong>: 開始時間（必須、HH:MM形式）</li>
+                            <li><strong>end_time</strong>: 終了時間（必須、HH:MM形式）</li>
+                            <li><strong>user_email</strong>: 予約者メールアドレス（必須）</li>
+                        </ul>
+                        
+                        <h3>オプション列</h3>
+                        <ul>
+                            <li><strong>description</strong>: 説明（最大400文字）</li>
+                            <li><strong>repeat_type</strong>: 繰り返しタイプ（daily, weekly, biweekly, monthly）</li>
+                            <li><strong>repeat_end_date</strong>: 繰り返し終了日（YYYY-MM-DD、YYYY/MM/DD、MM/DD/YYYY形式）</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="sample-download">
+                        <h3>サンプルファイル</h3>
+                        <p>フォーマットの参考として、サンプルCSVファイルをダウンロードできます：</p>
+                        <button type="button" id="download-sample-btn" class="btn-secondary">サンプルCSVダウンロード</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- 進行状況モーダル -->
+        <div id="progress-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>取り込み中...</h2>
+                </div>
+                <div class="progress-content">
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="progress-bar"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span id="progress-current">0</span> / <span id="progress-total">0</span> 件処理中
+                    </div>
+                    <div id="progress-status" class="progress-status"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ローディング表示 -->
+        <div id="loading" class="loading" style="display: none;">
+            <div class="spinner"></div>
+        </div>
+        
+        <!-- メッセージ表示 -->
+        <div id="message" class="message"></div>
+    </div>
+    
+    <script src="../js/auth/auth.js"></script>
+    <script src="../js/shared/header.js"></script>
+    <script src="../js/shared/ui-utils.js"></script>
+    <script src="../js/csv-import.js"></script>
+    <script>
+        // サイドバー初期化
+        document.addEventListener('DOMContentLoaded', async function() {
+            // 認証状態をチェック（正しいAPIエンドポイントを使用）
+            try {
+                const response = await fetch('../api/check_auth.php');
+                const authStatus = await response.json();
+                const isLoggedIn = authStatus.logged_in;
+                
+                if (isLoggedIn) {
+                    // ユーザー情報を設定
+                    currentUser = { 
+                        id: authStatus.user_id,
+                        name: authStatus.session_data?.name || 'ユーザー名不明',
+                        role: authStatus.session_data?.role || 'user',
+                        department: authStatus.session_data?.department || null,
+                        lastUpdated: Date.now()
+                    };
+                    
+                    // サイドバーの表示状態を更新
+                    updateSidebarVisibility();
+                    
+                    // 部署情報を表示
+                    await updateSidebarDepartmentInfo();
+                    
+                    // 管理者の場合は管理セクションを表示
+                    if (currentUser.role === 'admin') {
+                        document.getElementById('admin-section').style.display = 'block';
+                    }
+                    
+                    // CSV取込ページの初期化
+                    if (typeof initCSVImportPage === 'function') {
+                        initCSVImportPage(false); // 認証チェックをスキップ
+                    }
+                } else {
+                    // 未ログインの場合はメインページにリダイレクト
+                    window.location.href = '../index.html';
+                }
+            } catch (error) {
+                console.error('認証チェックエラー:', error);
+                // エラーの場合もメインページにリダイレクト
+                window.location.href = '../index.html';
+            }
+            
+            // ナビゲーションボタンのイベントリスナー
+            setupSidebarListeners();
+            
+            // ハンバーガーメニュー
+            document.getElementById('mobile-hamburger-btn')?.addEventListener('click', () => {
+                document.getElementById('sidebar').classList.add('open');
+                document.getElementById('sidebar-overlay').style.display = 'block';
+            });
+            
+            document.getElementById('hamburger-close-btn')?.addEventListener('click', () => {
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('sidebar-overlay').style.display = 'none';
+            });
+            
+            document.getElementById('sidebar-overlay')?.addEventListener('click', () => {
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('sidebar-overlay').style.display = 'none';
+            });
+        });
+        
+        // サイドバーの表示状態を更新（認証状態に応じて）
+        function updateSidebarVisibility() {
+            const adminSection = document.getElementById('admin-section');
+            const loginBtn = document.getElementById('sidebar-login-btn');
+            const logoutBtn = document.getElementById('sidebar-logout-btn');
+            const userSection = document.getElementById('sidebar-user-section');
+            const userInfo = document.getElementById('sidebar-user-info');
+            const configBtn = document.getElementById('sidebar-config-btn');
+            const reservationsBtn = document.getElementById('sidebar-calendar-btn');
+            
+            if (currentUser) {
+                // ログイン済み
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'flex';
+                userSection.style.display = 'block';
+                
+                // ユーザー情報を表示
+                if (userInfo && currentUser) {
+                    console.log('updateSidebarVisibility: Setting sidebar user info to:', currentUser.name);
+                    userInfo.textContent = currentUser.name || 'ユーザー名不明';
+                }
+                
+                // 管理者の場合は管理セクションを表示
+                if (currentUser.role === 'admin') {
+                    adminSection.style.display = 'block';
+                } else {
+                    adminSection.style.display = 'none';
+                }
+                
+                // カレンダーボタンをアクティブに設定
+                setActiveSidebarBtn('sidebar-import-btn');
+            } else {
+                // 未ログイン
+                loginBtn.style.display = 'flex';
+                logoutBtn.style.display = 'none';
+                adminSection.style.display = 'none';
+                userSection.style.display = 'none';
+                if (configBtn) configBtn.style.display = 'none';
+                if (reservationsBtn) reservationsBtn.style.display = 'none';
+            }
+        }
+        
+        // サイドバーのアクティブボタンを設定
+        function setActiveSidebarBtn(btnId) {
+            // 全てのサイドバーボタンからactiveクラスを削除
+            document.querySelectorAll('.sidebar-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // 指定されたボタンにactiveクラスを追加
+            document.getElementById(btnId)?.classList.add('active');
+        }
+        
+        // サイドバーの部署情報を更新
+        async function updateSidebarDepartmentInfo() {
+            if (!currentUser) return;
+            
+            const departmentNameElement = document.getElementById('sidebar-department-name');
+            if (!departmentNameElement) return;
+            
+            try {
+                const deptResponse = await fetch('../api/departments.php');
+                const deptResult = await deptResponse.json();
+                
+                if (deptResult.success && currentUser.department) {
+                    const dept = deptResult.departments.find(d => d.id == currentUser.department);
+                    if (dept) {
+                        departmentNameElement.textContent = dept.name;
+                        return;
+                    }
+                }
+                
+                departmentNameElement.textContent = '部署未設定';
+            } catch (error) {
+                console.error('部署情報の取得に失敗:', error);
+                departmentNameElement.textContent = '部署未設定';
+            }
+        }
+        
+        // サイドバーのイベントリスナー設定
+        function setupSidebarListeners() {
+            // カレンダーボタン
+            document.getElementById('sidebar-calendar-btn')?.addEventListener('click', () => {
+                setActiveSidebarBtn('sidebar-calendar-btn');
+                window.location.href = '../index.html';
+            });
+            
+            // 部署管理ボタン
+            document.getElementById('sidebar-department-btn')?.addEventListener('click', () => {
+                setActiveSidebarBtn('sidebar-department-btn');
+                window.location.href = 'department_management.html';
+            });
+            
+            // メール設定ボタン
+            document.getElementById('sidebar-email-btn')?.addEventListener('click', () => {
+                setActiveSidebarBtn('sidebar-email-btn');
+                window.location.href = 'email_notification_admin.html';
+            });
+            
+            // データ出力ボタン
+            document.getElementById('sidebar-export-btn')?.addEventListener('click', () => {
+                setActiveSidebarBtn('sidebar-export-btn');
+                window.location.href = 'csv_export.html';
+            });
+            
+            // データ取込ボタン
+            document.getElementById('sidebar-import-btn')?.addEventListener('click', () => {
+                setActiveSidebarBtn('sidebar-import-btn');
+                // 現在のページなので何もしない
+            });
+            
+            // 設定ボタン
+            document.getElementById('sidebar-config-btn')?.addEventListener('click', () => {
+                setActiveSidebarBtn('sidebar-config-btn');
+                window.location.href = '../config.html';
+            });
+            
+            // ログインボタン
+            document.getElementById('sidebar-login-btn')?.addEventListener('click', () => {
+                setActiveSidebarBtn('sidebar-login-btn');
+                window.location.href = '../index.html';
+            });
+            
+            // ログアウトボタン
+            document.getElementById('sidebar-logout-btn')?.addEventListener('click', () => {
+                if (commonHeader) {
+                    commonHeader.handleLogout();
+                }
+            });
+        }
+    </script>
+</body>
+</html>

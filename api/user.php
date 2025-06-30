@@ -47,7 +47,7 @@ function handleGetUser() {
     
     try {
         $stmt = $pdo->prepare("
-            SELECT id, name, email, department, role, created_at 
+            SELECT id, name, email, department, role, email_notification_type, created_at 
             FROM users 
             WHERE id = ?
         ");
@@ -98,6 +98,7 @@ function handleUpdateUser() {
     $name = trim($input['name']);
     $email = trim($input['email']);
     $department = isset($input['department']) ? trim($input['department']) : '';
+    $emailNotificationType = isset($input['email_notification_type']) ? (int)$input['email_notification_type'] : 3;
     
     // 文字数制限チェック
     if (strlen($name) > 100) {
@@ -127,14 +128,14 @@ function handleUpdateUser() {
         // ユーザー情報を更新
         $stmt = $pdo->prepare("
             UPDATE users 
-            SET name = ?, email = ?, department = ?, updated_at = CURRENT_TIMESTAMP
+            SET name = ?, email = ?, department = ?, email_notification_type = ?, updated_at = CURRENT_TIMESTAMP
             WHERE id = ?
         ");
-        $stmt->execute([$name, $email, $department, $userId]);
+        $stmt->execute([$name, $email, $department, $emailNotificationType, $userId]);
         
         // 更新後のユーザー情報を取得
         $stmt = $pdo->prepare("
-            SELECT id, name, email, department, role, created_at 
+            SELECT id, name, email, department, role, email_notification_type, created_at 
             FROM users 
             WHERE id = ?
         ");

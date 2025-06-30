@@ -14,7 +14,7 @@ switch ($action) {
         handleGetSecurityInfo();
         break;
     default:
-        sendJsonResponse(['error' => '無効なアクションです'], 400);
+        sendJsonResponse(false, '無効なアクションです', null, 400);
 }
 
 // CSRFトークン取得

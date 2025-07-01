@@ -141,6 +141,7 @@ function setupEventListeners(isLoggedIn = false) {
     
     // 詳細表示モーダル（非ログインでも利用可能、編集機能は制限）
     document.getElementById('close-detail-modal')?.addEventListener('click', closeDetailModal);
+    
     document.getElementById('reservation-detail-modal')?.addEventListener('mousedown', function(e) {
         if (e.target === this) {
             const startX = e.clientX;
@@ -162,6 +163,7 @@ function setupEventListeners(isLoggedIn = false) {
             document.addEventListener('mouseup', handleMouseUp);
         }
     });
+    
     
     // ログインユーザーのみの機能
     if (isLoggedIn) {
@@ -516,11 +518,11 @@ async function loadSidebarThemeColors() {
         html += `
             <div class="theme-color-actions">
                 <button type="button" class="theme-color-btn theme-color-btn-reset" onclick="resetThemeColors()">
-                    <span class="material-symbols-outlined">refresh</span>
+                    <img src="images/refresh.svg" alt="" class="material-icon">
                     デフォルトに戻す
                 </button>
                 <button type="button" class="theme-color-btn theme-color-btn-save" onclick="saveAllThemeColors()">
-                    <span class="material-symbols-outlined">save</span>
+                    <img src="images/save.svg" alt="" class="material-icon">
                     設定を保存
                 </button>
             </div>
@@ -534,69 +536,92 @@ async function loadSidebarThemeColors() {
     }
 }
 
-// デフォルトテーマカラーに戻す
-function resetThemeColors() {
-    const colorPickers = document.querySelectorAll('.theme-color-picker');
-    colorPickers.forEach(picker => {
-        const defaultColor = picker.getAttribute('data-default-color') || '#4299E1';
-        picker.value = defaultColor;
-    });
+// デフォルトテーマカラーに戻す（表示のみ）
+async function resetThemeColors() {
+    try {
+        // departmentsテーブルからデフォルトカラーを取得
+        const response = await fetch('api/departments.php');
+        const data = await response.json();
+        
+        if (data.success) {
+            const departments = data.departments;
+            const colorPickers = document.querySelectorAll('.theme-color-picker');
+            
+            colorPickers.forEach(picker => {
+                const deptId = picker.getAttribute('data-dept-id');
+                if (deptId) {
+                    // 該当する部署のデフォルトカラーを取得
+                    const dept = departments.find(d => d.id == deptId);
+                    const defaultColor = dept ? (dept.color || '#718096') : '#718096';
+                    picker.value = defaultColor;
+                } else {
+                    picker.value = '#718096';
+                }
+            });
+            
+            // console.log('テーマカラーをデパートメントテーブルのデフォルト値にリセットしました（表示のみ）');
+        } else {
+            console.error('部署情報の取得に失敗:', data.message);
+            // フォールバック：固定値でリセット
+            const colorPickers = document.querySelectorAll('.theme-color-picker');
+            colorPickers.forEach(picker => {
+                const defaultColor = picker.getAttribute('data-default-color') || '#718096';
+                picker.value = defaultColor;
+            });
+        }
+    } catch (error) {
+        console.error('デフォルトカラー取得エラー:', error);
+        // フォールバック：固定値でリセット
+        const colorPickers = document.querySelectorAll('.theme-color-picker');
+        colorPickers.forEach(picker => {
+            const defaultColor = picker.getAttribute('data-default-color') || '#718096';
+            picker.value = defaultColor;
+        });
+    }
 }
 
 // 全てのテーマカラー設定を保存
 async function saveAllThemeColors() {
+    if (!currentUser || !currentUser.id) {
+        console.error('ユーザー情報が取得できていません');
+        showToast('ユーザー情報が取得できていません', 'error');
+        return;
+    }
+
     try {
         const colorPickers = document.querySelectorAll('.theme-color-picker');
-        const savePromises = [];
-        
+        const colors = {};
         colorPickers.forEach(picker => {
             const deptId = picker.getAttribute('data-dept-id');
             const color = picker.value;
-            
-            const formData = new FormData();
-            formData.append('department_id', deptId);
-            formData.append('color', color);
-            
-            const promise = fetch('api/theme_colors.php', {
-                method: 'POST',
-                body: formData
-            });
-            
-            savePromises.push(promise);
-        });
-        
-        // 全ての保存処理を並行実行
-        const responses = await Promise.all(savePromises);
-        
-        // 全ての結果をチェック
-        let allSuccess = true;
-        for (const response of responses) {
-            const result = await response.json();
-            if (result.status !== 'success') {
-                allSuccess = false;
-                break;
+            if (deptId && color) {
+                colors[deptId] = color;
             }
+        });
+        if (Object.keys(colors).length === 0) {
+            showToast('保存するカラー設定がありません', 'warning');
+            return;
         }
-        
-        if (allSuccess) {
-            // original-colorを更新
-            colorPickers.forEach(picker => {
-                picker.setAttribute('data-original-color', picker.value);
-            });
-            
+        // PUTでまとめて送信
+        const response = await fetch('api/theme_colors.php', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ colors })
+        });
+        const result = await response.json();
+        if (result.status === 'success') {
             showToast('テーマカラー設定を保存しました！', 'success');
-            
-            // 少し遅延させてから画面を更新
             setTimeout(() => {
                 window.location.reload();
             }, 1500);
         } else {
-            showToast('一部のカラー設定の保存に失敗しました。', 'error');
+            showToast('カラー設定の保存に失敗しました。', 'error');
         }
-        
     } catch (error) {
-        console.error('テーマカラーの一括保存に失敗:', error);
-        showToast('設定の保存中にエラーが発生しました。', 'error');
+        console.error('テーマカラー保存エラー:', error);
+        showToast('カラー設定の保存に失敗しました。', 'error');
     }
 }
 
@@ -647,6 +672,7 @@ function openConfigModal() {
     const modal = document.getElementById('config-modal');
     if (modal) {
         modal.style.display = 'flex';
+        
         // ユーザー情報をモーダルに読み込み
         if (typeof loadUserData === 'function') {
             loadUserData();

@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>部署管理 - 会議室予約システム</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏢</text></svg>">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏢</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
     <link
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
         rel="stylesheet">
     <link rel="stylesheet" href="../css/style.css">
 </head>
+
 <body>
     <div id="app">
         <!-- サイドバー -->
@@ -32,18 +36,31 @@
                 <div class="sidebar-section sidebar-user-info" id="sidebar-user-section" style="display: none;">
                     <div class="sidebar-user-card">
                         <div class="sidebar-user-details">
-                            <span class="material-symbols-outlined sidebar-user-icon">account_circle</span>
+                            <img src="images/person.svg" alt="" class="material-icon">
                             <span class="sidebar-user-name" id="sidebar-user-info"></span>
                         </div>
                         <div class="sidebar-user-details">
-                            <span class="material-symbols-outlined">corporate_fare</span>
+                            <img src="images/groups.svg" alt="" class="material-icon">
                             <span id="sidebar-department-name"></span>
                         </div>
                     </div>
 
                     <!-- テーマカラー設定 -->
                     <div id="sidebar-theme-color-controls" class="sidebar-theme-colors" style="display: none;">
-                        <!-- 部署ごとのテーマカラー設定がここに表示されます -->
+                        <div class="sidebar-section-title">テーマカラー設定</div>
+                        <div id="user-theme-color-setting" class="theme-color-setting">
+                            <div class="theme-color-row">
+                                <label for="user-theme-color">あなたのテーマカラー:</label>
+                                <div class="theme-color-controls">
+                                    <input type="color" id="user-theme-color" class="theme-color-input" value="#718096">
+                                    <button type="button" id="save-theme-color-btn" class="btn btn-small btn-primary">保存</button>
+                                    <button type="button" id="reset-theme-color-btn" class="btn btn-small btn-secondary">リセット</button>
+                                </div>
+                            </div>
+                            <div class="theme-color-info">
+                                <span id="theme-color-source">デフォルトカラーを使用中</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -54,15 +71,15 @@
                         <span class="sidebar-btn-text">カレンダー</span>
                     </button>
                     <button type="button" id="sidebar-config-btn" class="sidebar-btn" style="display: none;">
-                        <span class="material-symbols-outlined">settings</span>
+                        <img src="images/settings.svg" alt="" class="material-icon">
                         <span class="sidebar-btn-text">設定</span>
                     </button>
                     <button type="button" id="sidebar-login-btn" class="sidebar-btn">
-                        <span class="material-symbols-outlined">login</span>
+                        <img src="images/login.svg" alt="" class="material-icon">
                         <span class="sidebar-btn-text">ログイン</span>
                     </button>
                     <button type="button" id="sidebar-logout-btn" class="sidebar-btn" style="display: none;">
-                        <span class="material-symbols-outlined">logout</span>
+                        <img src="images/logout.svg" alt="" class="material-icon">
                         <span class="sidebar-btn-text">ログアウト</span>
                     </button>
                 </div>
@@ -70,7 +87,7 @@
                 <div class="sidebar-section" id="admin-section" style="display: none;">
                     <div class="sidebar-section-title">管理</div>
                     <button type="button" id="sidebar-department-btn" class="sidebar-btn active">
-                        <span class="material-symbols-outlined">corporate_fare</span>
+                        <img src="images/groups.svg" alt="" class="material-icon">
                         <span class="sidebar-btn-text">部署管理</span>
                     </button>
                     <button type="button" id="sidebar-email-btn" class="sidebar-btn">
@@ -104,14 +121,15 @@
                     <h1 class="page-title">部署管理</h1>
                     <p class="page-description">部署の追加・編集・削除を行えます</p>
                 </div>
-                
+
                 <div id="loading" class="loading" style="display: none;">読み込み中...</div>
                 <div id="error-message" class="error-message" style="display: none;"></div>
                 <div id="success-message" class="success-message" style="display: none;"></div>
 
-                <div class="panel">
+
+                <section>
                     <h2>新しい部署を追加</h2>
-                    <form id="add-department-form" class="form-group">
+                    <form id="add-department-form" class="">
                         <div class="form-row">
                             <label for="department-name">部署名:</label>
                             <input type="text" id="department-name" required>
@@ -120,13 +138,20 @@
                             <label for="display-order">表示順:</label>
                             <input type="number" id="display-order" min="0">
                         </div>
-                        <button type="submit" class="btn btn-primary">追加</button>
+                        <div class="form-row" id="color-input-row" style="display: none;">
+                            <label for="department-color">デフォルトカラー:</label>
+                            <input type="color" id="department-color" value="#718096">
+                        </div>
+                        <div class="modal-actions">
+                            <button type="submit" class="btn btn-primary">追加</button>
+                        </div>
                     </form>
-                </div>
+                </section>
 
-                <div class="panel">
+
+                <div class="reservation-list-container">
                     <h2>部署一覧・編集</h2>
-                    <div id="departments-list">
+                    <div id="departments-list" class="departments-list">
                         <!-- 部署リストがここに表示されます -->
                     </div>
                 </div>
@@ -137,32 +162,33 @@
     <script src="../js/auth/auth.js"></script>
     <script src="../js/shared/header.js"></script>
     <script src="../js/shared/ui-utils.js"></script>
+    <script src="../js/shared/user-theme-colors.js"></script>
     <script src="../js/department-management.js"></script>
     <script>
         // サイドバー初期化
-        document.addEventListener('DOMContentLoaded', async function() {
+        document.addEventListener('DOMContentLoaded', async function () {
             // 認証状態をチェック（正しいAPIエンドポイントを使用）
             try {
                 const response = await fetch('../api/check_auth.php');
                 const authStatus = await response.json();
                 const isLoggedIn = authStatus.logged_in;
-                
+
                 if (isLoggedIn) {
                     // ユーザー情報を設定
-                    currentUser = { 
+                    currentUser = {
                         id: authStatus.user_id,
                         name: authStatus.session_data?.name || 'ユーザー名不明',
                         role: authStatus.session_data?.role || 'user',
                         department: authStatus.session_data?.department || null,
                         lastUpdated: Date.now()
                     };
-                    
+
                     // サイドバーの表示状態を更新
                     updateSidebarVisibility();
-                    
+
                     // 部署情報を表示
                     await updateSidebarDepartmentInfo();
-                    
+
                     // 管理者の場合は管理セクションを表示
                     if (currentUser.role === 'admin') {
                         document.getElementById('admin-section').style.display = 'block';
@@ -176,27 +202,27 @@
                 // エラーの場合もメインページにリダイレクト
                 window.location.href = '../index.html';
             }
-            
+
             // ナビゲーションボタンのイベントリスナー
             setupSidebarListeners();
-            
+
             // ハンバーガーメニュー
             document.getElementById('mobile-hamburger-btn')?.addEventListener('click', () => {
                 document.getElementById('sidebar').classList.add('open');
                 document.getElementById('sidebar-overlay').style.display = 'block';
             });
-            
+
             document.getElementById('hamburger-close-btn')?.addEventListener('click', () => {
                 document.getElementById('sidebar').classList.remove('open');
                 document.getElementById('sidebar-overlay').style.display = 'none';
             });
-            
+
             document.getElementById('sidebar-overlay')?.addEventListener('click', () => {
                 document.getElementById('sidebar').classList.remove('open');
                 document.getElementById('sidebar-overlay').style.display = 'none';
             });
         });
-        
+
         // サイドバーの表示状態を更新（認証状態に応じて）
         function updateSidebarVisibility() {
             const adminSection = document.getElementById('admin-section');
@@ -206,26 +232,26 @@
             const userInfo = document.getElementById('sidebar-user-info');
             const configBtn = document.getElementById('sidebar-config-btn');
             const reservationsBtn = document.getElementById('sidebar-calendar-btn');
-            
+
             if (currentUser) {
                 // ログイン済み
                 loginBtn.style.display = 'none';
                 logoutBtn.style.display = 'flex';
                 userSection.style.display = 'block';
-                
+
                 // ユーザー情報を表示
                 if (userInfo && currentUser) {
                     console.log('updateSidebarVisibility: Setting sidebar user info to:', currentUser.name);
                     userInfo.textContent = currentUser.name || 'ユーザー名不明';
                 }
-                
+
                 // 管理者の場合は管理セクションを表示
                 if (currentUser.role === 'admin') {
                     adminSection.style.display = 'block';
                 } else {
                     adminSection.style.display = 'none';
                 }
-                
+
                 // カレンダーボタンをアクティブに設定
                 setActiveSidebarBtn('sidebar-department-btn');
             } else {
@@ -238,29 +264,29 @@
                 if (reservationsBtn) reservationsBtn.style.display = 'none';
             }
         }
-        
+
         // サイドバーのアクティブボタンを設定
         function setActiveSidebarBtn(btnId) {
             // 全てのサイドバーボタンからactiveクラスを削除
             document.querySelectorAll('.sidebar-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
-            
+
             // 指定されたボタンにactiveクラスを追加
             document.getElementById(btnId)?.classList.add('active');
         }
-        
+
         // サイドバーの部署情報を更新
         async function updateSidebarDepartmentInfo() {
             if (!currentUser) return;
-            
+
             const departmentNameElement = document.getElementById('sidebar-department-name');
             if (!departmentNameElement) return;
-            
+
             try {
                 const deptResponse = await fetch('../api/departments.php');
                 const deptResult = await deptResponse.json();
-                
+
                 if (deptResult.success && currentUser.department) {
                     const dept = deptResult.departments.find(d => d.id == currentUser.department);
                     if (dept) {
@@ -268,14 +294,14 @@
                         return;
                     }
                 }
-                
+
                 departmentNameElement.textContent = '部署未設定';
             } catch (error) {
                 console.error('部署情報の取得に失敗:', error);
                 departmentNameElement.textContent = '部署未設定';
             }
         }
-        
+
         // サイドバーのイベントリスナー設定
         function setupSidebarListeners() {
             // カレンダーボタン
@@ -283,43 +309,43 @@
                 setActiveSidebarBtn('sidebar-calendar-btn');
                 window.location.href = '../index.html';
             });
-            
+
             // 部署管理ボタン
             document.getElementById('sidebar-department-btn')?.addEventListener('click', () => {
                 setActiveSidebarBtn('sidebar-department-btn');
                 // 現在のページなので何もしない
             });
-            
+
             // メール設定ボタン
             document.getElementById('sidebar-email-btn')?.addEventListener('click', () => {
                 setActiveSidebarBtn('sidebar-email-btn');
                 window.location.href = 'email_notification_admin.html';
             });
-            
+
             // データ出力ボタン
             document.getElementById('sidebar-export-btn')?.addEventListener('click', () => {
                 setActiveSidebarBtn('sidebar-export-btn');
                 window.location.href = 'csv_export.html';
             });
-            
+
             // データ取込ボタン
             document.getElementById('sidebar-import-btn')?.addEventListener('click', () => {
                 setActiveSidebarBtn('sidebar-import-btn');
                 window.location.href = 'csv_import.html';
             });
-            
+
             // 設定ボタン
             document.getElementById('sidebar-config-btn')?.addEventListener('click', () => {
                 setActiveSidebarBtn('sidebar-config-btn');
                 window.location.href = '../config.html';
             });
-            
+
             // ログインボタン
             document.getElementById('sidebar-login-btn')?.addEventListener('click', () => {
                 setActiveSidebarBtn('sidebar-login-btn');
                 window.location.href = '../index.html';
             });
-            
+
             // ログアウトボタン
             document.getElementById('sidebar-logout-btn')?.addEventListener('click', () => {
                 if (commonHeader) {
@@ -329,4 +355,5 @@
         }
     </script>
 </body>
+
 </html>

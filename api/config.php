@@ -3,7 +3,7 @@
 date_default_timezone_set('Asia/Tokyo');
 
 // データベース設定
-define('DB_PATH', '../database/meeting_room.db');
+define('DB_PATH', __DIR__ . '/../database/meeting_room.db');
 
 // セッション設定
 if (!session_id()) {

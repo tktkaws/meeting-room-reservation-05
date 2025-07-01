@@ -7,6 +7,30 @@ class DepartmentManager {
     init() {
         this.bindEvents();
         this.loadDepartments();
+        this.checkColorSupport();
+    }
+
+    async checkColorSupport() {
+        // 最初の部署データを取得してcolorカラムの存在をチェック
+        try {
+            const response = await fetch('../api/departments.php');
+            const data = await response.json();
+            
+            if (data.success && data.departments.length > 0) {
+                const hasColorSupport = data.departments[0].color !== undefined;
+                
+                // カラー入力フィールドの表示/非表示を制御
+                const colorInputRow = document.getElementById('color-input-row');
+                if (colorInputRow) {
+                    colorInputRow.style.display = hasColorSupport ? 'block' : 'none';
+                }
+                
+                this.colorSupported = hasColorSupport;
+            }
+        } catch (error) {
+            console.error('カラーサポートチェックエラー:', error);
+            this.colorSupported = false;
+        }
     }
 
     bindEvents() {
@@ -44,21 +68,27 @@ class DepartmentManager {
         }
 
         const html = departments.map(dept => `
-            <div class="department-item" id="dept-${dept.id}">
+            <div class="reservation-display-item department-item" id="dept-${dept.id}">
                 <form class="department-form" onsubmit="departmentManager.updateDepartment(event, ${dept.id})">
-                    <div class="form-row">
-                        <label>部署名:</label>
-                        <input type="text" value="${this.escapeHtml(dept.name)}" name="name" required>
-                    </div>
-                    <div class="form-row">
-                        <label>表示順:</label>
-                        <input type="number" value="${dept.display_order}" name="display_order" min="0">
-                    </div>
-                    <div class="form-row">
-                        <button type="submit" class="btn btn-small btn-primary">更新</button>
-                        <button type="button" class="btn btn-small btn-danger" onclick="departmentManager.deleteDepartment(${dept.id}, '${this.escapeHtml(dept.name)}')">
-                            削除
-                        </button>
+                    <div class="reservation-info department-info">
+                        <div class="form-row">
+                            <label>部署名:</label>
+                            <input type="text" value="${this.escapeHtml(dept.name)}" name="name" required>
+                        </div>
+                        <div class="form-row">
+                            <label>表示順:</label>
+                            <input type="number" value="${dept.display_order}" name="display_order" min="0">
+                        </div>
+                        <div class="form-row" style="display: ${dept.color !== undefined ? 'block' : 'none'};">
+                            <label>デフォルトカラー:</label>
+                            <input type="color" value="${dept.color || '#718096'}" name="color">
+                        </div>
+                        <div class="form-row department-actions">
+                            <button type="submit" class="btn btn-small btn-primary">更新</button>
+                            <button type="button" class="btn btn-small btn-danger" onclick="departmentManager.deleteDepartment(${dept.id}, '${this.escapeHtml(dept.name)}')">
+                                削除
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -70,6 +100,7 @@ class DepartmentManager {
     async addDepartment() {
         const name = document.getElementById('department-name').value.trim();
         const displayOrder = document.getElementById('display-order').value;
+        const color = document.getElementById('department-color').value;
 
         if (!name) {
             this.showError('部署名を入力してください');
@@ -78,16 +109,23 @@ class DepartmentManager {
 
         this.showLoading(true);
         try {
+            const requestData = {
+                action: 'add',
+                name: name,
+                display_order: displayOrder ? parseInt(displayOrder) : null
+            };
+            
+            // colorサポートがある場合のみcolorを追加
+            if (this.colorSupported) {
+                requestData.color = color;
+            }
+            
             const response = await fetch('../api/departments.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    action: 'add',
-                    name: name,
-                    display_order: displayOrder ? parseInt(displayOrder) : null
-                })
+                body: JSON.stringify(requestData)
             });
 
             const data = await response.json();
@@ -112,6 +150,7 @@ class DepartmentManager {
         const formData = new FormData(event.target);
         const name = formData.get('name').trim();
         const displayOrder = formData.get('display_order');
+        const color = formData.get('color');
 
         if (!name) {
             this.showError('部署名を入力してください');
@@ -120,20 +159,31 @@ class DepartmentManager {
 
         this.showLoading(true);
         try {
+            const requestData = {
+                action: 'update',
+                id: id,
+                name: name,
+                display_order: displayOrder ? parseInt(displayOrder) : null
+            };
+            
+            // colorサポートがある場合のみcolorを追加
+            if (this.colorSupported) {
+                requestData.color = color;
+                console.log('Sending color update:', color, 'colorSupported:', this.colorSupported);
+            } else {
+                console.log('Color not supported, skipping color update');
+            }
+            
             const response = await fetch('../api/departments.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    action: 'update',
-                    id: id,
-                    name: name,
-                    display_order: displayOrder ? parseInt(displayOrder) : null
-                })
+                body: JSON.stringify(requestData)
             });
 
             const data = await response.json();
+            console.log('Update response:', data);
             
             if (data.success) {
                 this.showSuccess(data.message);

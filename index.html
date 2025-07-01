@@ -36,33 +36,49 @@
                 <div class="sidebar-section sidebar-user-info" id="sidebar-user-section" style="display: none;">
                     <div class="sidebar-user-card">
                         <div class="sidebar-user-details">
-                            <span class="material-symbols-outlined sidebar-user-icon">account_circle</span>
+                            <img src="images/person.svg" alt="" class="material-icon">
                             <span class="sidebar-user-name" id="sidebar-user-info"></span>
                         </div>
                         <div class="sidebar-user-details">
-                            <span class="material-symbols-outlined">corporate_fare</span>
+                            <img src="images/groups.svg" alt="" class="material-icon">
                             <span id="sidebar-department-name"></span>
                         </div>
                     </div>
 
                     <!-- テーマカラー設定 -->
                     <div id="sidebar-theme-color-controls" class="sidebar-theme-colors" style="display: none;">
-                        <!-- 部署ごとのテーマカラー設定がここに表示されます -->
+                        <div class="sidebar-section-title">テーマカラー設定</div>
+                        <div id="user-theme-color-setting" class="theme-color-setting">
+                            <div class="theme-color-row">
+                                <label for="user-theme-color">あなたのテーマカラー:</label>
+                                <div class="theme-color-controls">
+                                    <input type="color" id="user-theme-color" class="theme-color-input" value="#718096">
+                                    <button type="button" id="save-theme-color-btn" class="btn btn-small btn-primary">保存</button>
+                                    <button type="button" id="reset-theme-color-btn" class="theme-color-btn theme-color-btn-reset" onclick="resetThemeColors()">
+                                        <img src="images/refresh.svg" alt="" class="material-icon">
+                                        デフォルトに戻す
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="theme-color-info">
+                                <span id="theme-color-source">デフォルトカラーを使用中</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- ナビゲーションセクション -->
                 <div class="sidebar-section">
                     <button type="button" id="sidebar-config-btn" class="sidebar-btn" style="display: none;">
-                        <span class="material-symbols-outlined">settings</span>
+                        <img src="images/settings.svg" alt="" class="material-icon">
                         <span class="sidebar-btn-text">設定</span>
                     </button>
                     <button type="button" id="sidebar-login-btn" class="sidebar-btn">
-                        <span class="material-symbols-outlined">login</span>
+                        <img src="images/login.svg" alt="" class="material-icon">
                         <span class="sidebar-btn-text">ログイン</span>
                     </button>
                     <button type="button" id="sidebar-logout-btn" class="sidebar-btn" style="display: none;">
-                        <span class="material-symbols-outlined">logout</span>
+                        <img src="images/logout.svg" alt="" class="material-icon">
                         <span class="sidebar-btn-text">ログアウト</span>
                     </button>
                 </div>
@@ -70,7 +86,7 @@
                 <div class="sidebar-section" id="admin-section" style="display: none;">
                     <div class="sidebar-section-title">管理</div>
                     <button type="button" id="sidebar-department-btn" class="sidebar-btn">
-                        <span class="material-symbols-outlined">corporate_fare</span>
+                        <img src="images/groups.svg" alt="" class="material-icon">
                         <span class="sidebar-btn-text">部署管理</span>
                     </button>
                     <button type="button" id="sidebar-email-btn" class="sidebar-btn">
@@ -127,7 +143,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h2>予約詳細</h2>
-                    <button class="close-btn" id="close-detail-modal">&times;</button>
+                    <div class="detail-actions" id="detail-actions">
+                        <!-- 編集ボタンは権限に応じて動的に追加 -->
+                    </div>
+                    <button class="close-btn" id="close-detail-modal"><img src="images/close.svg" alt="" class="material-icon"></button>
                 </div>
                 <div class="detail-content">
                     <div class="detail-section">
@@ -154,25 +173,27 @@
                     </div>
 
                     <div id="recurring-section" class="detail-section" style="display: none;">
-                        <h3>繰り返し予約情報</h3>
+                        <div class="recurring-section-header">
+                            <h3>繰り返し予約情報</h3>
+                            <div class="recurring-detail-actions" id="recurring-detail-actions">
+                                <!-- 繰り返し予約用の編集・削除ボタン -->
+                            </div>
+                        </div>
                         <div id="group-reservations">
                             <div id="group-list"></div>
                         </div>
                     </div>
-
-                    <div class="detail-actions" id="detail-actions">
-                        <!-- 編集ボタンは権限に応じて動的に追加 -->
-                    </div>
                 </div>
             </div>
         </div>
+
 
         <!-- グループ編集モーダル -->
         <div id="group-edit-modal" class="modal" style="display: none;">
             <div class="modal-content large-modal">
                 <div class="modal-header">
                     <h2>全ての繰り返し予約を編集</h2>
-                    <button class="close-btn" id="close-group-edit-modal">&times;</button>
+                    <button class="close-btn" id="close-group-edit-modal"><img src="images/close.svg" alt="" class="material-icon"></button>
                 </div>
                 <form id="group-edit-form">
                     <div class="group-edit-content">
@@ -264,7 +285,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h2 id="modal-title">新規予約</h2>
-                    <button class="close-btn" id="close-modal">&times;</button>
+                    <button class="close-btn" id="close-modal"><img src="images/close.svg" alt="" class="material-icon"></button>
                 </div>
                 <form id="reservation-form">
                     <div class="form-group">
@@ -392,7 +413,7 @@
             <div class="modal-content auth-modal-content">
                 <div class="modal-header">
                     <h2 id="auth-modal-title">ログイン</h2>
-                    <button class="close-btn" id="close-auth-modal">&times;</button>
+                    <button class="close-btn" id="close-auth-modal"><img src="images/close.svg" alt="" class="material-icon"></button>
                 </div>
 
                 <!-- ログインフォーム -->
@@ -409,7 +430,7 @@
                         <div class="form-group checkbox-group">
                             <label class="checkbox-label">
                                 <input type="checkbox" id="remember-me" name="remember_me" checked>
-                                <span>ログイン状態を保持する（180日間）</span>
+                                <span>ログイン状態を保持する</span>
                             </label>
                         </div>
                         <div class="modal-actions">
@@ -460,7 +481,7 @@
             <div class="modal-content large-modal">
                 <div class="modal-header">
                     <h2>ユーザー設定</h2>
-                    <button class="close-btn" id="close-config-modal">&times;</button>
+                    <button class="close-btn" id="close-config-modal"><img src="images/close.svg" alt="" class="material-icon"></button>
                 </div>
                 <div class="config-content">
                     <!-- プロフィール設定 -->
@@ -539,6 +560,7 @@
     <script src="js/shared/time-utils.js"></script>
     <script src="js/shared/header.js"></script>
     <script src="js/shared/theme-colors.js"></script>
+    <script src="js/shared/user-theme-colors.js"></script>
     <script src="js/calendar/date-utils.js"></script>
     <script src="js/auth/auth.js"></script>
     <script src="js/auth/auth-modal.js"></script>

@@ -3,6 +3,16 @@
 // 現在表示中の予約詳細データを保存
 let currentReservationDetail = null;
 
+// モーダル表示関数
+function showModal(modal) {
+    modal.style.display = 'flex';
+}
+
+// モーダル非表示関数
+function hideModal(modal) {
+    modal.style.display = 'none';
+}
+
 // 新規予約モーダルを開く
 function openNewReservationModal(selectedDate = null, startTime = null, endTime = null) {
     const modal = document.getElementById('reservation-modal');
@@ -73,7 +83,7 @@ async function showReservationDetail(reservationId) {
         }
         
         const result = await response.json();
-        console.log('Reservation detail API response:', result); // デバッグ用
+        // console.log('Reservation detail API response:', result);
         
         if (!result.success) {
             showMessage(result.message || '予約詳細の取得に失敗しました', 'error');
@@ -90,7 +100,7 @@ async function showReservationDetail(reservationId) {
         const canEdit = data.can_edit;
         const groupReservations = data.group_reservations;
         
-        console.log('Reservation data:', reservation); // デバッグ用
+        // console.log('Reservation data:', reservation);
         
         if (!reservation) {
             showMessage('予約データが取得できませんでした', 'error');
@@ -165,6 +175,15 @@ async function showReservationDetail(reservationId) {
         if (reservation.group_id) {
             recurringSection.style.display = 'block';
             
+            // 繰り返し予約用のアクションボタンを追加
+            const recurringDetailActions = document.getElementById('recurring-detail-actions');
+            if (canEdit && recurringDetailActions) {
+                recurringDetailActions.innerHTML = `
+                    <button class="detail-actions-btn" title="全ての予約を編集" onclick="editGroupReservations(${reservation.group_id})"><img src="images/edit.svg" alt="" class="material-icon"></button>
+                    <button class="detail-actions-btn" title="全ての予約を削除" onclick="deleteAllGroupReservations(${reservation.group_id})"><img src="images/delete.svg" alt="" class="material-icon"></button>
+                `;
+            }
+            
             // グループ内の全ての予約を表示（現在の予約も含む）
             const groupList = document.getElementById('group-list');
             if (!groupList) {
@@ -201,6 +220,10 @@ async function showReservationDetail(reservationId) {
             }
         } else {
             recurringSection.style.display = 'none';
+            const recurringDetailActions = document.getElementById('recurring-detail-actions');
+            if (recurringDetailActions) {
+                recurringDetailActions.innerHTML = '';
+            }
         }
         
         // 編集ボタンの表示
@@ -221,22 +244,22 @@ async function showReservationDetail(reservationId) {
             if (reservation.group_id) {
                 // 繰り返し予約の場合は編集ボタンを上段、削除ボタンを下段に配置
                 detailActions.innerHTML = `
-                    <div class="action-row">
-                        <button class="btn-edit-single" onclick="editSingleReservation(${reservationId})">この予約のみ編集</button>
-                        <button class="btn-edit-group" onclick="editGroupReservations(${reservation.group_id})">全ての予約を編集</button>
-                    </div>
-                    <div class="action-row">
-                        <button class="btn btn-danger" onclick="deleteSingleReservation(${reservationId})">この予約のみ削除</button>
-                        <button class="btn btn-danger" onclick="deleteAllGroupReservations(${reservation.group_id})">全ての予約を削除</button>
-                    </div>
+                    <button class="detail-actions-btn" title="この予約を編集" onclick="editSingleReservation(${reservationId})">
+                            <img src="images/edit.svg" alt="" class="material-icon">
+                        </button>
+                        <button class="detail-actions-btn" title="この予約を削除" onclick="deleteReservation(${reservationId})">
+                            <img src="images/delete.svg" alt="" class="material-icon">
+                        </button>
                 `;
             } else {
                 // 単発予約の場合は編集ボタンと削除ボタンを1列に配置
                 detailActions.innerHTML = `
-                    <div class="action-row">
-                        <button class="btn-edit-single" onclick="editSingleReservation(${reservationId})">編集</button>
-                        <button class="btn btn-danger" onclick="deleteReservation(${reservationId})">削除</button>
-                    </div>
+                   <button class="detail-actions-btn" title="編集" onclick="editSingleReservation(${reservationId})">
+                            <img src="images/edit.svg" alt="" class="material-icon">
+                        </button>
+                        <button class="detail-actions-btn" title="削除" onclick="deleteReservation(${reservationId})">
+                            <img src="images/delete.svg" alt="" class="material-icon">
+                        </button>
                 `;
             }
         }
@@ -256,13 +279,13 @@ async function showReservationDetail(reservationId) {
         // モーダルを画面中央に配置
         positionModalCenter(modal);
         modal.style.display = 'flex';
-        console.log('Reservation detail modal displayed successfully'); // デバッグ用
+        // console.log('Reservation detail modal displayed successfully'); 
         
     } catch (error) {
         console.error('予約詳細取得エラー:', error);
         showMessage('予約詳細の取得に失敗しました', 'error');
     } finally {
-        console.log('Hiding loading in finally block'); // デバッグ用
+        // console.log('Hiding loading in finally block'); 
         const loadingEl = document.getElementById('loading');
         if (loadingEl) {
             loadingEl.style.display = 'none';
@@ -424,6 +447,7 @@ function closeDetailModal() {
     // 保存された予約詳細データをクリア
     currentReservationDetail = null;
 }
+
 
 // 繰り返し予約オプション切り替え
 function toggleRecurringOptions() {

@@ -132,7 +132,7 @@ try {
     echo $count . "件</span></h2>";
     
     if ($count > 0) {
-        $stmt = $pdo->query("SELECT id, name, display_order, created_at FROM departments ORDER BY display_order, id");
+        $stmt = $pdo->query("SELECT id, name,display_order, created_at FROM departments ORDER BY display_order, id");
         $departments = $stmt->fetchAll();
         
         echo "<table>";

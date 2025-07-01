@@ -6,16 +6,52 @@ header('Content-Type: application/json');
 function getDepartments() {
     $pdo = getDatabase();
     try {
-        $stmt = $pdo->prepare("SELECT id, name, display_order FROM departments ORDER BY display_order, id");
+        // colorカラムが存在するかチェック
+        $colorColumnExists = false;
+        try {
+            $stmt = $pdo->query("PRAGMA table_info(departments)");
+            $columns = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($columns as $column) {
+                if ($column['name'] === 'color') {
+                    $colorColumnExists = true;
+                    break;
+                }
+            }
+        } catch (Exception $e) {
+            // カラム情報取得に失敗した場合はfalseのまま
+        }
+        
+        if ($colorColumnExists) {
+            $stmt = $pdo->prepare("SELECT id, name, display_order, color FROM departments ORDER BY display_order, id");
+        } else {
+            $stmt = $pdo->prepare("SELECT id, name, display_order FROM departments ORDER BY display_order, id");
+        }
+        
         $stmt->execute();
         $departments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // colorカラムが存在しない場合はデフォルト値を追加
+        if (!$colorColumnExists) {
+            $defaultColors = [
+                '1' => '#4299E1',
+                '2' => '#48BB78',
+                '3' => '#ED8936',
+                '4' => '#9F7AEA',
+                '5' => '#38B2AC'
+            ];
+            
+            foreach ($departments as &$dept) {
+                $dept['color'] = $defaultColors[strval($dept['id'])] ?? '#718096';
+            }
+        }
+        
         return ['success' => true, 'departments' => $departments];
     } catch (PDOException $e) {
         return ['success' => false, 'message' => 'データベースエラー: ' . $e->getMessage()];
     }
 }
 
-function addDepartment($name, $displayOrder = null) {
+function addDepartment($name, $displayOrder = null, $color = '#718096') {
     $pdo = getDatabase();
     try {
         if (empty($name)) {
@@ -29,8 +65,28 @@ function addDepartment($name, $displayOrder = null) {
             $displayOrder = ($result['max_order'] ?? 0) + 1;
         }
         
-        $stmt = $pdo->prepare("INSERT INTO departments (name, display_order) VALUES (?, ?)");
-        $stmt->execute([$name, $displayOrder]);
+        // colorカラムが存在するかチェック
+        $colorColumnExists = false;
+        try {
+            $stmt = $pdo->query("PRAGMA table_info(departments)");
+            $columns = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($columns as $column) {
+                if ($column['name'] === 'color') {
+                    $colorColumnExists = true;
+                    break;
+                }
+            }
+        } catch (Exception $e) {
+            // カラム情報取得に失敗した場合はfalseのまま
+        }
+        
+        if ($colorColumnExists) {
+            $stmt = $pdo->prepare("INSERT INTO departments (name, display_order, color) VALUES (?, ?, ?)");
+            $stmt->execute([$name, $displayOrder, $color]);
+        } else {
+            $stmt = $pdo->prepare("INSERT INTO departments (name, display_order) VALUES (?, ?)");
+            $stmt->execute([$name, $displayOrder]);
+        }
         
         return ['success' => true, 'message' => '部署が追加されました', 'id' => $pdo->lastInsertId()];
     } catch (PDOException $e) {
@@ -41,12 +97,31 @@ function addDepartment($name, $displayOrder = null) {
     }
 }
 
-function updateDepartment($id, $name, $displayOrder = null) {
+function updateDepartment($id, $name, $displayOrder = null, $color = null) {
     $pdo = getDatabase();
     try {
         if (empty($name)) {
             return ['success' => false, 'message' => '部署名は必須です'];
         }
+        
+        error_log("updateDepartment: id=$id, name=$name, displayOrder=$displayOrder, color=$color");
+        
+        // colorカラムが存在するかチェック
+        $colorColumnExists = false;
+        try {
+            $stmt = $pdo->query("PRAGMA table_info(departments)");
+            $columns = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($columns as $column) {
+                if ($column['name'] === 'color') {
+                    $colorColumnExists = true;
+                    break;
+                }
+            }
+        } catch (Exception $e) {
+            // カラム情報取得に失敗した場合はfalseのまま
+        }
+        
+        error_log("updateDepartment: colorColumnExists=" . ($colorColumnExists ? 'true' : 'false'));
         
         $sql = "UPDATE departments SET name = ?, updated_at = CURRENT_TIMESTAMP";
         $params = [$name];
@@ -56,8 +131,16 @@ function updateDepartment($id, $name, $displayOrder = null) {
             $params[] = $displayOrder;
         }
         
+        if ($color !== null && $colorColumnExists) {
+            $sql .= ", color = ?";
+            $params[] = $color;
+            error_log("updateDepartment: Adding color to SQL: $color");
+        }
+        
         $sql .= " WHERE id = ?";
         $params[] = $id;
+        
+        error_log("updateDepartment: SQL=$sql, params=" . json_encode($params));
         
         $stmt = $pdo->prepare($sql);
         $stmt->execute($params);
@@ -116,13 +199,14 @@ switch ($method) {
         }
         
         $action = $input['action'] ?? '';
+        error_log('Department API: Received action=' . $action . ', input=' . json_encode($input));
         
         switch ($action) {
             case 'add':
-                echo json_encode(addDepartment($input['name'] ?? '', $input['display_order'] ?? null));
+                echo json_encode(addDepartment($input['name'] ?? '', $input['display_order'] ?? null, $input['color'] ?? '#718096'));
                 break;
             case 'update':
-                echo json_encode(updateDepartment($input['id'] ?? 0, $input['name'] ?? '', $input['display_order'] ?? null));
+                echo json_encode(updateDepartment($input['id'] ?? 0, $input['name'] ?? '', $input['display_order'] ?? null, $input['color'] ?? null));
                 break;
             case 'delete':
                 echo json_encode(deleteDepartment($input['id'] ?? 0));

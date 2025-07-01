@@ -58,33 +58,30 @@ try {
             // テーマカラー取得
             $user_id = $_SESSION['user_id'] ?? null;
 
-            if (!$user_id) {
-                // 非ログインユーザーにはデフォルトカラーを返す
-                $default_colors = [
-                    "1" => "#46556B",
-                    "2" => "#11A444",
-                    "3" => "#F3373F",
-                    "4" => "#616161"
-                ];
-                echo json_encode(['status' => 'success', 'colors' => $default_colors]);
-                exit;
+            // 部署のデフォルトカラーを取得
+            $sql = "SELECT id, color FROM departments ORDER BY id";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+            $departments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            $colors = [];
+            foreach ($departments as $dept) {
+                $colors[strval($dept['id'])] = $dept['color'] ?? '#718096';
             }
 
-            $sql = "SELECT department_theme_colors FROM users WHERE id = ?";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([$user_id]);
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($user && $user['department_theme_colors']) {
-                $colors = json_decode($user['department_theme_colors'], true);
-            } else {
-                // デフォルトカラー
-                $colors = [
-                    "1" => "#46556B",
-                    "2" => "#11A444",
-                    "3" => "#F3373F",
-                    "4" => "#616161"
-                ];
+            if ($user_id) {
+                $sql = "SELECT department_theme_colors FROM users WHERE id = ?";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute([$user_id]);
+                $user = $stmt->fetch(PDO::FETCH_ASSOC);
+                if ($user && $user['department_theme_colors']) {
+                    $user_colors = json_decode($user['department_theme_colors'], true);
+                    if (is_array($user_colors)) {
+                        foreach ($user_colors as $dept_id => $color) {
+                            $colors[strval($dept_id)] = $color;
+                        }
+                    }
+                }
             }
 
             echo json_encode(['status' => 'success', 'colors' => $colors]);
